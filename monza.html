@@ -6,12 +6,12 @@
 <body bgcolor="black" text="white" leftmargin="0" rightmargin="0">
 
     <div align="center" style="width: 100%;">
-
         <header align="left" style="width: 800px;">
             <br>
             <a href="tracks.html">
                 <button style="background-color: #ffcc00; color: black; padding: 10px 20px; border: none; cursor: pointer; font-weight: bold; border-radius: 5px;">
-                    &larr; BACK TO TRACK LIST
+                    <span class="lang-en">&larr; BACK TO TRACK LIST</span>
+                    <span class="lang-fi" style="display:none;">&larr; TAKAISIN RATALISTAAN</span>
                 </button>
             </a>
         </header>
@@ -20,14 +20,17 @@
             <br>
             <div align="left" style="width: 800px;">
                 <h1><font face="Arial Black" size="7">CIRCUIT: MONZA</font></h1>
-                <font color="#ffcc00" face="Arial Black" size="2">THE TEMPLE OF SPEED</font>
+                <font color="#ffcc00" face="Arial Black" size="2" class="lang-en">THE TEMPLE OF SPEED</font>
+                <font color="#ffcc00" face="Arial Black" size="2" class="lang-fi" style="display:none;">NOPEUDEN TEMPPELI</font>
             </div>
 
             <br>
             <table width="800" border="0" cellpadding="30" bgcolor="white" style="border-radius: 15px;">
                 <tr>
                     <td align="center">
-                        <font color="black" face="Arial Black">TECHNICAL CIRCUIT LAYOUT</font><br><br>
+                        <font color="black" face="Arial Black" class="lang-en">TECHNICAL CIRCUIT LAYOUT</font>
+                        <font color="black" face="Arial Black" class="lang-fi" style="display:none;">TEKNINEN RATAPROFIILI</font>
+                        <br><br>
                         <img src="https://puresport.blob.core.windows.net/restyling/int_monza-v1_tb.jpg" width="600">
                     </td>
                 </tr>
@@ -37,20 +40,26 @@
             <table width="800" border="0" cellpadding="0" cellspacing="10">
                 <tr>
                     <td width="25%" bgcolor="#111111" style="border-radius: 10px; padding: 15px;" align="left">
-                        <font color="#555" size="1" face="Arial">Location</font><br>
-                        <font face="Arial Black" size="4">ITALY</font>
+                        <font color="#555" size="1" face="Arial" class="lang-en">Location</font>
+                        <font color="#555" size="1" face="Arial" class="lang-fi" style="display:none;">Sijainti</font><br>
+                        <font face="Arial Black" size="4" class="lang-en">ITALY</font>
+                        <font face="Arial Black" size="4" class="lang-fi" style="display:none;">ITALIA</font>
                     </td>
                     <td width="25%" bgcolor="#111111" style="border-radius: 10px; padding: 15px;" align="left">
-                        <font color="#555" size="1" face="Arial">Length</font><br>
+                        <font color="#555" size="1" face="Arial" class="lang-en">Length</font>
+                        <font color="#555" size="1" face="Arial" class="lang-fi" style="display:none;">Pituus</font><br>
                         <font face="Arial Black" size="4">5.793 KM</font>
                     </td>
                     <td width="25%" bgcolor="#111111" style="border-radius: 10px; padding: 15px;" align="left">
-                        <font color="#555" size="1" face="Arial">Full Throttle</font><br>
+                        <font color="#555" size="1" face="Arial" class="lang-en">Full Throttle</font>
+                        <font color="#555" size="1" face="Arial" class="lang-fi" style="display:none;">Täysi Kaasu</font><br>
                         <font face="Arial Black" size="4">~80%</font>
                     </td>
                     <td width="25%" bgcolor="#111111" style="border-radius: 10px; padding: 15px;" align="left">
-                        <font color="#555" size="1" face="Arial">Downforce</font><br>
-                        <font face="Arial Black" size="4">LOW</font>
+                        <font color="#555" size="1" face="Arial" class="lang-en">Downforce</font>
+                        <font color="#555" size="1" face="Arial" class="lang-fi" style="display:none;">Downforce</font><br>
+                        <font face="Arial Black" size="4" class="lang-en">LOW</font>
+                        <font face="Arial Black" size="4" class="lang-fi" style="display:none;">MATALA</font>
                     </td>
                 </tr>
             </table>
@@ -63,5 +72,14 @@
         <br><br>
     </div>
 
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var currentLang = localStorage.getItem('prefLang') || 'en';
+        if (currentLang === 'fi') {
+            document.querySelectorAll('.lang-en').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.lang-fi').forEach(el => el.style.display = 'inline-block');
+        }
+    });
+    </script>
 </body>
 </html>
