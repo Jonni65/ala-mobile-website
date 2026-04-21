@@ -21,6 +21,20 @@
     </header>
 
     <nav>
+        <h3>Language</h3>
+        <div align="center">
+    <br>
+    <button onclick="setLang('en')" style="background: #222; color: white; border: 1px solid #ffcc00; padding: 5px 15px; cursor: pointer; font-family: Arial; font-weight: bold; border-radius: 5px;">ENGLISH</button>
+    <button onclick="setLang('fi')" style="background: #222; color: white; border: 1px solid #ffcc00; padding: 5px 15px; cursor: pointer; font-family: Arial; font-weight: bold; border-radius: 5px;">SUOMI</button>
+    <br><br>
+</div>
+
+<script>
+function setLang(lang) {
+    localStorage.setItem('prefLang', lang);
+    location.reload(); 
+}
+</script>
         <h3>Navigation</h3>
         <ul>
             <li><a href="index.html"><font color="#ffcc00">Home</font></a></li>
