@@ -13,7 +13,6 @@
             <tr>
                 <td background="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3203370/library_hero.jpg" 
                     height="400" valign="top" align="left">
-                    
                     <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3203370/logo.png" width="300" alt="Ala Mobile Logo">
                 </td>
             </tr>
@@ -21,98 +20,69 @@
     </header>
 
     <nav>
-        <h3>Language</h3>
+        <h3 class="lang-en">Language</h3>
+        <h3 class="lang-fi" style="display:none;">Kieli</h3>
+        
         <div align="center">
-    <br>
-    <button onclick="setLang('en')" style="background: #222; color: white; border: 1px solid #ffcc00; padding: 5px 15px; cursor: pointer; font-family: Arial; font-weight: bold; border-radius: 5px;">ENGLISH</button>
-    <button onclick="setLang('fi')" style="background: #222; color: white; border: 1px solid #ffcc00; padding: 5px 15px; cursor: pointer; font-family: Arial; font-weight: bold; border-radius: 5px;">SUOMI</button>
-    <br><br>
-</div>
+            <br>
+            <button onclick="setLang('en')" style="background: #222; color: white; border: 1px solid #ffcc00; padding: 5px 15px; cursor: pointer; font-family: Arial; font-weight: bold; border-radius: 5px;">ENGLISH</button>
+            <button onclick="setLang('fi')" style="background: #222; color: white; border: 1px solid #ffcc00; padding: 5px 15px; cursor: pointer; font-family: Arial; font-weight: bold; border-radius: 5px;">SUOMI</button>
+            <br><br>
+        </div>
 
-<script>
-function setLang(lang) {
-    localStorage.setItem('prefLang', lang);
-    location.reload(); 
-}
-</script>
-        <h3>Navigation</h3>
+        <h3 class="lang-en">Navigation</h3>
+        <h3 class="lang-fi" style="display:none;">Navigointi</h3>
         <ul>
-            <li><a href="index.html"><font color="#ffcc00">Home</font></a></li>
-            <li><a href="tracks.html"><font color="#ffcc00">Tracks List</font></a></li>
-            <li><a href="custom.html"><font color="#ffcc00">Car Customization</font></a></li>
-            <li><font color="white">Developer (Vince)</font></li>
+            <li><a href="index.html"><font color="#ffcc00" class="lang-en">Home</font><font color="#ffcc00" class="lang-fi" style="display:none;">Etusivu</font></a></li>
+            <li><a href="tracks.html"><font color="#ffcc00" class="lang-en">Tracks List</font><font color="#ffcc00" class="lang-fi" style="display:none;">Ratalista</font></a></li>
+            <li><a href="custom.html"><font color="#ffcc00" class="lang-en">Car Customization</font><font color="#ffcc00" class="lang-fi" style="display:none;">Auton muokkaus</font></a></li>
+            <li><font color="white" class="lang-en">Developer (Vince)</font><font color="white" class="lang-fi" style="display:none;">Kehittäjä (Vince)</font></li>
         </ul>
     </nav>
 
     <hr color="#444444">
 
     <main>
-        <p>This is a racing game that was originally on mobile and is now on Steam &copy;.</p>
+        <p class="lang-en">This is a racing game that was originally on mobile and is now on Steam &copy;.</p>
+        <p class="lang-fi" style="display:none;">Tämä on kilpa-ajopeli, joka oli alun perin mobiililla ja on nyt saatavilla Steamissa &copy;.</p>
         
         <p>
             <a href="https://store.steampowered.com/app/3203370/" target="_blank">
-                <font color="#00ffff"><b>[ CLICK HERE TO VISIT THE STEAM PAGE ]</b></font>
+                <font color="#00ffff" class="lang-en"><b>[ CLICK HERE TO VISIT THE STEAM PAGE ]</b></font>
+                <font color="#00ffff" class="lang-fi" style="display:none;"><b>[ KLIKKAA TÄSTÄ STEAM-SIVULLE ]</b></font>
             </a>
         </p>
         
-        <h2 align="center">PC System Requirements</h2>
+        <h2 align="center" class="lang-en">PC System Requirements</h2>
+        <h2 align="center" class="lang-fi" style="display:none;">PC-laitteistovaatimukset</h2>
         
         <table border="1" width="100%" cellpadding="10" cellspacing="0" bordercolor="white">
             <tr bgcolor="#222222">
-                <th><font face="Arial" color="#ffcc00">Component</font></th>
-                <th><font face="Arial" color="#ffcc00">Minimum</font></th>
-                <th><font face="Arial" color="#ffcc00">Recommended</font></th>
+                <th><font face="Arial" color="#ffcc00" class="lang-en">Component</font><font face="Arial" color="#ffcc00" class="lang-fi" style="display:none;">Osa</font></th>
+                <th><font face="Arial" color="#ffcc00" class="lang-en">Minimum</font><font face="Arial" color="#ffcc00" class="lang-fi" style="display:none;">Minimi</font></th>
+                <th><font face="Arial" color="#ffcc00" class="lang-en">Recommended</font><font face="Arial" color="#ffcc00" class="lang-fi" style="display:none;">Suositus</font></th>
             </tr>
             <tr>
                 <td><b>OS</b></td>
-                <td>Windows 10+</td>
-                <td>Windows 11</td>
+                <td class="lang-en">Windows 10+</td><td class="lang-fi" style="display:none;">Windows 10+</td>
+                <td class="lang-en">Windows 11</td><td class="lang-fi" style="display:none;">Windows 11</td>
             </tr>
             <tr>
-                <td><b>Processor</b></td>
+                <td><b><span class="lang-en">Processor</span><span class="lang-fi" style="display:none;">Prosessori</span></b></td>
                 <td>Intel Core i3 4130T (2.9GHz) / AMD FX 6300 (3.5 GHz)</td>
                 <td>Intel Core i5-9600K / Ryzen 5</td>
             </tr>
             <tr>
-                <td><b>Memory</b></td>
+                <td><b><span class="lang-en">Memory</span><span class="lang-fi" style="display:none;">Muisti</span></b></td>
                 <td>4 GB RAM</td>
                 <td>8 GB RAM</td>
             </tr>
             <tr>
-                <td><b>Graphics</b></td>
+                <td><b><span class="lang-en">Graphics</span><span class="lang-fi" style="display:none;">Näytönohjain</span></b></td>
                 <td>Nvidia GTX 770 (1GB) / AMD HD 7870 (1GB)</td>
                 <td>Nvidia GTX 1060 / AMD RX 580</td>
             </tr>
             <tr>
                 <td><b>DirectX</b></td>
-                <td>Version 9.0</td>
-                <td>Version 11</td>
-            </tr>
-            <tr>
-                <td><b>Storage</b></td>
-                <td>3 GB available space</td>
-                <td>5 GB (SSD Recommended)</td>
-            </tr>
-            <tr>
-                <td><b>Sound Card</b></td>
-                <td>DirectX 9.0c compatible</td>
-                <td>DirectX 9.0c compatible</td>
-            </tr>
-            <tr>
-                <td><b>joo</b></td>
-                <td>Joo kans</td>
-                <td>joo</td>
-            </tr>
-        </table>
-    </main>
-
-    <hr color="#444444">
-
-    <footer>
-        <p align="center">
-            <font size="2">&copy; Your Name 2026 | Ala Mobile Project</font>
-        </p>
-    </footer>
-
-</body>
-</html>
+                <td class="lang-en">Version 9.0</td><td class="lang-fi" style="display:none;">Versio 9.0</td>
+                <td class="lang-en">Version
