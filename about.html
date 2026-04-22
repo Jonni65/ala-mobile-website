@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Ala Mobile Hub</title>
+    <style>
+        :root {
+            --bg: #050505; --card: #0f0f0f; --text: #ffffff;
+            --accent: #ff0000; --border: #222;
+            --active: #00ff41; --nav-bg: #1a1a1a;
+            --shadow: rgba(0,0,0,0.5);
+            --subtext: #888;
+            --header-bg: #000000;
+        }
+        [data-theme="light"] {
+            --bg: #ffffff; --card: #f4f4f4; --text: #111111;
+            --accent: #d70000; --border: #cccccc;
+            --active: #008f25; --nav-bg: #eeeeee;
+            --shadow: rgba(0,0,0,0.1);
+            --header-bg: #e0e0e0; 
+        }
+
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden; }
+
+        /* --- SIDEBAR --- */
+        #menuToggle { display: block; position: fixed; top: 30px; left: 30px; z-index: 10010; user-select: none; }
+        #menuToggle span { display: block; width: 26px; height: 3px; margin-bottom: 6px; background: var(--accent); transition: 0.4s; position: relative; z-index: 10011; }
+        #menuToggle input { display: block; width: 40px; height: 32px; position: absolute; top: -7px; left: -5px; cursor: pointer; opacity: 0; z-index: 10012; }
+        #menuToggle input:checked ~ span:nth-last-child(3) { transform: rotate(45deg) translate(5px, 6px); }
+        #menuToggle input:checked ~ span:nth-last-child(2) { opacity: 0; }
+        #menuToggle input:checked ~ span:nth-last-child(1) { transform: rotate(-45deg) translate(5px, -7px); }
+
+        #menu { 
+            position: fixed; width: 320px; height: 100vh; margin: 0; padding: 80px 15px; top: 0; left: 0; 
+            background: var(--card); border-right: 6px solid var(--accent); transform: translateX(-100%); 
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); z-index: 10000; list-style: none; box-sizing: border-box; 
+        }
+        #menuToggle input:checked ~ ul { transform: translateX(0); }
+
+        /* --- NAV & LANG --- */
+        .selector-label { font-size: 10px; font-weight: 900; letter-spacing: 1.5px; color: var(--accent); text-transform: uppercase; text-align: center; display: block; margin-top: 10px; }
+        .lang-trigger { text-align: center; cursor: pointer; font-size: 28px; color: var(--accent); margin-bottom: 5px; }
+        #lang-list { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; border-bottom: 1px solid var(--border); }
+        #lang-list.active { max-height: 350px; margin-bottom: 15px; }
+        .lang-option { display: flex; align-items: center; padding: 10px 15px; font-size: 13px; font-weight: bold; cursor: pointer; margin: 4px 0; background: var(--nav-bg); clip-path: polygon(4% 0, 100% 0, 96% 100%, 0% 100%); transition: 0.2s; }
+        .lang-option img { width: 20px; margin-right: 12px; }
+        .lang-option:hover { background: var(--accent); color: #fff; transform: translateX(5px); }
+        .lang-option.selected { background: var(--active) !important; color: white !important; }
+
+        .nav-list { list-style: none; padding: 0; margin-top: 20px; }
+        .sharp-nav { display: block; background: var(--nav-bg); color: var(--text); text-decoration: none; font-weight: 900; text-transform: uppercase; font-style: italic; padding: 16px 25px; margin-bottom: 8px; clip-path: polygon(0% 0%, 100% 0%, 88% 100%, 0% 100%); transition: 0.2s; }
+        .sharp-nav:hover { background: var(--accent); color: #fff; transform: translateX(8px); }
+
+        /* --- HEADER & BACK BTN --- */
+        .page-header { 
+            position: relative; width: 100%; height: 260px; 
+            background-color: var(--header-bg); 
+            border-bottom: 4px solid var(--accent); 
+            transition: background 0.5s ease;
+        }
+        .header-fade {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to right, var(--header-bg) 0%, transparent 90%);
+            z-index: 2;
+        }
+        .header-title-wrap { position: absolute; bottom: 30px; left: 50px; z-index: 10; }
+        .page-title { font-size: 48px; font-weight: 900; font-style: italic; text-transform: uppercase; letter-spacing: -2px; margin: 0; }
+
+        .back-btn { 
+            position: absolute; top: 30px; right: 40px; z-index: 100; 
+            background: var(--nav-bg); color: var(--text); padding: 10px 25px; 
+            text-decoration: none; font-weight: 900; font-style: italic; font-size: 11px; 
+            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%); border: 1px solid var(--border); 
+            transition: 0.3s;
+        }
+        .back-btn:hover { background: var(--accent); color: white; }
+
+        /* --- MAIN CONTENT --- */
+        .main-container { max-width: 900px; margin: 40px auto; padding: 0 20px; padding-bottom: 100px; }
+        .drawer { background: var(--card); border-left: 8px solid var(--accent); margin-bottom: 20px; overflow: hidden; box-shadow: 0 10px 30px var(--shadow); transition: 0.3s; }
+        .drawer-trigger { padding: 25px 40px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; }
+        .drawer-trigger h2 { margin: 0; font-style: italic; text-transform: uppercase; font-size: 18px; font-weight: 900; color: var(--accent); letter-spacing: 1px; }
+        .drawer-trigger .icon { font-size: 24px; transition: 0.4s; color: var(--accent); font-weight: bold; }
+        
+        .drawer-content { max-height: 0; padding: 0 40px; opacity: 0; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+        .drawer.open .drawer-content { max-height: 1500px; padding-bottom: 40px; opacity: 1; }
+        .drawer.open .icon { transform: rotate(45deg); }
+
+        p { line-height: 1.8; opacity: 0.85; font-size: 15px; text-align: justify; }
+        .legal-sub { font-weight: 900; font-size: 12px; color: var(--accent); text-transform: uppercase; display: block; margin: 25px 0 5px; letter-spacing: 1px; }
+        .ai-tag { display: inline-block; border: 1px solid var(--border); padding: 8px 18px; font-size: 10px; font-weight: 900; color: var(--subtext); text-transform: uppercase; letter-spacing: 2px; margin-top: 20px; background: var(--nav-bg); }
+        .footer-credit { text-align: center; margin-top: 60px; border-top: 1px solid var(--border); padding-top: 30px; font-size: 12px; opacity: 0.5; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+    </style>
+</head>
+<body>
+
+    <nav id="menuToggle">
+        <input type="checkbox" id="navCheck" />
+        <span></span><span></span><span></span>
+        <ul id="menu">
+            <span class="selector-label">Language</span>
+            <div class="lang-trigger" onclick="document.getElementById('lang-list').classList.toggle('active')">⏷</div>
+            <div id="lang-list">
+                <div class="lang-option" onclick="changeLang('en', this)"><img src="https://flagcdn.com/w40/gb.png"> ENGLISH</div>
+                <div class="lang-option" onclick="changeLang('fi', this)"><img src="https://flagcdn.com/w40/fi.png"> SUOMI</div>
+                <div class="lang-option" onclick="changeLang('sv', this)"><img src="https://flagcdn.com/w40/se.png"> SVENSKA</div>
+                <div class="lang-option" onclick="changeLang('it', this)"><img src="https://flagcdn.com/w40/it.png"> ITALIANO</div>
+                <div class="lang-option" onclick="changeLang('es', this)"><img src="https://flagcdn.com/w40/es.png"> ESPAÑOL</div>
+            </div>
+            <div class="nav-list">
+                <li><a href="index.html" class="sharp-nav" id="link-home">HOME SCREEN</a></li>
+                <li><a href="tracks.html" class="sharp-nav" id="link-tracks">TRACK LIST</a></li>
+                <li><a href="custom.html" class="sharp-nav" id="link-custom">CUSTOMIZATION</a></li>
+                <hr style="border: none; border-top: 1px solid var(--border); margin: 30px 0;">
+                <li><button onclick="toggleTheme()" style="background:none; border:none; color:var(--accent); font-weight:900; cursor:pointer; text-transform:uppercase; font-style:italic;" id="txt-mode">SWITCH THEME</button></li>
+            </div>
+        </ul>
+    </nav>
+
+    <div class="page-header">
+        <a href="index.html" class="back-btn" id="btn-back">← HOME SCREEN</a>
+        <div class="header-fade"></div>
+        <div class="header-title-wrap">
+            <div class="page-title" id="txt-about-header">PROJECT DOCUMENTATION</div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="drawer" id="drawer-origins">
+            <div class="drawer-trigger" onclick="toggleDrawer('drawer-origins')">
+                <h2 id="txt-project-title">PROJECT STORY</h2>
+                <div class="icon">+</div>
+            </div>
+            <div class="drawer-content">
+                <p id="txt-project-body">
+                    Initially, I started this project as schoolwork during my get-to-know period at IT-studies in my school. However, after seeing how well the result turned out, I decided to publish it in the hopes that someday Vince will adopt the site.
+                </p>
+                <div class="ai-tag" id="txt-ai-credit">BUILT IN 2 DAYS WITH GOOGLE GEMINI AI</div>
+            </div>
+        </div>
+
+        <div class="drawer" id="drawer-legal">
+            <div class="drawer-trigger" onclick="toggleDrawer('drawer-legal')">
+                <h2 id="txt-legal-title">LEGAL & ATTRIBUTION</h2>
+                <div class="icon">+</div>
+            </div>
+            <div class="drawer-content">
+                <span class="legal-sub" id="lbl-tm">TRADEMARK NOTICE & COMPLIANCE</span>
+                <p id="txt-tm-body">Ala Mobile and all associated visual assets, high-fidelity logos, gameplay imagery, and proprietary UI elements are the exclusive intellectual property of CVi Games and Vincenzo Cosentino. This digital platform is an independent, non-commercial fan project created for technical demonstration. It is not officially affiliated with, endorsed by, or sponsored by CVi Games, nor does it claim any ownership over the software or its brand identity.</p>
+                
+                <span class="legal-sub" id="lbl-ip">INTELLECTUAL PROPERTY & CARTOGRAPHY</span>
+                <p id="txt-ip-body">All Formula 1 circuit maps, technical track layouts, and historical racing data utilized as reference materials are the property of Formula One Management (FOM), their respective architects, and official sanctioning bodies. These graphical assets are integrated under 'Fair Use' provisions for non-commercial educational evaluation within a student IT portfolio. Any and all third-party trademarks remain the property of their respective owners.</p>
+                
+                <span class="legal-sub" id="lbl-noncom">NON-COMMERCIAL INTENT & LIABILITY</span>
+                <p id="txt-noncom-body">This platform is strictly non-profit and does not generate revenue through advertisements, subscriptions, or data monetization. It does not host proprietary game files, executable binaries, or provide unauthorized access to copyrighted software. The project serves exclusively as a technical UI/UX demonstration for educational assessment by Jonni Heiskanen. The author assumes no liability for the external use of this information.</p>
+            </div>
+        </div>
+
+        <div class="footer-credit" id="txt-footer">
+            &copy; 2026 JONNI HEISKANEN | CVI GAMES FAN PROJECT | ALL RIGHTS RESERVED
+        </div>
+    </div>
+
+    <script>
+    function toggleDrawer(id) { document.getElementById(id).classList.toggle('open'); }
+
+    const translations = {
+        en: { 
+            "link-home": "HOME SCREEN", "link-tracks": "TRACK LIST", "link-custom": "CUSTOMIZATION", "btn-back": "← HOME SCREEN",
+            "txt-about-header": "PROJECT DOCUMENTATION", "txt-project-title": "PROJECT STORY", 
+            "txt-project-body": "Initially, I started this project as schoolwork during my get-to-know period at IT-studies in my school. However, after seeing how well the result turned out, I decided to publish it in the hopes that someday Vince will adopt the site.",
+            "txt-ai-credit": "BUILT IN 2 DAYS WITH GOOGLE GEMINI AI",
+            "txt-legal-title": "LEGAL & ATTRIBUTION", 
+            "lbl-tm": "TRADEMARK NOTICE & COMPLIANCE", "txt-tm-body": "Ala Mobile and all associated visual assets, logos, and gameplay imagery are the exclusive intellectual property of CVi Games and Vincenzo Cosentino. This digital platform is an independent, non-commercial fan project created for technical demonstration. It is not officially affiliated with CVi Games.",
+            "lbl-ip": "INTELLECTUAL PROPERTY & CARTOGRAPHY", "txt-ip-body": "All Formula 1 circuit maps and technical track layouts used for reference are property of FOM and their respective architects. These assets are utilized under 'Fair Use' for educational reference purposes within a student IT portfolio.",
+            "lbl-noncom": "NON-COMMERCIAL INTENT & LIABILITY", "txt-noncom-body": "This platform is strictly non-profit and does not generate revenue. It does not host proprietary files or copyrighted software. The project serves exclusively as a technical UI/UX demonstration for educational evaluation by Jonni Heiskanen.",
+            "txt-footer": "© 2026 JONNI HEISKANEN | CVI GAMES FAN PROJECT | ALL RIGHTS RESERVED", "txt-mode": "SWITCH THEME"
+        },
+        fi: { 
+            "link-home": "ALOITUSRUUTU", "link-tracks": "RATALISTA", "link-custom": "MUOKKAUS", "btn-back": "← ALOITUSRUUTU",
+            "txt-about-header": "PROJEKTIN DOKUMENTAATIO", "txt-project-title": "PROJEKTIN TARINA", 
+            "txt-project-body": "Aloitin tämän projektin alun perin kouluprojektina IT-opintojeni tutustumisjaksolla. Nähtyäni kuinka hyvä lopputuloksesta tuli, päätin julkaista sen toivoen, että Vince ehkä joskus ottaisi sivuston käyttöön.",
+            "txt-ai-credit": "KEHITETTY 2 PÄIVÄSSÄ GOOGLE GEMINI AI:N AVULLA",
+            "txt-legal-title": "OIKEUDELLISET TIEDOT", 
+            "lbl-tm": "TAVARAMERKKI-ILMOITUS JA NOUDATTAMINEN", "txt-tm-body": "Ala Mobile ja kaikki siihen liittyvät varat, logot ja pelikuvat ovat CVi Gamesin ja Vincenzo Cosentinon yksinomaista omaisuutta. Tämä sivusto on itsenäinen faniprojekti teknistä esittelyä varten.",
+            "lbl-ip": "TEKIJÄNOIKEUDET JA KARTOGRAFIA", "txt-ip-body": "F1-ratakartat ja tekniset asettelut ovat FOM:n ja vastaavien arkkitehtien omaisuutta. Näitä varoja käytetään 'Fair Use' -periaatteen mukaisesti Jonni Heiskasen opintoihin liittyvässä portfoliossa.",
+            "lbl-noncom": "EI-KAUPALLINEN TARKOITUS JA VASTUU", "txt-noncom-body": "Sivusto ei tuota tuloja mainoksilla tai datalla. Se ei sisällä suojattuja pelitiedostoja tai tekijänoikeudella suojattuja ohjelmistoja. Projekti on tekninen käyttöliittymäesittely Jonni Heiskasen opetuksellista arviointia varten.",
+            "txt-footer": "© 2026 JONNI HEISKANEN | CVI GAMES FANIPROJEKTI | KAIKKI OIKEUDET PIDÄTETÄÄN", "txt-mode": "VAIHDA TEEMA"
+        }
+    };
+
+    function changeLang(lang, el) {
+        document.querySelectorAll('.lang-option').forEach(opt => opt.classList.remove('selected'));
+        if(el) el.classList.add('selected');
+        localStorage.setItem('prefLang', lang);
+        applyLanguage();
+        setTimeout(() => { if(el) el.classList.remove('selected'); }, 1500); 
+    }
+
+    function applyLanguage() {
+        const lang = localStorage.getItem('prefLang') || 'en';
+        const data = translations[lang] || translations['en'];
+        for (let id in data) {
+            const el = document.getElementById(id);
+            if (el) el.innerText = data[id];
+        }
+    }
+
+    function toggleTheme() {
+        const body = document.documentElement;
+        const isDark = body.getAttribute('data-theme') !== 'light';
+        body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+        localStorage.setItem('theme', isDark ? 'light' : 'dark');
+    }
+
+    window.onload = () => {
+        applyLanguage();
+        if (localStorage.getItem('theme') === 'light') document.documentElement.setAttribute('data-theme', 'light');
+    };
+    </script>
+</body>
+</html>
