@@ -1,425 +1,213 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Ala Mobile - Home</title>
-
     <style>
-
         :root {
-
             --bg: #050505; --card: #0f0f0f; --text: #ffffff;
-
             --accent: #ff0000; --border: #222;
-
             --active: #00ff41; --nav-bg: #1a1a1a;
-
             --shadow: rgba(0,0,0,0.4);
-
             /* Dark Theme Fade Colors */
-
             --fade-color: rgba(0,0,0,1);
-
             --fade-mid: rgba(0,0,0,0.8);
-
         }
-
         [data-theme="light"] {
-
             --bg: #ffffff; --card: #f8f9fa; --text: #111111;
-
             --accent: #d70000; --border: #dddddd;
-
             --active: #008f25; --nav-bg: #eeeeee;
-
             --shadow: rgba(0,0,0,0.1);
-
             /* Light Theme Fade Colors */
-
             --fade-color: rgba(255,255,255,1);
-
             --fade-mid: rgba(255,255,255,0.7);
-
         }
-
-
 
         body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden; transition: background 0.5s ease; }
 
-
-
         /* --- SIDEBAR & HAMBURGER --- */
-
         #menuToggle { display: block; position: fixed; top: 30px; left: 30px; z-index: 10010; user-select: none; }
-
         #menuToggle span { display: block; width: 26px; height: 3px; margin-bottom: 6px; background: var(--accent); transition: 0.4s; position: relative; z-index: 10011; }
-
         #menuToggle input { display: block; width: 40px; height: 32px; position: absolute; top: -7px; left: -5px; cursor: pointer; opacity: 0; z-index: 10012; }
-
         #menuToggle input:checked ~ span:nth-last-child(3) { transform: rotate(45deg) translate(5px, 6px); }
-
         #menuToggle input:checked ~ span:nth-last-child(2) { opacity: 0; }
-
         #menuToggle input:checked ~ span:nth-last-child(1) { transform: rotate(-45deg) translate(5px, -7px); }
 
-
-
         #menu { 
-
             position: fixed; width: 320px; height: 100vh; margin: 0; padding: 80px 15px; top: 0; left: 0; 
-
             background: var(--card); border-right: 6px solid var(--accent); transform: translateX(-100%); 
-
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); z-index: 10000; list-style: none; box-sizing: border-box; 
-
         }
-
         #menuToggle input:checked ~ ul { transform: translateX(0); }
 
-
-
         /* --- LANGUAGE SELECTOR --- */
-
         .selector-label { font-size: 10px; font-weight: 900; letter-spacing: 1.5px; color: var(--accent); text-transform: uppercase; text-align: center; display: block; margin-top: 10px; }
-
         .lang-trigger { text-align: center; cursor: pointer; font-size: 28px; color: var(--accent); margin-bottom: 5px; }
-
         #lang-list { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; border-bottom: 1px solid var(--border); }
-
         #lang-list.active { max-height: 350px; margin-bottom: 15px; }
-
         .lang-option { display: flex; align-items: center; padding: 10px 15px; font-size: 13px; font-weight: bold; cursor: pointer; margin: 4px 0; background: var(--nav-bg); clip-path: polygon(4% 0, 100% 0, 96% 100%, 0% 100%); transition: 0.2s; }
-
         .lang-option img { width: 20px; margin-right: 12px; }
-
         .lang-option:hover { background: var(--accent); color: #fff; transform: translateX(5px); }
-
         .lang-option.selected { background: var(--active) !important; color: white !important; }
 
-
-
         .nav-list { list-style: none; padding: 0; margin-top: 20px; }
-
         .sharp-nav { display: block; background: var(--nav-bg); color: var(--text); text-decoration: none; font-weight: 900; text-transform: uppercase; font-style: italic; padding: 16px 25px; margin-bottom: 8px; clip-path: polygon(0% 0%, 100% 0%, 88% 100%, 0% 100%); transition: 0.2s; }
-
         .sharp-nav:hover { background: var(--accent); color: #fff; transform: translateX(8px); }
 
-
-
         /* --- HERO & SMOOTH DYNAMIC FADE --- */
-
         .hero-container { position: relative; width: 100%; height: clamp(350px, 60vh, 600px); background: var(--bg); overflow: hidden; transition: background 0.5s ease; }
-
         .hero-img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-
-
         .hero-container::after {
-
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-
             background: 
-
                 linear-gradient(to right, var(--fade-color) 0%, var(--fade-mid) 25%, transparent 100%),
-
                 linear-gradient(to bottom, transparent 80%, var(--fade-color) 100%);
-
             z-index: 2; transition: background 0.5s ease; 
-
         }
-
         
-
         .official-logo { 
-
             position: absolute; bottom: 10%; left: 5%; width: clamp(240px, 40vw, 500px); 
-
             z-index: 10; filter: drop-shadow(5px 5px 15px rgba(0,0,0,0.8)); transition: filter 0.5s ease;
-
         }
-
         [data-theme="light"] .official-logo { filter: drop-shadow(2px 2px 10px rgba(0,0,0,0.3)) brightness(0.9); }
 
-
-
         /* --- CONTENT CARDS --- */
-
         .main-container { max-width: 1000px; margin: -60px auto 0; padding: 0 20px; position: relative; z-index: 100; padding-bottom: 100px; }
-
         .steam-container { text-align: center; margin-bottom: 40px; }
-
         .steam-btn { display: inline-block; background: var(--accent); color: #fff; padding: 18px 45px; text-decoration: none; font-weight: 900; font-style: italic; text-transform: uppercase; clip-path: polygon(8% 0, 100% 0, 92% 100%, 0% 100%); transition: 0.3s; font-size: 15px; border: none; cursor: pointer; }
-
         .steam-btn:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(255,0,0,0.4); }
-
-
 
         .content-card { background: var(--card); border-left: 8px solid var(--accent); padding: clamp(20px, 5vw, 50px); box-shadow: 0 15px 35px rgba(0,0,0,0.2); margin-bottom: 30px; transition: background 0.5s ease; }
 
-
-
         .table-wrap { width: 100%; overflow-x: auto; margin-top: 25px; }
-
         table { border-collapse: collapse; width: 100%; min-width: 500px; }
-
         th { text-align: left; color: var(--accent); border-bottom: 3px solid var(--accent); padding: 15px 10px; font-size: 12px; text-transform: uppercase; font-weight: 900; }
-
         td { padding: 18px 10px; border-bottom: 1px solid var(--border); font-size: 15px; font-weight: 600; transition: border 0.5s ease; }
 
-
-
         /* --- PROJECT LINK --- */
-
         .about-link-container { text-align: center; margin-top: -10px; margin-bottom: 60px; }
-
         #link-about-project { color: var(--accent); font-weight: 900; text-decoration: none; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; font-style: italic; border-bottom: 2px solid var(--accent); padding-bottom: 4px; transition: 0.3s; opacity: 0.7; }
-
         #link-about-project:hover { opacity: 1; letter-spacing: 3px; }
-
     </style>
-
 </head>
-
 <body>
 
-
-
     <nav id="menuToggle">
-
         <input type="checkbox" id="navCheck" />
-
         <span></span><span></span><span></span>
-
         <ul id="menu">
-
             <span class="selector-label">Language</span>
-
             <div class="lang-trigger" onclick="document.getElementById('lang-list').classList.toggle('active')">⏷</div>
-
             <div id="lang-list">
-
                 <div class="lang-option" onclick="changeLang('en', this)"><img src="https://flagcdn.com/w40/gb.png"> ENGLISH</div>
-
                 <div class="lang-option" onclick="changeLang('fi', this)"><img src="https://flagcdn.com/w40/fi.png"> SUOMI</div>
-
                 <div class="lang-option" onclick="changeLang('sv', this)"><img src="https://flagcdn.com/w40/se.png"> SVENSKA</div>
-
                 <div class="lang-option" onclick="changeLang('it', this)"><img src="https://flagcdn.com/w40/it.png"> ITALIANO</div>
-
                 <div class="lang-option" onclick="changeLang('es', this)"><img src="https://flagcdn.com/w40/es.png"> ESPAÑOL</div>
-
             </div>
-
             <div class="nav-list">
-
                 <li><a href="index.html" class="sharp-nav" id="link-home">HOME SCREEN</a></li>
-
                 <li><a href="tracks.html" class="sharp-nav" id="link-tracks">TRACK LIST</a></li>
-
                 <li><a href="custom.html" class="sharp-nav" id="link-custom">CUSTOMIZATION</a></li>
-
                 <hr style="border: none; border-top: 1px solid var(--border); margin: 30px 0;">
-
                 <li><button onclick="toggleTheme()" style="background:none; border:none; color:var(--accent); font-weight:900; cursor:pointer; text-transform:uppercase; font-style:italic;" id="txt-mode">SWITCH THEME</button></li>
-
             </div>
-
         </ul>
-
     </nav>
 
-
-
     <div class="hero-container">
-
         <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3203370/library_hero.jpg" class="hero-img">
-
         <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3203370/logo.png" class="official-logo">
-
     </div>
-
-
 
     <div class="main-container">
-
         <div class="steam-container">
-
             <a href="https://store.steampowered.com/app/3203370/" target="_blank" class="steam-btn" id="btn-steam">GET IT ON STEAM</a>
-
         </div>
-
         
-
         <div class="content-card">
-
             <h2 id="txt-sys-req" style="font-size: 24px; font-weight: 900; font-style: italic; letter-spacing: -1px; margin: 0;">SYSTEM REQUIREMENTS</h2>
-
             <div class="table-wrap">
-
                 <table>
-
                     <tr><th id="th-osa">COMPONENT</th><th id="th-min">MINIMUM</th><th id="th-rec">RECOMMENDED</th></tr>
-
                     <tr><td>OS</td><td>Windows 10+</td><td>Windows 11</td></tr>
-
                     <tr><td id="td-proc">PROCESSOR</td><td>i3 4130T / FX 6300</td><td>i5-9600K / Ryzen 5</td></tr>
-
                     <tr><td id="td-mem">MEMORY</td><td>4 GB RAM</td><td>8 GB RAM</td></tr>
-
                     <tr><td id="td-gfx">GRAPHICS</td><td>GTX 770 / HD 7870</td><td>GTX 1060 / RX 580</td></tr>
-
                     <tr><td id="td-store">STORAGE</td><td id="td-store-min">3 GB space</td><td id="td-store-rec">5 GB (SSD)</td></tr>
-
                 </table>
-
             </div>
-
         </div>
-
-
 
         <div class="about-link-container">
-
             <a href="about.html" id="link-about-project">PROJECT DOCUMENTATION & LEGAL INFO</a>
-
         </div>
-
     </div>
 
-
-
     <script>
-
     const translations = {
-
         en: { 
-
             "link-home": "HOME SCREEN", "link-tracks": "TRACK LIST", "link-custom": "CUSTOMIZATION", "txt-sys-req": "SYSTEM REQUIREMENTS", 
-
             "th-osa": "COMPONENT", "th-min": "MINIMUM", "th-rec": "RECOMMENDED", "td-proc": "PROCESSOR", "td-mem": "MEMORY", "td-gfx": "GRAPHICS", 
-
             "td-store": "STORAGE", "td-store-min": "3 GB SPACE", "td-store-rec": "5 GB (SSD)", "btn-steam": "GET IT ON STEAM", "txt-mode": "SWITCH THEME",
-
             "link-about-project": "PROJECT DOCUMENTATION & LEGAL INFO"
-
         },
-
         fi: { 
-
             "link-home": "ALOITUSRUUTU", "link-tracks": "RATALISTA", "link-custom": "MUOKKAUS", "txt-sys-req": "JÄRJESTELMÄVAATIMUKSET", 
-
             "th-osa": "OSA", "th-min": "MINIMI", "th-rec": "SUOSITUS", "td-proc": "PROSESSORI", "td-mem": "MUISTI", "td-gfx": "NÄYTÖNOHJAIN", 
-
             "td-store": "TALLENNUSTILA", "td-store-min": "3 GT TILAA", "td-store-rec": "5 GT (SSD)", "btn-steam": "LATAA STEAMISTA", "txt-mode": "VAIHDA TEEMA",
-
             "link-about-project": "PROJEKTIN DOKUMENTAATIO JA LAKITIEDOT"
-
         },
-
         sv: { 
-
             "link-home": "HEMSKÄRM", "link-tracks": "BANLISTA", "link-custom": "ANPASSNING", "txt-sys-req": "SYSTEMKRAV", 
-
             "th-osa": "KOMPONENT", "th-min": "MINIMUM", "th-rec": "REKOMMENDERAT", "td-proc": "PROCESSOR", "td-mem": "MINNE", "td-gfx": "GRAFIK", 
-
             "td-store": "LAGRING", "td-store-min": "3 GB UTRYMME", "td-store-rec": "5 GB (SSD)", "btn-steam": "HÄMTA PÅ STEAM", "txt-mode": "BYT TEMA",
-
             "link-about-project": "PROJEKTDOKUMENTATION & JURIDISK INFO"
-
         },
-
         it: { 
-
             "link-home": "HOME", "link-tracks": "LISTA TRACCIATI", "link-custom": "PERSONALIZZA", "txt-sys-req": "REQUISITI DI SISTEMA", 
-
             "th-osa": "COMPONENTE", "th-min": "MINIMO", "th-rec": "CONSIGLIATO", "td-proc": "PROCESSORE", "td-mem": "MEMORIA", "td-gfx": "GRAFICA", 
-
             "td-store": "ARCHIVIAZIONE", "td-store-min": "3 GB DI SPAZIO", "td-store-rec": "5 GB (SSD)", "btn-steam": "SCARICA SU STEAM", "txt-mode": "CAMBIA TEMA",
-
             "link-about-project": "DOCUMENTAZIONE E NOTE LEGALI"
-
         },
-
         es: { 
-
             "link-home": "INICIO", "link-tracks": "LISTA DE PISTAS", "link-custom": "PERSONALIZACIÓN", "txt-sys-req": "REQUISITOS DEL SISTEMA", 
-
             "th-osa": "COMPONENTE", "th-min": "MÍNIMO", "th-rec": "RECOMENDADO", "td-proc": "PROCESADOR", "td-mem": "MEMORIA", "td-gfx": "GRÁFICOS", 
-
             "td-store": "ALMACENAMIENTO", "td-store-min": "3 GB DE ESPACIO", "td-store-rec": "5 GB (SSD)", "btn-steam": "CONSEGUIR EN STEAM", "txt-mode": "CAMBIAR TEMA",
-
             "link-about-project": "DOCUMENTACIÓN E INFO LEGAL"
-
         }
-
     };
-
-
 
     function changeLang(lang, el) {
-
         document.querySelectorAll('.lang-option').forEach(opt => opt.classList.remove('selected'));
-
         if(el) el.classList.add('selected');
-
         localStorage.setItem('prefLang', lang);
-
         applyLanguage();
-
         setTimeout(() => { if(el) el.classList.remove('selected'); }, 1500); 
-
     }
-
-
 
     function applyLanguage() {
-
         const lang = localStorage.getItem('prefLang') || 'en';
-
         const data = translations[lang] || translations['en'];
-
         for (let id in data) {
-
             const el = document.getElementById(id);
-
             if (el) el.innerText = data[id];
-
         }
-
     }
-
-
 
     function toggleTheme() {
-
         const body = document.documentElement;
-
         const isDark = body.getAttribute('data-theme') !== 'light';
-
         body.setAttribute('data-theme', isDark ? 'light' : 'dark');
-
         localStorage.setItem('theme', isDark ? 'light' : 'dark');
-
     }
 
-
-
     window.onload = () => {
-
         applyLanguage();
-
         if (localStorage.getItem('theme') === 'light') document.documentElement.setAttribute('data-theme', 'light');
-
     };
-
     </script>
-
 </body>
-
 </html>
