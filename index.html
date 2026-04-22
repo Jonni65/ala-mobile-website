@@ -10,7 +10,6 @@
             --accent: #ff0000; --border: #222;
             --active: #00ff41; --nav-bg: #1a1a1a;
             --shadow: rgba(0,0,0,0.4);
-            /* Dark Theme Fade Colors */
             --fade-color: rgba(0,0,0,1);
             --fade-mid: rgba(0,0,0,0.8);
         }
@@ -19,7 +18,6 @@
             --accent: #d70000; --border: #dddddd;
             --active: #008f25; --nav-bg: #eeeeee;
             --shadow: rgba(0,0,0,0.1);
-            /* Light Theme Fade Colors */
             --fade-color: rgba(255,255,255,1);
             --fade-mid: rgba(255,255,255,0.7);
         }
@@ -55,28 +53,26 @@
         .sharp-nav { display: block; background: var(--nav-bg); color: var(--text); text-decoration: none; font-weight: 900; text-transform: uppercase; font-style: italic; padding: 16px 25px; margin-bottom: 8px; clip-path: polygon(0% 0%, 100% 0%, 88% 100%, 0% 100%); transition: 0.2s; }
         .sharp-nav:hover { background: var(--accent); color: #fff; transform: translateX(8px); }
 
-        /* --- HERO & SMOOTH DYNAMIC FADE --- */
+        /* --- HERO --- */
         .hero-container { position: relative; width: 100%; height: clamp(350px, 60vh, 600px); background: var(--bg); overflow: hidden; transition: background 0.5s ease; }
         .hero-img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
         .hero-container::after {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: 
-                linear-gradient(to right, var(--fade-color) 0%, var(--fade-mid) 25%, transparent 100%),
-                linear-gradient(to bottom, transparent 80%, var(--fade-color) 100%);
+            background: linear-gradient(to right, var(--fade-color) 0%, var(--fade-mid) 25%, transparent 100%),
+                        linear-gradient(to bottom, transparent 80%, var(--fade-color) 100%);
             z-index: 2; transition: background 0.5s ease; 
         }
-        
-        .official-logo { 
-            position: absolute; bottom: 10%; left: 5%; width: clamp(240px, 40vw, 500px); 
-            z-index: 10; filter: drop-shadow(5px 5px 15px rgba(0,0,0,0.8)); transition: filter 0.5s ease;
-        }
-        [data-theme="light"] .official-logo { filter: drop-shadow(2px 2px 10px rgba(0,0,0,0.3)) brightness(0.9); }
+        .official-logo { position: absolute; bottom: 10%; left: 5%; width: clamp(240px, 40vw, 500px); z-index: 10; filter: drop-shadow(5px 5px 15px rgba(0,0,0,0.8)); transition: filter 0.5s ease; }
 
         /* --- CONTENT CARDS --- */
         .main-container { max-width: 1000px; margin: -60px auto 0; padding: 0 20px; position: relative; z-index: 100; padding-bottom: 100px; }
         .steam-container { text-align: center; margin-bottom: 40px; }
-        .steam-btn { display: inline-block; background: var(--accent); color: #fff; padding: 18px 45px; text-decoration: none; font-weight: 900; font-style: italic; text-transform: uppercase; clip-path: polygon(8% 0, 100% 0, 92% 100%, 0% 100%); transition: 0.3s; font-size: 15px; border: none; cursor: pointer; }
+        .steam-btn { 
+            display: inline-block; background: var(--accent); color: #fff !important; padding: 18px 45px; 
+            text-decoration: none !important; font-weight: 900; font-style: italic; text-transform: uppercase; 
+            clip-path: polygon(8% 0, 100% 0, 92% 100%, 0% 100%); transition: 0.3s; 
+            font-size: 15px; border: none; cursor: pointer; 
+        }
         .steam-btn:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(255,0,0,0.4); }
 
         .content-card { background: var(--card); border-left: 8px solid var(--accent); padding: clamp(20px, 5vw, 50px); box-shadow: 0 15px 35px rgba(0,0,0,0.2); margin-bottom: 30px; transition: background 0.5s ease; }
@@ -86,12 +82,10 @@
         th { text-align: left; color: var(--accent); border-bottom: 3px solid var(--accent); padding: 15px 10px; font-size: 12px; text-transform: uppercase; font-weight: 900; }
         td { padding: 18px 10px; border-bottom: 1px solid var(--border); font-size: 15px; font-weight: 600; transition: border 0.5s ease; }
 
-        /* --- PROJECT LINK --- */
         .about-link-container { text-align: center; margin-top: -10px; margin-bottom: 60px; }
         #link-about-project { color: var(--accent); font-weight: 900; text-decoration: none; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; font-style: italic; border-bottom: 2px solid var(--accent); padding-bottom: 4px; transition: 0.3s; opacity: 0.7; }
         #link-about-project:hover { opacity: 1; letter-spacing: 3px; }
 
-        /* --- RESPONSIVITY --- */
         @media (max-width: 768px) {
             table { min-width: 100%; }
             .content-card { padding: 30px 20px; }
@@ -133,7 +127,7 @@
 
     <div class="main-container">
         <div class="steam-container">
-            <a href="https://store.steampowered.com/app/3203370/" target="_blank" class="steam-btn" id="btn-steam">GET IT ON STEAM</a>
+            <a href="https://store.steampowered.com/app/3203370/" target="_blank" rel="noopener noreferrer" class="steam-btn" id="btn-steam">GET IT ON STEAM</a>
         </div>
         
         <div class="content-card">
@@ -161,31 +155,31 @@
             "link-home": "HOME SCREEN", "link-tracks": "TRACK LIST", "link-custom": "CUSTOMIZATION", "txt-sys-req": "SYSTEM REQUIREMENTS", 
             "th-osa": "COMPONENT", "th-min": "MINIMUM", "th-rec": "RECOMMENDED", "td-proc": "PROCESSOR", "td-mem": "MEMORY", "td-gfx": "GRAPHICS", 
             "td-store": "STORAGE", "td-store-min": "3 GB SPACE", "td-store-rec": "5 GB (SSD)", "btn-steam": "GET IT ON STEAM", "txt-mode": "SWITCH THEME",
-            "link-about-project": "PROJECT DOCUMENTATION & LEGAL INFO"
+            "link-about-project": "PROJECT DOCUMENTATION & LEGAL INFO", "steam-lang": "english"
         },
         fi: { 
             "link-home": "ALOITUSRUUTU", "link-tracks": "RATALISTA", "link-custom": "MUOKKAUS", "txt-sys-req": "JÄRJESTELMÄVAATIMUKSET", 
             "th-osa": "OSA", "th-min": "MINIMI", "th-rec": "SUOSITUS", "td-proc": "PROSESSORI", "td-mem": "MUISTI", "td-gfx": "NÄYTÖNOHJAIN", 
             "td-store": "TALLENNUSTILA", "td-store-min": "3 GT TILAA", "td-store-rec": "5 GT (SSD)", "btn-steam": "LATAA STEAMISTA", "txt-mode": "VAIHDA TEEMA",
-            "link-about-project": "PROJEKTIN DOKUMENTAATIO JA LAKITIEDOT"
+            "link-about-project": "PROJEKTIN DOKUMENTAATIO JA LAKITIEDOT", "steam-lang": "finnish"
         },
         sv: { 
             "link-home": "HEMSKÄRM", "link-tracks": "BANLISTA", "link-custom": "ANPASSNING", "txt-sys-req": "SYSTEMKRAV", 
             "th-osa": "KOMPONENT", "th-min": "MINIMUM", "th-rec": "REKOMMENDERAT", "td-proc": "PROCESSOR", "td-mem": "MINNE", "td-gfx": "GRAFIK", 
             "td-store": "LAGRING", "td-store-min": "3 GB UTRYMME", "td-store-rec": "5 GB (SSD)", "btn-steam": "HÄMTA PÅ STEAM", "txt-mode": "BYT TEMA",
-            "link-about-project": "PROJEKTDOKUMENTATION & JURIDISK INFO"
+            "link-about-project": "PROJEKTDOKUMENTATION & JURIDISK INFO", "steam-lang": "swedish"
         },
         it: { 
             "link-home": "HOME", "link-tracks": "LISTA TRACCIATI", "link-custom": "PERSONALIZZA", "txt-sys-req": "REQUISITI DI SISTEMA", 
             "th-osa": "COMPONENTE", "th-min": "MINIMO", "th-rec": "CONSIGLIATO", "td-proc": "PROCESSORE", "td-mem": "MEMORIA", "td-gfx": "GRAFICA", 
             "td-store": "ARCHIVIAZIONE", "td-store-min": "3 GB DI SPAZIO", "td-store-rec": "5 GB (SSD)", "btn-steam": "SCARICA SU STEAM", "txt-mode": "CAMBIA TEMA",
-            "link-about-project": "DOCUMENTAZIONE E NOTE LEGALI"
+            "link-about-project": "DOCUMENTAZIONE E NOTE LEGALI", "steam-lang": "italian"
         },
         es: { 
             "link-home": "INICIO", "link-tracks": "LISTA DE PISTAS", "link-custom": "PERSONALIZACIÓN", "txt-sys-req": "REQUISITOS DEL SISTEMA", 
             "th-osa": "COMPONENTE", "th-min": "MÍNIMO", "th-rec": "RECOMENDADO", "td-proc": "PROCESADOR", "td-mem": "MEMORIA", "td-gfx": "GRÁFICOS", 
             "td-store": "ALMACENAMIENTO", "td-store-min": "3 GB DE ESPACIO", "td-store-rec": "5 GB (SSD)", "btn-steam": "CONSEGUIR EN STEAM", "txt-mode": "CAMBIAR TEMA",
-            "link-about-project": "DOCUMENTACIÓN E INFO LEGAL"
+            "link-about-project": "DOCUMENTACIÓN E INFO LEGAL", "steam-lang": "spanish"
         }
     };
 
@@ -200,9 +194,17 @@
     function applyLanguage() {
         const lang = localStorage.getItem('prefLang') || 'en';
         const data = translations[lang] || translations['en'];
+        
+        // Update texts
         for (let id in data) {
             const el = document.getElementById(id);
-            if (el) el.innerText = data[id];
+            if (el && id !== "steam-lang") el.innerText = data[id];
+        }
+
+        // Update Steam Link with corresponding language parameter
+        const steamBtn = document.getElementById('btn-steam');
+        if (steamBtn) {
+            steamBtn.href = `https://store.steampowered.com/app/3203370/?l=${data['steam-lang']}`;
         }
     }
 
