@@ -86,10 +86,13 @@
         th { text-align: left; color: var(--accent); border-bottom: 3px solid var(--accent); padding: 15px 10px; font-size: 12px; text-transform: uppercase; font-weight: 900; }
         td { padding: 18px 10px; border-bottom: 1px solid var(--border); font-size: 15px; font-weight: 600; transition: border 0.5s ease; }
 
-        /* --- PROJECT LINK --- */
-        .about-link-container { text-align: center; margin-top: -10px; margin-bottom: 60px; }
+        /* --- PROJECT LINK & DEBUG BUTTON --- */
+        .about-link-container { text-align: center; margin-top: -10px; margin-bottom: 60px; display: flex; flex-direction: column; align-items: center; gap: 20px; }
         #link-about-project { color: var(--accent); font-weight: 900; text-decoration: none; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; font-style: italic; border-bottom: 2px solid var(--accent); padding-bottom: 4px; transition: 0.3s; opacity: 0.7; }
         #link-about-project:hover { opacity: 1; letter-spacing: 3px; }
+        
+        .debug-btn { display: inline-block; background: transparent; color: var(--text); border: 2px solid var(--accent); padding: 10px 25px; text-decoration: none; font-weight: 900; font-style: italic; text-transform: uppercase; clip-path: polygon(8% 0, 100% 0, 92% 100%, 0% 100%); transition: 0.3s; font-size: 12px; cursor: pointer; opacity: 0.8; }
+        .debug-btn:hover { background: var(--accent); color: #fff; transform: scale(1.05); opacity: 1; }
     </style>
 </head>
 <body>
@@ -143,6 +146,7 @@
 
         <div class="about-link-container">
             <a href="about.html" id="link-about-project">PROJECT DOCUMENTATION & LEGAL INFO</a>
+            <a href="YOUR_LINK_HERE" class="debug-btn">RESPONSIVITY DEBUGGER</a>
         </div>
     </div>
 
