@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Australian GP - Ala Mobile</title>
+    <style>
+        :root {
+            --bg: #050505; --card: #0f0f0f; --text: #ffffff;
+            --accent: #ff0000; --border: #222; --nav-bg: #1a1a1a;
+            --confirm: #00ff41; --subtext: #888; --hero-op: 0.35;
+        }
+        [data-theme="light"] {
+            --bg: #ffffff; --card: #f4f4f4; --text: #111111;
+            --accent: #d70000; --border: #cccccc; --nav-bg: #eeeeee;
+            --confirm: #008f25; --subtext: #555; --hero-op: 0.18;
+            --light-flag-op: 0.75;
+        }
+
+        body, .content-card, #menu, .sharp-nav, .lang-option, .back-btn {
+            transition: background 0.4s ease, color 0.4s ease, border 0.4s ease;
+        }
+
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden; }
+
+        /* --- SIDEBAR --- */
+        #menuToggle { display: block; position: fixed; top: 30px; left: 30px; z-index: 9999; user-select: none; }
+        #menuToggle input { display: block; width: 40px; height: 32px; position: absolute; top: -7px; left: -5px; cursor: pointer; opacity: 0; z-index: 10001; }
+        #menuToggle span { display: block; width: 26px; height: 3px; margin-bottom: 5px; position: relative; background: var(--accent); z-index: 10000; transition: 0.4s; }
+        #menuToggle input:checked ~ span:nth-last-child(3) { transform: rotate(45deg) translate(5px, 6px); }
+        #menuToggle input:checked ~ span:nth-last-child(2) { opacity: 0; }
+        #menuToggle input:checked ~ span:nth-last-child(1) { transform: rotate(-45deg) translate(5px, -7px); }
+
+        #menu { 
+            position: fixed; width: 340px; height: 100vh; margin: 0; padding: 100px 15px; top: 0; left: 0; 
+            background: var(--card); border-right: 6px solid var(--accent); transform: translateX(-100%); 
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 8px 0 20px rgba(0,0,0,0.3); list-style: none;
+            box-sizing: border-box; z-index: 9000; overflow-y: auto;
+        }
+        #menuToggle input:checked ~ ul { transform: translateX(0); }
+
+        /* --- POP-OUT LANG --- */
+        .selector-label { font-size: 10px; font-weight: 900; letter-spacing: 1.5px; color: var(--accent); text-transform: uppercase; text-align: center; display: block; }
+        .lang-trigger { text-align: center; cursor: pointer; font-size: 28px; color: var(--accent); margin-bottom: 5px; transition: 0.3s; }
+        #lang-list { max-height: 0; overflow: hidden; opacity: 0; transform: translateY(-15px); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); border-bottom: 1px solid var(--border); }
+        #lang-list.active { max-height: 500px; opacity: 1; transform: translateY(0); margin-bottom: 15px; }
+        .lang-option { display: flex; align-items: center; padding: 12px 15px; font-size: 13px; font-weight: bold; cursor: pointer; clip-path: polygon(4% 0, 100% 0, 96% 100%, 0% 100%); margin: 4px 0; background: var(--nav-bg); color: var(--text); }
+        .lang-option img { width: 20px; margin-right: 12px; }
+        .lang-option:hover { background: var(--accent); color: #fff; transform: translateX(5px); }
+        .lang-option.selected { background: var(--confirm) !important; color: white !important; }
+
+        /* --- NAV LIST --- */
+        .nav-list { list-style: none; padding: 0; margin-top: 20px; }
+        .sharp-nav {
+            display: block; background: var(--nav-bg); color: var(--text); text-decoration: none;
+            font-weight: 900; text-transform: uppercase; font-style: italic;
+            padding: 16px 25px; margin-bottom: 8px;
+            clip-path: polygon(0% 0%, 100% 0%, 88% 100%, 0% 100%);
+            border-left: 4px solid transparent; transition: 0.2s;
+        }
+        .sharp-nav:hover { background: var(--accent); color: #fff; border-left: 4px solid var(--text); transform: translateX(8px); }
+
+        .back-btn { position: absolute; top: 30px; right: 40px; z-index: 100; background: var(--nav-bg); color: var(--text); padding: 10px 25px; text-decoration: none; font-weight: 900; font-style: italic; font-size: 11px; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%); border: 1px solid var(--border); }
+        .back-btn:hover { background: var(--accent); color: #fff; }
+
+        /* --- HERO & FLAG --- */
+        .hero-banner { position: relative; width: 100%; height: 320px; background: #000; border-bottom: 4px solid var(--accent); overflow: hidden; }
+        .hero-img { 
+            width: 70%; height: 100%; object-fit: cover; 
+            position: absolute; right: 0; 
+            opacity: var(--hero-op);
+            mask-image: linear-gradient(to right, transparent 0%, black 70%);
+            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 70%);
+            filter: saturate(0.6);
+        }
+        [data-theme="light"] .hero-img { opacity: var(--light-flag-op); }
+
+        .track-title-wrap { position: absolute; bottom: 30px; left: 40px; z-index: 10; max-width: 50%; }
+        .sharp-title { font-size: 48px; font-weight: 900; text-transform: uppercase; letter-spacing: -1.5px; margin: 0; font-style: italic; color: #fff; }
+        [data-theme="light"] .sharp-title { color: #111; }
+        .loc-tag { color: var(--accent); font-weight: 900; letter-spacing: 5px; font-size: 10px; display: block; margin-bottom: 5px; font-family: monospace; }
+
+        /* --- LAYOUT --- */
+        .container { width: 100%; margin: 0; padding: 0; display: grid; grid-template-columns: 480px 1fr; gap: 0; }
+        .content-card { 
+            background: var(--card); border-right: 1px solid var(--border); 
+            padding: 60px 50px; min-height: calc(100vh - 320px); 
+            box-shadow: 15px 0 40px rgba(0,0,0,0.15); 
+            background: linear-gradient(to right, var(--card) 85%, transparent 100%);
+        }
+        .track-map-card { background: var(--bg); display: flex; align-items: center; justify-content: center; padding: 50px; }
+        /* NO INVERSION - Keeping official F1 colors */
+        .track-map-card img { width: 90%; max-width: 850px; opacity: 1; filter: none; }
+
+        .spec-table { width: 100%; border-collapse: collapse; margin-top: 40px; }
+        .spec-table td { padding: 16px 0; border-bottom: 1px solid var(--border); }
+        .spec-label { font-weight: 900; color: var(--subtext); font-size: 11px; letter-spacing: 2px; }
+        .spec-value { text-align: right; font-weight: 900; color: var(--accent); font-family: 'Consolas', monospace; font-size: 18px; }
+    </style>
+</head>
+<body>
+
+    <nav id="menuToggle">
+        <input type="checkbox" id="navCheck" />
+        <span></span><span></span><span></span>
+        <ul id="menu">
+            <span class="selector-label">Language</span>
+            <div class="lang-trigger" id="arrow" onclick="toggleLang()">⏷</div>
+            <div id="lang-list">
+                <div class="lang-option" onclick="changeLang('en', this)"><img src="https://flagcdn.com/w40/gb.png"> ENGLISH</div>
+                <div class="lang-option" onclick="changeLang('fi', this)"><img src="https://flagcdn.com/w40/fi.png"> SUOMI</div>
+                <div class="lang-option" onclick="changeLang('sv', this)"><img src="https://flagcdn.com/w40/se.png"> SVENSKA</div>
+                <div class="lang-option" onclick="changeLang('it', this)"><img src="https://flagcdn.com/w40/it.png"> ITALIANO</div>
+                <div class="lang-option" onclick="changeLang('es', this)"><img src="https://flagcdn.com/w40/es.png"> ESPAÑOL</div>
+            </div>
+            <div class="nav-list">
+                <li><a href="index.html" class="sharp-nav" id="link-home">HOME SCREEN</a></li>
+                <li><a href="tracks.html" class="sharp-nav" id="link-tracks">TRACK LIST</a></li>
+                <li><a href="custom.html" class="sharp-nav" id="link-custom">CUSTOMIZATION</a></li>
+                <hr style="border: none; border-top: 1px solid var(--border); margin: 30px 0;">
+                <li><a href="javascript:void(0)" onclick="toggleTheme()" style="text-decoration:none; color:var(--accent); font-weight: 900; font-size: 14px;" id="txt-mode">SWITCH THEME</a></li>
+            </div>
+        </ul>
+    </nav>
+
+    <div class="hero-banner">
+        <a href="tracks.html" class="back-btn" id="btn-back">← TRACK LIST</a>
+        <img src="https://flagcdn.com/w1280/au.png" class="hero-img">
+        <div class="track-title-wrap">
+            <span class="loc-tag" id="txt-loc">MELBOURNE // AUSTRALIA</span>
+            <h1 class="sharp-title" id="txt-track-name">AUSTRALIAN GP</h1>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="content-card">
+            <h3 id="txt-overview" style="font-weight: 900; color: var(--accent); font-size: 13px; letter-spacing: 2px;">TECHNICAL OVERVIEW</h3>
+            <p id="txt-desc" style="line-height: 1.7; font-size: 15px; opacity: 0.8; margin-top: 25px;">A flowing parkland circuit. Albert Park combines high-speed sections with heavy braking zones around a scenic lake.</p>
+            
+            <table class="spec-table">
+                <tr><td class="spec-label" id="lbl-length">LENGTH</td><td class="spec-value">5.278 KM</td></tr>
+                <tr><td class="spec-label" id="lbl-turns">TURNS</td><td class="spec-value">14</td></tr>
+                <tr><td class="spec-label" id="lbl-type">TRACK TYPE</td><td class="spec-value" id="val-type">PARK CIRCUIT</td></tr>
+                <tr><td class="spec-label" id="lbl-diff">DIFFICULTY</td><td class="spec-value" id="val-diff">MEDIUM</td></tr>
+            </table>
+        </div>
+
+        <div class="track-map-card">
+            <img src="https://media.formula1.com/image/upload/c_lfill,w_3392/q_auto/v1740000001/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Australia_Circuit.webp">
+        </div>
+    </div>
+
+    <script>
+    const translations = {
+        en: { "txt-track-name": "AUSTRALIAN GP", "txt-loc": "MELBOURNE // AUSTRALIA", "txt-overview": "TECHNICAL OVERVIEW", "txt-desc": "A flowing parkland circuit. Albert Park combines high-speed sections with heavy braking zones around a scenic lake.", "lbl-length": "LENGTH", "lbl-turns": "TURNS", "lbl-type": "TRACK TYPE", "val-type": "PARK CIRCUIT", "lbl-diff": "DIFFICULTY", "val-diff": "MEDIUM", "btn-back": "← TRACK LIST", "link-home": "HOME SCREEN", "link-tracks": "TRACK LIST", "link-custom": "CUSTOMIZATION", "txt-mode": "SWITCH THEME" },
+        fi: { "txt-track-name": "AUSTRALIAN GP", "txt-loc": "MELBOURNE // AUSTRALIA", "txt-overview": "TEKNINEN YLEISKATSAUS", "txt-desc": "Virtaava puistorata. Albert Park yhdistää suuret nopeudet ja raskaat jarrutukset maisemajärven ympärillä.", "lbl-length": "PITUUS", "lbl-turns": "MUTKAT", "lbl-type": "RATATYYPPI", "val-type": "PUISTORATA", "lbl-diff": "VAIKEUSASTE", "val-diff": "KESKITASO", "btn-back": "← RATALISTA", "link-home": "ALOITUSRUUTU", "link-tracks": "RATALISTA", "link-custom": "MUOKKAUS", "txt-mode": "VAIHDA TEEMA" },
+        sv: { "txt-track-name": "AUSTRALIENS GP", "txt-loc": "MELBOURNE // AUSTRALIEN", "txt-overview": "TEKNISK ÖVERSIKT", "txt-desc": "En flödande parkbana. Albert Park kombinerar höghastighetssektioner med tunga bromszoner runt en vacker sjö.", "lbl-length": "LÄNGD", "lbl-turns": "SVÄNGAR", "lbl-type": "BANTYP", "val-type": "PARKBANA", "lbl-diff": "SVÅRIGHETSGRAD", "val-diff": "MEDIUM", "btn-back": "← BANLISTA", "link-home": "HEMSKÄRM", "link-tracks": "BANLISTA", "link-custom": "ANPASSNING", "txt-mode": "BYT TEMA" },
+        it: { "txt-track-name": "GP AUSTRALIA", "txt-loc": "MELBOURNE // AUSTRALIA", "txt-overview": "PANORAMICA TECNICA", "txt-desc": "Un circuito cittadino nel parco. Albert Park unisce tratti veloci a forti frenate attorno a un lago scenografico.", "lbl-length": "LUNGHEZZA", "lbl-turns": "CURVE", "lbl-type": "TIPO CIRCUITO", "val-type": "CIRCUITO PARCO", "lbl-diff": "DIFFICOLTÀ", "val-diff": "MEDIA", "btn-back": "← LISTA CIRCUITI", "link-home": "HOME SCREEN", "link-tracks": "LISTA CIRCUITI", "link-custom": "PERSONALIZZAZIONE", "txt-mode": "CAMBIA TEMA" },
+        es: { "txt-track-name": "GP DE AUSTRALIA", "txt-loc": "MELBOURNE // AUSTRALIA", "txt-overview": "RESUMEN TÉCNICO", "txt-desc": "Un fluido circuito de parque. Albert Park combina secciones de alta velocidad con fuertes frenadas alrededor de un lago.", "lbl-length": "LONGITUD", "lbl-turns": "CURVAS", "lbl-type": "TIPO DE PISTA", "val-type": "CIRCUITO DE PARQUE", "lbl-diff": "DIFICULTAD", "val-diff": "MEDIA", "btn-back": "← LISTA PISTAS", "link-home": "PANTALLA INICIAL", "link-tracks": "LISTA DE PISTAS", "link-custom": "PERSONALIZACIÓN", "txt-mode": "CAMBIAR TEMA" }
+    };
+
+    function toggleLang() { 
+        document.getElementById('lang-list').classList.toggle('active');
+        document.getElementById('arrow').classList.toggle('open');
+    }
+
+    function changeLang(lang, el) {
+        document.querySelectorAll('.lang-option').forEach(opt => opt.classList.remove('selected'));
+        el.classList.add('selected');
+        localStorage.setItem('prefLang', lang);
+        applyLanguage();
+        setTimeout(() => { el.classList.remove('selected'); }, 2500); 
+    }
+
+    function applyLanguage() {
+        const lang = localStorage.getItem('prefLang') || 'en';
+        const data = translations[lang] || translations['en'];
+        for (let id in data) {
+            const el = document.getElementById(id);
+            if (el) el.innerText = data[id];
+        }
+    }
+
+    function toggleTheme() {
+        const body = document.documentElement;
+        const isDark = body.getAttribute('data-theme') !== 'light';
+        body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+        localStorage.setItem('theme', isDark ? 'light' : 'dark');
+    }
+
+    window.onload = () => {
+        applyLanguage();
+        if (localStorage.getItem('theme') === 'light') document.documentElement.setAttribute('data-theme', 'light');
+    };
+    </script>
+</body>
+</html>

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customization - Ala Mobile</title>
+    <style>
+        :root {
+            --bg: #050505; --card: #0f0f0f; --text: #ffffff;
+            --accent: #ff0000; --border: #222; --nav-bg: #1a1a1a;
+            --confirm: #00ff41; --subtext: #666;
+        }
+        [data-theme="light"] {
+            --bg: #ffffff; --card: #f8f9fa; --text: #111111;
+            --accent: #d70000; --border: #dddddd; --nav-bg: #eeeeee;
+            --confirm: #008f25; --subtext: #888;
+        }
+
+        body, .editor-card, #menu, .sharp-nav, .lang-option {
+            transition: background 0.5s ease, color 0.5s ease, border 0.5s ease;
+        }
+
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden; }
+
+        /* --- STICKY SIDEBAR --- */
+        #menuToggle { display: block; position: fixed; top: 30px; left: 30px; z-index: 9999; user-select: none; }
+        #menuToggle input { display: block; width: 40px; height: 32px; position: absolute; top: -7px; left: -5px; cursor: pointer; opacity: 0; z-index: 10001; }
+        #menuToggle span { display: block; width: 26px; height: 3px; margin-bottom: 5px; position: relative; background: var(--accent); z-index: 10000; transition: 0.4s; }
+        #menuToggle input:checked ~ span:nth-last-child(3) { transform: rotate(45deg) translate(5px, 6px); }
+        #menuToggle input:checked ~ span:nth-last-child(2) { opacity: 0; }
+        #menuToggle input:checked ~ span:nth-last-child(1) { transform: rotate(-45deg) translate(5px, -7px); }
+
+        #menu { 
+            position: fixed; width: 340px; height: 100vh; margin: 0; padding: 100px 15px; top: 0; left: 0; 
+            background: var(--card); border-right: 6px solid var(--accent); transform: translateX(-100%); 
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 8px 0 20px rgba(0,0,0,0.3); list-style: none;
+            box-sizing: border-box; z-index: 9000; overflow-y: auto;
+        }
+        #menuToggle input:checked ~ ul { transform: translateX(0); }
+
+        /* --- LANG SELECTOR --- */
+        .selector-label { font-size: 10px; font-weight: 900; letter-spacing: 1.5px; color: var(--accent); text-transform: uppercase; text-align: center; display: block; }
+        .lang-trigger { text-align: center; cursor: pointer; font-size: 28px; color: var(--accent); margin-bottom: 5px; transition: 0.3s; }
+        #lang-list { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; border-bottom: 1px solid var(--border); }
+        #lang-list.active { max-height: 350px; margin-bottom: 15px; }
+        .lang-option { display: flex; align-items: center; padding: 10px 15px; font-size: 13px; font-weight: bold; cursor: pointer; clip-path: polygon(4% 0, 100% 0, 96% 100%, 0% 100%); margin: 4px 0; background: var(--nav-bg); }
+        .lang-option img { width: 20px; margin-right: 12px; }
+        .lang-option:hover { background: var(--accent); color: #fff; }
+        .lang-option.selected { background: var(--confirm) !important; color: white !important; }
+
+        /* --- NAV BUTTONS --- */
+        .nav-list { list-style: none; padding: 0; margin-top: 20px; }
+        .sharp-nav { display: block; background: var(--nav-bg); color: var(--text); text-decoration: none; font-weight: 900; text-transform: uppercase; font-style: italic; padding: 16px 25px; margin-bottom: 8px; clip-path: polygon(0% 0%, 100% 0%, 88% 100%, 0% 100%); border-left: 4px solid transparent; transition: 0.2s; }
+        .sharp-nav:hover { background: var(--accent); color: #fff; border-left: 4px solid var(--text); transform: translateX(8px); }
+
+        /* --- WORKSHOP LAYOUT --- */
+        .container { max-width: 1000px; margin: 100px auto; padding: 0 40px; }
+        h1 { font-size: 50px; font-style: italic; font-weight: 900; letter-spacing: -2px; border-left: 10px solid var(--accent); padding-left: 20px; margin-bottom: 40px; text-transform: uppercase; }
+
+        /* HERO CARD */
+        .workshop-hero { 
+            background: var(--card); border: 1px solid var(--border); border-left: 8px solid var(--accent);
+            display: flex; align-items: center; padding: 40px; margin-bottom: 30px; 
+            text-decoration: none; color: inherit; transition: 0.3s;
+        }
+        .workshop-hero:hover { transform: scale(1.01); border-color: var(--accent); box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+        .hero-text { flex: 1; }
+        .hero-text h2 { color: var(--accent); font-size: 32px; font-style: italic; font-weight: 900; margin: 0; }
+        .hero-text p { font-size: 18px; font-weight: 700; margin: 10px 0; opacity: 0.8; }
+        .hero-hint { font-size: 11px; letter-spacing: 3px; color: var(--subtext); text-transform: uppercase; }
+
+        /* EDITOR GRID */
+        .editor-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .editor-card { 
+            background: var(--card); border: 1px solid var(--border); 
+            text-decoration: none; color: inherit; transition: 0.3s;
+            display: flex; flex-direction: column; overflow: hidden;
+        }
+        .image-wrap { width: 100%; height: 220px; overflow: hidden; background: #000; position: relative; }
+        .image-wrap img { width: 100%; height: 100%; object-fit: cover; opacity: 0.5; filter: grayscale(1); transition: 0.5s; }
+        .editor-card:hover img { opacity: 1; filter: grayscale(0); transform: scale(1.05); }
+        .editor-card:hover { border-color: var(--accent); }
+        
+        .card-content { padding: 25px; border-top: 4px solid var(--accent); }
+        .card-content h3 { margin: 0; font-size: 20px; font-weight: 900; font-style: italic; color: var(--accent); }
+        .card-content p { font-size: 13px; margin: 8px 0 0; opacity: 0.7; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <nav id="menuToggle">
+        <input type="checkbox" id="navCheck" />
+        <span></span><span></span><span></span>
+        <ul id="menu">
+            <span class="selector-label">Language</span>
+            <div class="lang-trigger" id="arrow" onclick="toggleLang()">⏷</div>
+            <div id="lang-list">
+                <div class="lang-option" onclick="changeLang('en', this)"><img src="https://flagcdn.com/w40/gb.png"> ENGLISH</div>
+                <div class="lang-option" onclick="changeLang('fi', this)"><img src="https://flagcdn.com/w40/fi.png"> SUOMI</div>
+                <div class="lang-option" onclick="changeLang('sv', this)"><img src="https://flagcdn.com/w40/se.png"> SVENSKA</div>
+                <div class="lang-option" onclick="changeLang('it', this)"><img src="https://flagcdn.com/w40/it.png"> ITALIANO</div>
+                <div class="lang-option" onclick="changeLang('es', this)"><img src="https://flagcdn.com/w40/es.png"> ESPAÑOL</div>
+            </div>
+            <div class="nav-list">
+                <li><a href="index.html" class="sharp-nav" id="link-home">HOME SCREEN</a></li>
+                <li><a href="tracks.html" class="sharp-nav" id="link-tracks">TRACK LIST</a></li>
+                <li><a href="custom.html" class="sharp-nav" id="link-custom" style="background: var(--accent); color: white;">CUSTOMIZATION</a></li>
+                <hr style="border: none; border-top: 1px solid var(--border); margin: 30px 0;">
+                <li><a href="javascript:void(0)" onclick="toggleTheme()" style="text-decoration:none; color:var(--accent); font-weight: 900; font-style: italic; font-size: 14px;" id="txt-mode">SWITCH THEME</a></li>
+            </div>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1 id="txt-custom-title">Customization Hub</h1>
+
+        <a href="teamdata.html" class="workshop-hero">
+            <div class="hero-text">
+                <h2 id="txt-identity-title">TEAM IDENTITY</h2>
+                <p id="txt-identity-desc">DRIVER • TEAM • ENGINE</p>
+                <span class="hero-hint" id="txt-identity-hint">CLICK TO SEE TEAM CUSTOMIZATION</span>
+            </div>
+            <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3203370/logo.png" width="220" style="filter: drop-shadow(0 0 10px rgba(255,0,0,0.2));">
+        </a>
+
+        <div class="editor-grid">
+            <a href="livery.html" class="editor-card">
+                <div class="image-wrap">
+                    <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3203370/extras_big/086096827c33a71a029ce7c0a7b73ee6.avif?t=1769311329">
+                </div>
+                <div class="card-content">
+                    <h3 id="txt-livery-title">LIVERY EDITOR</h3>
+                    <p id="txt-livery-desc">COLORS • MATERIALS • DECALS</p>
+                </div>
+            </a>
+
+            <a href="helmet.html" class="editor-card">
+                <div class="image-wrap">
+                    <img src="https://i0.wp.com/liverylab.uk/wp-content/uploads/2025/09/20250809_205831.jpg?ssl=1" alt="Helmet Setup">
+                </div>
+                <div class="card-content">
+                    <h3 id="txt-helmet-title">HELMET DESIGN</h3>
+                    <p id="txt-helmet-desc">COLORS • PATTERNS</p>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <script>
+    const translations = {
+        en: { 
+            "txt-custom-title": "Customization Hub", "txt-identity-title": "TEAM IDENTITY", "txt-identity-desc": "DRIVER • TEAM • ENGINE", "txt-identity-hint": "CLICK TO SEE TEAM CUSTOMIZATION",
+            "txt-livery-title": "LIVERY EDITOR", "txt-livery-desc": "COLORS • MATERIALS • DECALS", "txt-helmet-title": "HELMET DESIGN", "txt-helmet-desc": "COLORS • PATTERNS",
+            "link-home": "HOME SCREEN", "link-tracks": "TRACK LIST", "link-custom": "CUSTOMIZATION", "txt-mode": "SWITCH THEME"
+        },
+        fi: { 
+            "txt-custom-title": "Muokkauskeskus", "txt-identity-title": "TIIMIN IDENTITEETTI", "txt-identity-desc": "KULJETTAJA • TIIMI • MOOTTORI", "txt-identity-hint": "KLIKKAA NÄHDÄKSESI TIIMIN MUOKKAUS",
+            "txt-livery-title": "VÄRITYS-EDITOR", "txt-livery-desc": "VÄRIT • MATERIAALIT • TARRAT", "txt-helmet-title": "KYPÄRÄN MUOKKAUS", "txt-helmet-desc": "VÄRIT • KUVIOT",
+            "link-home": "ALOITUSRUUTU", "link-tracks": "RATALISTA", "link-custom": "MUOKKAUS", "txt-mode": "VAIHDA TEEMA"
+        },
+        sv: {
+            "txt-custom-title": "Anpassningscenter", "txt-identity-title": "TEAMIDENTITET", "txt-identity-desc": "FÖRARE • TEAM • MOTOR", "txt-identity-hint": "KLICKA FÖR ATT SE TEAMANPASSNING",
+            "txt-livery-title": "LIVERY-EDITOR", "txt-livery-desc": "FÄRGER • MATERIAL • DEKALER", "txt-helmet-title": "HJÄLMDESIGN", "txt-helmet-desc": "FÄRGER • MÖNSTER",
+            "link-home": "HEMSKÄRM", "link-tracks": "BANLISTA", "link-custom": "ANPASSNING", "txt-mode": "BYT TEMA"
+        },
+        it: {
+            "txt-custom-title": "Hub Personalizzazione", "txt-identity-title": "IDENTITÀ TEAM", "txt-identity-desc": "PILOTA • TEAM • MOTORE", "txt-identity-hint": "CLICCA PER VEDERE LA PERSONALIZZAZIONE TEAM",
+            "txt-livery-title": "EDITOR LIVREA", "txt-livery-desc": "COLORI • MATERIALI • DECALCOMANIE", "txt-helmet-title": "DESIGN CASCO", "txt-helmet-desc": "COLORI • MODELLI",
+            "link-home": "HOME SCREEN", "link-tracks": "LISTA CIRCUITI", "link-custom": "PERSONALIZZAZIONE", "txt-mode": "CAMBIA TEMA"
+        },
+        es: {
+            "txt-custom-title": "Centro de Personalización", "txt-identity-title": "IDENTIDAD DEL EQUIPO", "txt-identity-desc": "PILOTO • EQUIPO • MOTOR", "txt-identity-hint": "HAZ CLIC PARA VER LA PERSONALIZACIÓN DEL EQUIPO",
+            "txt-livery-title": "EDITOR DE LIBREA", "txt-livery-desc": "COLORES • MATERIALES • CALCOMANÍAS", "txt-helmet-title": "DISEÑO DEL CASCO", "txt-helmet-desc": "COLORES • PATRONES",
+            "link-home": "PANTALLA DE INICIO", "link-tracks": "LISTA DE PISTAS", "link-custom": "PERSONALIZACIÓN", "txt-mode": "CAMBIAR TEMA"
+        }
+    };
+
+    function toggleLang() { document.getElementById('lang-list').classList.toggle('active'); }
+
+    function changeLang(lang, el) {
+        document.querySelectorAll('.lang-option').forEach(opt => opt.classList.remove('selected'));
+        el.classList.add('selected');
+        localStorage.setItem('prefLang', lang);
+        applyLanguage();
+        setTimeout(() => el.classList.remove('selected'), 2500); 
+    }
+
+    function applyLanguage() {
+        const lang = localStorage.getItem('prefLang') || 'en';
+        const data = translations[lang] || translations['en'];
+        for (let id in data) {
+            const el = document.getElementById(id);
+            if (el) el.innerText = data[id];
+        }
+    }
+
+    function toggleTheme() {
+        const body = document.documentElement;
+        const isDark = body.getAttribute('data-theme') !== 'light';
+        body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+        localStorage.setItem('theme', isDark ? 'light' : 'dark');
+    }
+
+    window.onload = () => {
+        applyLanguage();
+        if (localStorage.getItem('theme') === 'light') document.documentElement.setAttribute('data-theme', 'light');
+    };
+    </script>
+</body>
+</html>

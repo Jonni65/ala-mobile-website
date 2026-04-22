@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Identity</title>
+    <style>
+        :root {
+            --bg: #050505; --card: #0f0f0f; --text: #ffffff;
+            --accent: #ff0000; --border: #222; --nav-bg: #1a1a1a;
+            --subtext: #888; --hero-op: 1;
+            --banner-bg: #000000;
+        }
+        [data-theme="light"] {
+            --bg: #ffffff; --card: #f4f4f4; --text: #111111;
+            --accent: #d70000; --border: #cccccc; --nav-bg: #eeeeee;
+            --subtext: #555; 
+            --hero-op: 0.85; 
+            --banner-bg: #f5f5f5;
+        }
+
+        body, .content-card, #menu, .sharp-nav, .lang-option, .back-btn {
+            transition: background 0.4s ease, color 0.4s ease, border 0.4s ease;
+        }
+
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden; }
+
+        /* --- SIDEBAR --- */
+        #menuToggle { display: block; position: fixed; top: 30px; left: 30px; z-index: 9999; user-select: none; }
+        #menuToggle input { display: block; width: 40px; height: 32px; position: absolute; top: -7px; left: -5px; cursor: pointer; opacity: 0; z-index: 10001; }
+        #menuToggle span { display: block; width: 26px; height: 3px; margin-bottom: 5px; position: relative; background: var(--accent); z-index: 10000; transition: 0.4s; }
+        #menuToggle input:checked ~ span:nth-last-child(3) { transform: rotate(45deg) translate(5px, 6px); }
+        #menuToggle input:checked ~ span:nth-last-child(2) { opacity: 0; }
+        #menuToggle input:checked ~ span:nth-last-child(1) { transform: rotate(-45deg) translate(5px, -7px); }
+
+        #menu { 
+            position: fixed; width: 340px; height: 100vh; margin: 0; padding: 100px 15px; top: 0; left: 0; 
+            background: var(--card); border-right: 6px solid var(--accent); transform: translateX(-100%); 
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 8px 0 20px rgba(0,0,0,0.3); list-style: none;
+            box-sizing: border-box; z-index: 9000; overflow-y: auto;
+        }
+        #menuToggle input:checked ~ ul { transform: translateX(0); }
+
+        .selector-label { font-size: 10px; font-weight: 900; letter-spacing: 1.5px; color: var(--accent); text-transform: uppercase; text-align: center; display: block; }
+        .lang-trigger { text-align: center; cursor: pointer; font-size: 28px; color: var(--accent); margin-bottom: 5px; transition: 0.3s; }
+        #lang-list { max-height: 0; overflow: hidden; opacity: 0; transform: translateY(-15px); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); border-bottom: 1px solid var(--border); }
+        #lang-list.active { max-height: 500px; opacity: 1; transform: translateY(0); margin-bottom: 15px; }
+        
+        .lang-option { display: flex; align-items: center; padding: 12px 15px; font-size: 13px; font-weight: bold; cursor: pointer; margin: 4px 0; background: var(--nav-bg); color: var(--text); clip-path: polygon(4% 0, 100% 0, 96% 100%, 0% 100%); }
+        .lang-option img { width: 20px; margin-right: 12px; }
+        .lang-option:hover { background: var(--accent); color: #fff; transform: translateX(5px); }
+
+        .nav-list { list-style: none; padding: 0; margin-top: 20px; }
+        .sharp-nav { display: block; background: var(--nav-bg); color: var(--text); text-decoration: none; font-weight: 900; text-transform: uppercase; font-style: italic; padding: 16px 25px; margin-bottom: 8px; clip-path: polygon(0% 0%, 100% 0%, 88% 100%, 0% 100%); border-left: 4px solid transparent; transition: 0.2s; }
+        .sharp-nav:hover { background: var(--accent); color: #fff; transform: translateX(8px); }
+
+        .theme-btn-text { display: block; padding: 10px 0; text-decoration: none; color: var(--accent); font-weight: 900; font-size: 14px; text-transform: uppercase; border: none; background: none; cursor: pointer; transition: 0.3s; text-align: left; }
+        .theme-btn-text:hover { opacity: 0.7; }
+
+        /* --- HERO: GARAGE PLACEHOLDER --- */
+        .hero-banner { 
+            position: relative; width: 100%; height: 320px; 
+            background: #000; 
+            border-bottom: 4px solid var(--accent); overflow: hidden; 
+        }
+
+        .hero-banner::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 25%, transparent 75%);
+            z-index: 2;
+        }
+
+        .hero-img { 
+            width: 100%; height: 100%; object-fit: cover; position: absolute; right: 0; 
+            opacity: var(--hero-op); z-index: 1; 
+            mask-image: linear-gradient(to right, transparent 0%, black 100%);
+            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 100%);
+        }
+
+        .track-title-wrap { position: absolute; bottom: 35px; left: 40px; z-index: 10; }
+        .sharp-title { font-size: 56px; font-weight: 900; text-transform: uppercase; letter-spacing: -2px; margin: 0; font-style: italic; color: #ffffff !important; text-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+        .loc-tag { color: var(--accent); font-weight: 900; letter-spacing: 5px; font-size: 11px; display: block; margin-bottom: 5px; }
+
+        .back-btn { position: absolute; top: 30px; right: 40px; z-index: 100; background: var(--nav-bg); color: var(--text); padding: 10px 25px; text-decoration: none; font-weight: 900; font-style: italic; font-size: 11px; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%); border: 1px solid var(--border); }
+
+        /* --- LAYOUT --- */
+        .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 60px 40px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 40px; }
+        .info-card { background: var(--card); border: 1px solid var(--border); padding: 30px; border-radius: 15px; border-top: 4px solid var(--accent); }
+        .info-card h4 { margin: 0 0 10px 0; font-size: 11px; color: var(--subtext); letter-spacing: 2px; text-transform: uppercase; }
+        .info-card h2 { margin: 0 0 15px 0; font-size: 24px; color: var(--text); font-weight: 900; }
+        .info-card p { margin: 0; line-height: 1.6; color: var(--subtext); font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <nav id="menuToggle">
+        <input type="checkbox" id="navCheck" />
+        <span></span><span></span><span></span>
+        <ul id="menu">
+            <span class="selector-label">Language</span>
+            <div class="lang-trigger" onclick="document.getElementById('lang-list').classList.toggle('active')">⏷</div>
+            <div id="lang-list">
+                <div class="lang-option" onclick="changeLang('en')"><img src="https://flagcdn.com/w40/gb.png"> ENGLISH</div>
+                <div class="lang-option" onclick="changeLang('fi')"><img src="https://flagcdn.com/w40/fi.png"> SUOMI</div>
+                <div class="lang-option" onclick="changeLang('sv')"><img src="https://flagcdn.com/w40/se.png"> SVENSKA</div>
+                <div class="lang-option" onclick="changeLang('it')"><img src="https://flagcdn.com/w40/it.png"> ITALIANO</div>
+                <div class="lang-option" onclick="changeLang('es')"><img src="https://flagcdn.com/w40/es.png"> ESPAÑOL</div>
+            </div>
+            <div class="nav-list">
+                <li><a href="index.html" class="sharp-nav" id="link-home">HOME SCREEN</a></li>
+                <li><a href="tracks.html" class="sharp-nav" id="link-tracks">TRACK LIST</a></li>
+                <li><a href="custom.html" class="sharp-nav" id="link-custom">CUSTOMIZATION</a></li>
+                <hr style="border: none; border-top: 1px solid var(--border); margin: 30px 0;">
+                <li><button onclick="toggleTheme()" class="theme-btn-text" id="txt-mode">SWITCH THEME</button></li>
+            </div>
+        </ul>
+    </nav>
+
+    <div class="hero-banner">
+        <a href="custom.html" class="back-btn" id="btn-back">← CUSTOMIZATION</a>
+        <img src="https://cdn-6.motorsport.com/images/amp/63v7LJJY/s6/haas-garage-1.jpg" class="hero-img">
+        <div class="track-title-wrap">
+            <span class="loc-tag" id="txt-loc">REGISTRATION // CAREER</span>
+            <h1 class="sharp-title" id="txt-track-name">TEAM IDENTITY</h1>
+        </div>
+    </div>
+
+    <div class="container">
+        <p id="txt-desc" style="line-height: 1.8; font-size: 16px; opacity: 0.8;">In Ala Mobile, you can fully customize your team's presence on the grid. These details define your legacy and will appear on timing screens, HUD elements, and garage branding.</p>
+        
+        <div class="grid">
+            <div class="info-card">
+                <h4 id="lbl-team">CONSTRUCTOR NAME</h4>
+                <h2 id="val-team">TEAM NAME</h2>
+                <p id="desc-team">Your team's official racing title used on the grid.</p>
+            </div>
+            <div class="info-card">
+                <h4 id="lbl-engine">POWER UNIT</h4>
+                <h2 id="val-engine">ENGINE NAME</h2>
+                <p id="desc-engine">The supplier of your car's engine and hybrid system.</p>
+            </div>
+            <div class="info-card">
+                <h4 id="lbl-d1">LEAD PILOT</h4>
+                <h2 id="val-d1">DRIVER 1 NAME</h2>
+                <p id="desc-d1">The number one seat and primary focus of the team.</p>
+            </div>
+            <div class="info-card">
+                <h4 id="lbl-d2">SUPPORT PILOT</h4>
+                <h2 id="val-d2">DRIVER 2 NAME</h2>
+                <p id="desc-d2">Your teammate and competitor for the season.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    const translations = {
+        en: { 
+            "txt-track-name": "TEAM IDENTITY", "txt-loc": "REGISTRATION // CAREER", "btn-back": "← CUSTOMIZATION",
+            "txt-desc": "In Ala Mobile, you can fully customize your team's presence on the grid. These details define your legacy and will appear on timing screens, HUD elements, and garage branding.",
+            "lbl-team": "CONSTRUCTOR NAME", "val-team": "TEAM NAME", "desc-team": "Your team's official racing title used on the grid.",
+            "lbl-engine": "POWER UNIT", "val-engine": "ENGINE NAME", "desc-engine": "The supplier of your car's engine and hybrid system.",
+            "lbl-d1": "LEAD PILOT", "val-d1": "DRIVER 1 NAME", "desc-d1": "The number one seat and primary focus of the team.",
+            "lbl-d2": "SUPPORT PILOT", "val-d2": "DRIVER 2 NAME", "desc-d2": "Your teammate and competitor for the season.",
+            "link-home": "HOME SCREEN", "link-tracks": "TRACK LIST", "link-custom": "CUSTOMIZATION", "txt-mode": "SWITCH THEME"
+        },
+        fi: { 
+            "txt-track-name": "TIIMIN IDENTITEETTI", "txt-loc": "REKISTERÖINTI // URA", "btn-back": "← MUOKKAUS",
+            "txt-desc": "Ala Mobilessa voit täysin muokata tiimisi läsnäoloa radalla. Nämä tiedot määrittelevät perintösi ja näkyvät ajanottonäytöillä, HUD-elementeissä ja pilttuun brändäyksessä.",
+            "lbl-team": "VALMISTAJAN NIMI", "val-team": "TIIMIN NIMI", "desc-team": "Tiimisi virallinen kilpailunimi radalla.",
+            "lbl-engine": "VOIMAYKSIKKÖ", "val-engine": "MOOTTORIN NIMI", "desc-engine": "Autosi moottorin ja hybridijärjestelmän toimittaja.",
+            "lbl-d1": "YKKÖSKULJETTAJA", "val-d1": "KULJETTAJA 1 NIMI", "desc-d1": "Tiimin ykköspaikka ja ensisijainen painopiste.",
+            "lbl-d2": "KAKKOSKULJETTAJA", "val-d2": "KULJETTAJA 2 NIMI", "desc-d2": "Tallikaverisi ja kilpailijasi kauden aikana.",
+            "link-home": "ALOITUSRUUTU", "link-tracks": "RATALISTA", "link-custom": "MUOKKAUS", "txt-mode": "VAIHDA TEEMA"
+        },
+        sv: { 
+            "txt-track-name": "TEAMIDENTITET", "txt-loc": "REGISTRERING // KARRIÄR", "btn-back": "← ANPASSNING",
+            "txt-desc": "I Ala Mobile kan du helt anpassa ditt teams närvaro på gridden. Dessa detaljer definierar ditt arv och visas på tidsskärmar och HUD.",
+            "lbl-team": "KONSTRUKTÖRSNAMN", "val-team": "TEAMNAMN", "desc-team": "Ditt teams officiella racingtitel på gridden.",
+            "lbl-engine": "MOTOR", "val-engine": "MOTOR-NAMN", "desc-engine": "Leverantören av din bils motor och hybridsystem.",
+            "lbl-d1": "FÖRSTEFÖRARE", "val-d1": "FÖRARE 1 NAMN", "desc-d1": "Teamets förstaplats och primära fokus.",
+            "lbl-d2": "ANDREFÖRARE", "val-d2": "FÖRARE 2 NAMN", "desc-d2": "Din lagkamrat och konkurrent under säsongen.",
+            "link-home": "HEMSKÄRM", "link-tracks": "BANLISTA", "link-custom": "ANPASSNING", "txt-mode": "BYT TEMA"
+        },
+        it: { 
+            "txt-track-name": "IDENTITÀ TEAM", "txt-loc": "REGISTRAZIONE // CARRIERA", "btn-back": "← PERSONALIZZAZIONE",
+            "txt-desc": "In Ala Mobile, puoi personalizzare completamente la presenza del tuo team sulla griglia. Questi dettagli definiscono la tua eredità e appariranno sugli schermi dei tempi.",
+            "lbl-team": "NOME COSTRUTTORE", "val-team": "NOME TEAM", "desc-team": "Il titolo ufficiale del tuo team utilizzato in pista.",
+            "lbl-engine": "POWER UNIT", "val-engine": "NOME MOTORE", "desc-engine": "Il fornitore del motore e del sistema ibrido della tua auto.",
+            "lbl-d1": "PRIMO PILOTA", "val-d1": "NOME PILOTA 1", "desc-d1": "Il sedile numero uno e il focus principale del team.",
+            "lbl-d2": "PILOTA DI SUPPORTO", "val-d2": "NOME PILOTA 2", "desc-d2": "Il tuo compagno di squadra per la stagione.",
+            "link-home": "SCHERMATA INIZIALE", "link-tracks": "LISTA CIRCUITI", "link-custom": "PERSONALIZZAZIONE", "txt-mode": "CAMBIA TEMA"
+        },
+        es: { 
+            "txt-track-name": "IDENTIDAD DEL EQUIPO", "txt-loc": "REGISTRO // CARRERA", "btn-back": "← PERSONALIZACIÓN",
+            "txt-desc": "En Ala Mobile, puedes personalizar completamente la presencia de tu equipo en la parrilla. Estos detalles definen tu legado.",
+            "lbl-team": "NOMBRE DEL CONSTRUCTOR", "val-team": "NOMBRE DEL EQUIPO", "desc-team": "El título oficial de tu equipo en la parrilla.",
+            "lbl-engine": "UNIDAD DE POTENCIA", "val-engine": "NOMBRE DEL MOTOR", "desc-engine": "El proveedor del motor y sistema híbrido de tu coche.",
+            "lbl-d1": "PILOTO PRINCIPAL", "val-d1": "NOMBRE PILOTO 1", "desc-d1": "El asiento número uno y el foco principal del equipo.",
+            "lbl-d2": "PILOTO DE APOYO", "val-d2": "NOMBRE PILOTO 2", "desc-d2": "Tu compañero de equipo para la temporada.",
+            "link-home": "PANTALLA INICIAL", "link-tracks": "LISTA DE PISTAS", "link-custom": "PERSONALIZACIÓN", "txt-mode": "CAMBIAR TEMA"
+        }
+    };
+
+    function changeLang(lang) {
+        localStorage.setItem('prefLang', lang);
+        applyLanguage();
+    }
+
+    function applyLanguage() {
+        const lang = localStorage.getItem('prefLang') || 'en';
+        const data = translations[lang] || translations['en'];
+        for (let id in data) {
+            const el = document.getElementById(id);
+            if (el) el.innerText = data[id];
+        }
+    }
+
+    function toggleTheme() {
+        const body = document.documentElement;
+        const isDark = body.getAttribute('data-theme') !== 'light';
+        body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+        localStorage.setItem('theme', isDark ? 'light' : 'dark');
+    }
+
+    window.onload = () => {
+        applyLanguage();
+        if (localStorage.getItem('theme') === 'light') document.documentElement.setAttribute('data-theme', 'light');
+    };
+    </script>
+</body>
+</html>

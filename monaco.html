@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monaco GP - Ala Mobile</title>
+    <style>
+        :root {
+            --bg: #050505; --card: #0f0f0f; --text: #ffffff;
+            --accent: #ff0000; --border: #222; --nav-bg: #1a1a1a;
+            --confirm: #00ff41; --subtext: #888; 
+            --hero-op: 0.8; /* Flag is now actually visible */
+            --banner-bg: #0a0a0a;
+        }
+        [data-theme="light"] {
+            --bg: #ffffff; --card: #f4f4f4; --text: #111111;
+            --accent: #d70000; --border: #cccccc; --nav-bg: #eeeeee;
+            --confirm: #008f25; --subtext: #555; 
+            --hero-op: 0.6; /* High visibility even in Light Mode */
+            --banner-bg: #f0f0f0;
+        }
+
+        body, .content-card, #menu, .sharp-nav, .lang-option, .back-btn {
+            transition: background 0.4s ease, color 0.4s ease, border 0.4s ease;
+        }
+
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden; }
+
+        /* --- SIDEBAR --- */
+        #menuToggle { display: block; position: fixed; top: 30px; left: 30px; z-index: 9999; user-select: none; }
+        #menuToggle input { display: block; width: 40px; height: 32px; position: absolute; top: -7px; left: -5px; cursor: pointer; opacity: 0; z-index: 10001; }
+        #menuToggle span { display: block; width: 26px; height: 3px; margin-bottom: 5px; position: relative; background: var(--accent); z-index: 10000; transition: 0.4s; }
+        #menuToggle input:checked ~ span:nth-last-child(3) { transform: rotate(45deg) translate(5px, 6px); }
+        #menuToggle input:checked ~ span:nth-last-child(2) { opacity: 0; }
+        #menuToggle input:checked ~ span:nth-last-child(1) { transform: rotate(-45deg) translate(5px, -7px); }
+
+        #menu { 
+            position: fixed; width: 340px; height: 100vh; margin: 0; padding: 100px 15px; top: 0; left: 0; 
+            background: var(--card); border-right: 6px solid var(--accent); transform: translateX(-100%); 
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 8px 0 20px rgba(0,0,0,0.3); list-style: none;
+            box-sizing: border-box; z-index: 9000; overflow-y: auto;
+        }
+        #menuToggle input:checked ~ ul { transform: translateX(0); }
+
+        /* --- HERO: HIGH VISIBILITY FIX --- */
+        .hero-banner { 
+            position: relative; width: 100%; height: 320px; 
+            background: var(--banner-bg); 
+            border-bottom: 4px solid var(--accent); overflow: hidden; 
+        }
+
+        /* The Technical Anchor: Permanent dark gradient for text legibility */
+        .hero-banner::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0.7) 30%, transparent 80%);
+            z-index: 2;
+        }
+
+        .hero-img { 
+            width: 90%; height: 100%; object-fit: cover; position: absolute; right: 0; 
+            opacity: var(--hero-op); 
+            filter: saturate(1.1); /* Boosted color */
+            z-index: 1;
+        }
+
+        .track-title-wrap { position: absolute; bottom: 35px; left: 40px; z-index: 10; }
+        .sharp-title { 
+            font-size: 56px; font-weight: 900; text-transform: uppercase; letter-spacing: -2px; 
+            margin: 0; font-style: italic; color: #ffffff !important; 
+            text-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+        .loc-tag { color: var(--accent); font-weight: 900; letter-spacing: 5px; font-size: 11px; display: block; margin-bottom: 5px; }
+
+        .back-btn { position: absolute; top: 30px; right: 40px; z-index: 100; background: var(--nav-bg); color: var(--text); padding: 10px 25px; text-decoration: none; font-weight: 900; font-style: italic; font-size: 11px; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%); border: 1px solid var(--border); }
+
+        /* --- LAYOUT --- */
+        .container { width: 100%; margin: 0; display: grid; grid-template-columns: 480px 1fr; }
+        .content-card { background: var(--card); border-right: 1px solid var(--border); padding: 60px 50px; min-height: calc(100vh - 320px); }
+        .track-map-card { background: var(--bg); display: flex; align-items: center; justify-content: center; padding: 50px; }
+        .track-map-card img { width: 95%; max-width: 850px; }
+
+        .spec-table { width: 100%; border-collapse: collapse; margin-top: 40px; }
+        .spec-table td { padding: 18px 0; border-bottom: 1px solid var(--border); }
+        .spec-label { font-weight: 900; color: var(--subtext); font-size: 11px; letter-spacing: 2px; }
+        .spec-value { text-align: right; font-weight: 900; color: var(--accent); font-family: 'Consolas', monospace; font-size: 19px; }
+    </style>
+</head>
+<body>
+
+    <nav id="menuToggle">
+        <input type="checkbox" id="navCheck" />
+        <span></span><span></span><span></span>
+        <ul id="menu">
+            <span class="selector-label">Language</span>
+            <div class="lang-trigger" onclick="document.getElementById('lang-list').classList.toggle('active')">⏷</div>
+            <div id="lang-list">
+                <div class="lang-option" onclick="changeLang('en', this)"><img src="https://flagcdn.com/w40/gb.png"> ENGLISH</div>
+                <div class="lang-option" onclick="changeLang('fi', this)"><img src="https://flagcdn.com/w40/fi.png"> SUOMI</div>
+                <div class="lang-option" onclick="changeLang('it', this)"><img src="https://flagcdn.com/w40/it.png"> ITALIANO</div>
+            </div>
+            <div class="nav-list">
+                <li><a href="index.html" class="sharp-nav" id="link-home">HOME SCREEN</a></li>
+                <li><a href="tracks.html" class="sharp-nav" id="link-tracks">TRACK LIST</a></li>
+                <hr style="border: none; border-top: 1px solid var(--border); margin: 30px 0;">
+                <li><a href="javascript:void(0)" onclick="toggleTheme()" class="sharp-nav" id="txt-mode" style="color:var(--accent)">SWITCH THEME</a></li>
+            </div>
+        </ul>
+    </nav>
+
+    <div class="hero-banner">
+        <a href="tracks.html" class="back-btn" id="btn-back">← TRACK LIST</a>
+        <img src="https://flagcdn.com/w1280/mc.png" class="hero-img">
+        <div class="track-title-wrap">
+            <span class="loc-tag" id="txt-loc">MONTE CARLO // MONACO</span>
+            <h1 class="sharp-title" id="txt-track-name">MONACO GP</h1>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="content-card">
+            <h3 id="txt-overview" style="font-weight: 900; color: var(--accent); font-size: 13px; letter-spacing: 2px;">TECHNICAL OVERVIEW</h3>
+            <p id="txt-desc" style="line-height: 1.7; font-size: 15px; opacity: 0.8; margin-top: 25px;">The ultimate test of precision. Monaco is a legendary street circuit where the walls are closer than anywhere else.</p>
+            
+            <table class="spec-table">
+                <tr><td class="spec-label" id="lbl-length">LENGTH</td><td class="spec-value">3.337 KM</td></tr>
+                <tr><td class="spec-label" id="lbl-turns">TURNS</td><td class="spec-value">19</td></tr>
+                <tr><td class="spec-label" id="lbl-laps">RACE LAPS</td><td class="spec-value">78</td></tr>
+                <tr><td class="spec-label" id="lbl-diff">DIFFICULTY</td><td class="spec-value" id="val-diff">EXTREME</td></tr>
+            </table>
+        </div>
+
+        <div class="track-map-card">
+            <img src="https://media.formula1.com/image/upload/f_auto,q_auto:eco/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Monaco_Circuit.png">
+        </div>
+    </div>
+
+    <script>
+    const translations = {
+        en: { "txt-track-name": "MONACO GP", "txt-loc": "MONTE CARLO // MONACO", "txt-overview": "TECHNICAL OVERVIEW", "txt-desc": "The ultimate test of precision. Monaco is a legendary street circuit where the walls are closer than anywhere else.", "lbl-length": "LENGTH", "lbl-turns": "TURNS", "lbl-laps": "RACE LAPS", "lbl-diff": "DIFFICULTY", "val-diff": "EXTREME", "btn-back": "← TRACK LIST", "link-home": "HOME SCREEN", "link-tracks": "TRACK LIST", "txt-mode": "SWITCH THEME" },
+        fi: { "txt-track-name": "MONACON GP", "txt-loc": "MONTE CARLO // MONACO", "txt-overview": "TEKNINEN YLEISKATSAUS", "txt-desc": "Tarkkuuden perimmäinen testi. Monaco on legendaarinen katurata, jossa seinät ovat lähempänä kuin missään muualla.", "lbl-length": "PITUUS", "lbl-turns": "MUTKAT", "lbl-laps": "KIERROKSET", "lbl-diff": "VAIKEUSASTE", "val-diff": "ÄÄRIMMÄINEN", "btn-back": "← RATALISTA", "link-home": "ALOITUSRUUTU", "link-tracks": "RATALISTA", "txt-mode": "VAIHDA TEEMA" },
+        it: { "txt-track-name": "GP MONACO", "txt-loc": "MONTE CARLO // MONACO", "txt-overview": "PANORAMICA TECNICA", "txt-desc": "La prova definitiva di precisione. Monaco è un leggendario circuito cittadino dove i muretti sono più vicini che altrove.", "lbl-length": "LUNGHEZZA", "lbl-turns": "CURVE", "lbl-laps": "GIRI", "lbl-diff": "DIFFICOLTÀ", "val-diff": "ESTREMA", "btn-back": "← LISTA CIRCUITI", "link-home": "SCHERMATA INIZIALE", "link-tracks": "LISTA CIRCUITI", "txt-mode": "CAMBIA TEMA" }
+    };
+
+    function changeLang(lang) {
+        localStorage.setItem('prefLang', lang);
+        applyLanguage();
+    }
+
+    function applyLanguage() {
+        const lang = localStorage.getItem('prefLang') || 'en';
+        const data = translations[lang] || translations['en'];
+        for (let id in data) {
+            const el = document.getElementById(id);
+            if (el) el.innerText = data[id];
+        }
+    }
+
+    function toggleTheme() {
+        const body = document.documentElement;
+        const isDark = body.getAttribute('data-theme') !== 'light';
+        body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+        localStorage.setItem('theme', isDark ? 'light' : 'dark');
+    }
+
+    window.onload = () => {
+        applyLanguage();
+        if (localStorage.getItem('theme') === 'light') document.documentElement.setAttribute('data-theme', 'light');
+    };
+    </script>
+</body>
+</html>

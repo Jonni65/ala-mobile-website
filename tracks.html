@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track List - Ala Mobile</title>
+    <style>
+        :root {
+            --bg: #050505; --card: #0f0f0f; --text: #ffffff;
+            --accent: #ff0000; --border: #222; --nav-bg: #1a1a1a;
+            --confirm: #00ff41;
+        }
+        [data-theme="light"] {
+            --bg: #ffffff; --card: #f8f9fa; --text: #111111;
+            --accent: #d70000; --border: #dddddd; --nav-bg: #eeeeee;
+            --confirm: #008f25;
+        }
+
+        body, .track-card, #menu, .sharp-nav, .lang-option {
+            transition: background 0.5s ease, color 0.5s ease, border 0.5s ease;
+        }
+
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden; }
+
+        /* --- SIDEBAR --- */
+        #menuToggle { display: block; position: fixed; top: 30px; left: 30px; z-index: 9999; user-select: none; }
+        #menuToggle input { display: block; width: 40px; height: 32px; position: absolute; top: -7px; left: -5px; cursor: pointer; opacity: 0; z-index: 10001; }
+        #menuToggle span { display: block; width: 26px; height: 3px; margin-bottom: 5px; position: relative; background: var(--accent); z-index: 10000; transition: 0.4s; }
+        
+        #menuToggle input:checked ~ span:nth-last-child(3) { transform: rotate(45deg) translate(5px, 6px); }
+        #menuToggle input:checked ~ span:nth-last-child(2) { opacity: 0; }
+        #menuToggle input:checked ~ span:nth-last-child(1) { transform: rotate(-45deg) translate(5px, -7px); }
+
+        #menu { 
+            position: fixed; width: 340px; height: 100vh; margin: 0; padding: 100px 15px; top: 0; left: 0; 
+            background: var(--card); border-right: 6px solid var(--accent); transform: translateX(-100%); 
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 8px 0 20px rgba(0,0,0,0.3); list-style: none;
+            box-sizing: border-box; z-index: 9000; overflow-y: auto;
+        }
+        #menuToggle input:checked ~ ul { transform: translateX(0); }
+
+        /* --- INTERACTION LOCK --- */
+        #content-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.1); z-index: 8500;
+            display: none; pointer-events: none;
+        }
+        #menuToggle input:checked ~ #content-overlay {
+            display: block; pointer-events: all;
+        }
+
+        .selector-label { font-size: 10px; font-weight: 900; letter-spacing: 1.5px; color: var(--accent); text-transform: uppercase; text-align: center; display: block; }
+        .lang-trigger { text-align: center; cursor: pointer; font-size: 28px; color: var(--accent); margin-bottom: 5px; transition: 0.3s; }
+        #lang-list { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; border-bottom: 1px solid var(--border); }
+        #lang-list.active { max-height: 350px; margin-bottom: 15px; }
+        .lang-option { display: flex; align-items: center; padding: 10px 15px; font-size: 13px; font-weight: bold; cursor: pointer; margin: 4px 0; background: var(--nav-bg); clip-path: polygon(4% 0, 100% 0, 96% 100%, 0% 100%); transition: 0.2s; }
+        .lang-option img { width: 20px; margin-right: 12px; }
+        .lang-option:hover { background: var(--accent); color: #fff; }
+        .lang-option.selected { background: var(--confirm) !important; color: white !important; }
+
+        .nav-list { list-style: none; padding: 0; margin-top: 20px; }
+        .sharp-nav { display: block; background: var(--nav-bg); color: var(--text); text-decoration: none; font-weight: 900; text-transform: uppercase; font-style: italic; padding: 16px 25px; margin-bottom: 8px; clip-path: polygon(0% 0%, 100% 0%, 88% 100%, 0% 100%); border-left: 4px solid transparent; transition: 0.2s; }
+        .sharp-nav:hover { background: var(--accent); color: #fff; transform: translateX(8px); }
+        .theme-btn-text { display: block; padding: 10px 0; text-decoration: none; color: var(--accent); font-weight: 900; font-size: 14px; text-transform: uppercase; border: none; background: none; cursor: pointer; transition: 0.3s; text-align: left; }
+
+        /* --- TRACK GRID --- */
+        .container { max-width: 1400px; margin: 100px auto; padding: 0 40px; }
+        h1 { font-size: 50px; font-style: italic; font-weight: 900; letter-spacing: -2px; border-left: 10px solid var(--accent); padding-left: 20px; margin-bottom: 40px; text-transform: uppercase; color: var(--text); }
+
+        .track-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .track-link { text-decoration: none; color: inherit; display: block; }
+        
+        .track-card { 
+            background: var(--card); border: 1px solid var(--border); 
+            position: relative; transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); 
+            filter: grayscale(1); opacity: 0.8; 
+        }
+        .track-card:hover { 
+            border-color: var(--accent); transform: translateY(-10px); 
+            opacity: 1; filter: grayscale(0); 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4); 
+        }
+        
+        .track-flag { width: 100%; height: 160px; object-fit: cover; }
+        .track-info { padding: 20px; border-top: 3px solid var(--accent); }
+        .track-name { font-weight: 900; font-size: 18px; text-transform: uppercase; font-style: italic; color: var(--text); }
+        .track-meta { font-size: 10px; color: #888; margin-top: 5px; font-family: monospace; letter-spacing: 1px; text-transform: uppercase; }
+    </style>
+</head>
+<body>
+
+    <nav id="menuToggle">
+        <input type="checkbox" id="navCheck" />
+        <span></span><span></span><span></span>
+        <div id="content-overlay"></div>
+        <ul id="menu">
+            <span class="selector-label">Language</span>
+            <div class="lang-trigger" onclick="document.getElementById('lang-list').classList.toggle('active')">⏷</div>
+            <div id="lang-list">
+                <div class="lang-option" onclick="changeLang('en', this)"><img src="https://flagcdn.com/w40/gb.png"> ENGLISH</div>
+                <div class="lang-option" onclick="changeLang('fi', this)"><img src="https://flagcdn.com/w40/fi.png"> SUOMI</div>
+                <div class="lang-option" onclick="changeLang('sv', this)"><img src="https://flagcdn.com/w40/se.png"> SVENSKA</div>
+                <div class="lang-option" onclick="changeLang('it', this)"><img src="https://flagcdn.com/w40/it.png"> ITALIANO</div>
+                <div class="lang-option" onclick="changeLang('es', this)"><img src="https://flagcdn.com/w40/es.png"> ESPAÑOL</div>
+            </div>
+            <div class="nav-list">
+                <li><a href="index.html" class="sharp-nav" id="link-home">HOME SCREEN</a></li>
+                <li><a href="tracks.html" class="sharp-nav" id="link-tracks" style="background: var(--accent); color: white;">TRACK LIST</a></li>
+                <li><a href="custom.html" class="sharp-nav" id="link-custom">CUSTOMIZATION</a></li>
+                <hr style="border: none; border-top: 1px solid var(--border); margin: 30px 0;">
+                <li><button onclick="toggleTheme()" class="theme-btn-text" id="txt-mode">SWITCH THEME</button></li>
+            </div>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1 id="txt-track-title">TRACK LIST</h1>
+        
+        <div class="track-grid">
+            <a href="australia.html" class="track-link"><div class="track-card"><img src="https://flagcdn.com/w640/au.png" class="track-flag"><div class="track-info"><div class="track-name" id="t-au">Australian GP</div><div class="track-meta" id="m-park">TYPE: PARK CIRCUIT</div></div></div></a>
+            <a href="china.html" class="track-link"><div class="track-card"><img src="https://flagcdn.com/w640/cn.png" class="track-flag"><div class="track-info"><div class="track-name" id="t-cn">Chinese GP</div><div class="track-meta" id="m-perm">TYPE: PERMANENT</div></div></div></a>
+            <a href="bahrain.html" class="track-link"><div class="track-card"><img src="https://flagcdn.com/w640/bh.png" class="track-flag"><div class="track-info"><div class="track-name" id="t-bh">Bahraini GP</div><div class="track-meta" id="m-night">TYPE: NIGHT RACE</div></div></div></a>
+            <a href="motorvalley.html" class="track-link"><div class="track-card"><img src="https://flagcdn.com/w640/sm.png" class="track-flag"><div class="track-info"><div class="track-name" id="t-im">Motorvalley GP</div><div class="track-meta" id="m-class">TYPE: CLASSIC</div></div></div></a>
+            <a href="spain.html" class="track-link"><div class="track-card"><img src="https://flagcdn.com/w640/es.png" class="track-flag"><div class="track-info"><div class="track-name" id="t-es">Spanish GP</div><div class="track-meta" id="m-perm2">TYPE: PERMANENT</div></div></div></a>
+            <a href="monaco.html" class="track-link"><div class="track-card"><img src="https://flagcdn.com/w640/mc.png" class="track-flag"><div class="track-info"><div class="track-name" id="t-mc">Monaco GP</div><div class="track-meta" id="m-street">TYPE: STREET</div></div></div></a>
+            <a href="canada.html" class="track-link"><div class="track-card"><img src="https://flagcdn.com/w640/ca.png" class="track-flag"><div class="track-info"><div class="track-name" id="t-ca">Canadian GP</div><div class="track-meta" id="m-semi">TYPE: SEMI-STREET</div></div></div></a>
+            <a href="austria.html" class="track-link"><div class="track-card"><img src="https://flagcdn.com/w640/at.png" class="track-flag"><div class="track-info"><div class="track-name" id="t-at">Austrian GP</div><div class="track-meta" id="m-high">TYPE: HIGH SPEED</div></div></div></a>
+            <a href="britain.html" class="track-link"><div class="track-card"><img src="https://flagcdn.com/w640/gb.png" class="track-flag"><div class="track-info"><div class="track-name" id="t-gb">British GP</div><div class="track-meta" id="m-class2">TYPE: CLASSIC</div></div></div></a>
+            <a href="germany.html" class="track-link"><div class="track-card"><img src="https://flagcdn.com/w640/de.png" class="track-flag"><div class="track-info"><div class="track-name" id="t-de">German GP</div><div class="track-meta" id="m-perm3">TYPE: PERMANENT</div></div></div></a>
+            <a href="hungary.html" class="track-link"><div class="track-card"><img src="https://flagcdn.com/w640/hu.png" class="track-flag"><div class="track-info"><div class="track-name" id="t-hu">Hungarian GP</div><div class="track-meta" id="m-tech">TYPE: TECHNICAL</div></div></div></a>
+            <a href="belgium.html" class="track-link"><div class="track-card"><img src="https://flagcdn.com/w640/be.png" class="track-flag"><div class="track-info"><div class="track-name" id="t-be">Belgian GP</div><div class="track-meta" id="m-leg">TYPE: LEGENDARY</div></div></div></a>
+            <a href="italy.html" class="track-link"><div class="track-card"><img src="https://flagcdn.com/w640/it.png" class="track-flag"><div class="track-info"><div class="track-name" id="t-it">Italian GP</div><div class="track-meta" id="m-speed">TYPE: SPEED TEMPLE</div></div></div></a>
+            <a href="japan.html" class="track-link"><div class="track-card"><img src="https://flagcdn.com/w640/jp.png" class="track-flag"><div class="track-info"><div class="track-name" id="t-jp">Japanese GP</div><div class="track-meta" id="m-fig">TYPE: FIGURE-8</div></div></div></a>
+            <a href="brazil.html" class="track-link"><div class="track-card"><img src="https://flagcdn.com/w640/br.png" class="track-flag"><div class="track-info"><div class="track-name" id="t-br">Brazilian GP</div><div class="track-meta" id="m-und">TYPE: UNDULATING</div></div></div></a>
+            <a href="emirates.html" class="track-link"><div class="track-card"><img src="https://flagcdn.com/w640/ae.png" class="track-flag"><div class="track-info"><div class="track-name" id="t-ae">Emirates GP</div><div class="track-meta" id="m-des">TYPE: DESERT CIRCUIT</div></div></div></a>
+        </div>
+    </div>
+
+    <script>
+    const translations = {
+        en: { 
+            "txt-track-title": "Track List", "link-home": "HOME SCREEN", "link-tracks": "TRACK LIST", "link-custom": "CUSTOMIZATION", "txt-mode": "SWITCH THEME",
+            "t-au": "Australian GP", "t-cn": "Chinese GP", "t-bh": "Bahraini GP", "t-im": "Motorvalley GP", "t-es": "Spanish GP", "t-mc": "Monaco GP", "t-ca": "Canadian GP", "t-at": "Austrian GP", "t-gb": "British GP", "t-de": "German GP", "t-hu": "Hungarian GP", "t-be": "Belgian GP", "t-it": "Italian GP", "t-jp": "Japanese GP", "t-br": "Brazilian GP", "t-ae": "Emirates GP",
+            "m-park": "TYPE: PARK CIRCUIT", "m-perm": "TYPE: PERMANENT", "m-perm2": "TYPE: PERMANENT", "m-perm3": "TYPE: PERMANENT", "m-night": "TYPE: NIGHT RACE", "m-class": "TYPE: CLASSIC", "m-class2": "TYPE: CLASSIC", "m-street": "TYPE: STREET", "m-semi": "TYPE: SEMI-STREET", "m-high": "TYPE: HIGH SPEED", "m-tech": "TYPE: TECHNICAL", "m-leg": "TYPE: LEGENDARY", "m-speed": "TYPE: SPEED TEMPLE", "m-fig": "TYPE: FIGURE-8", "m-und": "TYPE: UNDULATING", "m-des": "TYPE: DESERT CIRCUIT"
+        },
+        fi: { 
+            "txt-track-title": "Ratalista", "link-home": "ALOITUSRUUTU", "link-tracks": "RATALISTA", "link-custom": "MUOKKAUS", "txt-mode": "VAIHDA TEEMA",
+            "t-au": "Australian GP", "t-cn": "Kiinan GP", "t-bh": "Bahrainin GP", "t-im": "Motorvalleyn GP", "t-es": "Espanjan GP", "t-mc": "Monacon GP", "t-ca": "Kanadan GP", "t-at": "Itävallan GP", "t-gb": "Britannian GP", "t-de": "Saksan GP", "t-hu": "Unkarin GP", "t-be": "Belgian GP", "t-it": "Italian GP", "t-jp": "Japanin GP", "t-br": "Brasilian GP", "t-ae": "Emiraattien GP",
+            "m-park": "TYYPPI: PUISTORATA", "m-perm": "TYYPPI: PYSYVÄ RATA", "m-perm2": "TYYPPI: PYSYVÄ RATA", "m-perm3": "TYYPPI: PYSYVÄ RATA", "m-night": "TYYPPI: ILTAKISA", "m-class": "TYYPPI: KLASSINEN", "m-class2": "TYYPPI: KLASSINEN", "m-street": "TYYPPI: KATURATA", "m-semi": "TYYPPI: PUOLIKATURATA", "m-high": "TYYPPI: NOPEA RATA", "m-tech": "TYYPPI: TEKNINEN", "m-leg": "TYYPPI: LEGENDAARINEN", "m-speed": "TYYPPI: VAUHDIN TEMPPELI", "m-fig": "TYYPPI: KAHDEKSIKKO", "m-und": "TYYPPI: KUMPUILEVA", "m-des": "TYYPPI: AAVIKKORATA"
+        },
+        sv: {
+            "txt-track-title": "Banlista", "link-home": "HEMSKÄRM", "link-tracks": "BANLISTA", "link-custom": "ANPASSNING", "txt-mode": "BYT TEMA",
+            "t-au": "Australiens GP", "t-cn": "Kinas GP", "t-bh": "Bahrains GP", "t-im": "Motorvalleys GP", "t-es": "Spaniens GP", "t-mc": "Monacos GP", "t-ca": "Kanadas GP", "t-at": "Österrikes GP", "t-gb": "Brittiska GP", "t-de": "Tysklands GP", "t-hu": "Ungerns GP", "t-be": "Belgiens GP", "t-it": "Italiens GP", "t-jp": "Japans GP", "t-br": "Brasiliens GP", "t-ae": "Emiratens GP",
+            "m-park": "TYP: PARKBANA", "m-perm": "TYP: PERMANENT", "m-perm2": "TYP: PERMANENT", "m-perm3": "TYP: PERMANENT", "m-night": "TYP: NATTRACE", "m-class": "TYP: KLASSISK", "m-class2": "TYP: KLASSISK", "m-street": "TYP: GATUBANA", "m-semi": "TYP: SEMI-GATUBANA", "m-high": "TYP: HÖG HASTIGHET", "m-tech": "TYP: TEKNISK", "m-leg": "TYP: LEGENDARISK", "m-speed": "TYP: FARTTEMPEL", "m-fig": "TYP: FIGUR-8", "m-und": "TYP: KUPERAD", "m-des": "TYP: ÖKENBANA"
+        },
+        it: {
+            "txt-track-title": "Lista Circuiti", "link-home": "SCHERMATA INIZIALE", "link-tracks": "LISTA CIRCUITI", "link-custom": "PERSONALIZZAZIONE", "txt-mode": "CAMBIA TEMA",
+            "t-au": "GP Australia", "t-cn": "GP Cina", "t-bh": "GP Bahrain", "t-im": "GP Motorvalley", "t-es": "GP Spagna", "t-mc": "GP Monaco", "t-ca": "GP Canada", "t-at": "GP Austria", "t-gb": "GP Gran Bretagna", "t-de": "GP Germania", "t-hu": "GP Ungheria", "t-be": "GP Belgio", "t-it": "GP Italia", "t-jp": "GP Giappone", "t-br": "GP Brasile", "t-ae": "GP Emirati",
+            "m-park": "TIPO: CIRCUITO PARCO", "m-perm": "TIPO: PERMANENTE", "m-perm2": "TIPO: PERMANENTE", "m-perm3": "TIPO: PERMANENTE", "m-night": "TIPO: GARA NOTTURNA", "m-class": "TIPO: CLASSICO", "m-class2": "TIPO: CLASSICO", "m-street": "TIPO: CITTADINO", "m-semi": "TIPO: SEMI-CITTADINO", "m-high": "TIPO: ALTA VELOCITÀ", "m-tech": "TIPO: TECNICO", "m-leg": "TIPO: LEGGENDARIO", "m-speed": "TIPO: TEMPIO DELLA VELOCITÀ", "m-fig": "TIPO: FIGURA A 8", "m-und": "TIPO: ONDULATO", "m-des": "TIPO: CIRCUITO NEL DESERTO"
+        },
+        es: {
+            "txt-track-title": "Lista de Pistas", "link-home": "PANTALLA INICIAL", "link-tracks": "LISTA DE PISTAS", "link-custom": "PERSONALIZACIÓN", "txt-mode": "CAMBIAR TEMA",
+            "t-au": "GP de Australia", "t-cn": "GP de China", "t-bh": "GP de Baréin", "t-im": "GP de Motorvalley", "t-es": "GP de España", "t-mc": "GP de Mónaco", "t-ca": "GP de Canadá", "t-at": "GP de Austria", "t-gb": "GP de Gran Bretaña", "t-de": "GP de Alemania", "t-hu": "GP de Hungría", "t-be": "GP de Bélgica", "t-it": "GP de Italia", "t-jp": "GP de Japón", "t-br": "GP de Brasil", "t-ae": "GP de Emiratos",
+            "m-park": "TIPO: CIRCUITO DE PARQUE", "m-perm": "TIPO: PERMANENTE", "m-perm2": "TIPO: PERMANENTE", "m-perm3": "TIPO: PERMANENTE", "m-night": "TIPO: CARRERA NOCTURNA", "m-class": "TIPO: CLÁSICO", "m-class2": "TIPO: CLÁSICO", "m-street": "TIPO: CALLEJERO", "m-semi": "TIPO: SEMICALLEJERO", "m-high": "TIPO: ALTA VELOCIDAD", "m-tech": "TIPO: TÉCNICO", "m-leg": "TIPO: LEGENDARIO", "m-speed": "TIPO: TEMPLO DE LA VELOCIDAD", "m-fig": "TIPO: FIGURA DE 8", "m-und": "TIPO: ONDULADO", "m-des": "TIPO: CIRCUITO DEL DESIERTO"
+        }
+    };
+
+    function changeLang(lang, el) {
+        document.querySelectorAll('.lang-option').forEach(opt => opt.classList.remove('selected'));
+        if(el) el.classList.add('selected');
+        localStorage.setItem('prefLang', lang);
+        applyLanguage();
+        setTimeout(() => { if(el) el.classList.remove('selected'); }, 1500); 
+    }
+
+    function applyLanguage() {
+        const lang = localStorage.getItem('prefLang') || 'en';
+        const data = translations[lang] || translations['en'];
+        for (let id in data) {
+            const el = document.getElementById(id);
+            if (el) el.innerText = data[id];
+        }
+    }
+
+    function toggleTheme() {
+        const body = document.documentElement;
+        const isDark = body.getAttribute('data-theme') !== 'light';
+        body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+        localStorage.setItem('theme', isDark ? 'light' : 'dark');
+    }
+
+    window.onload = () => {
+        applyLanguage();
+        if (localStorage.getItem('theme') === 'light') document.documentElement.setAttribute('data-theme', 'light');
+    };
+    </script>
+</body>
+</html>
