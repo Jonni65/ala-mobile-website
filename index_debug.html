@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ala Mobile - Debug Index</title>
+    <style>
+        /* [ROOT AND CORE STYLES SAME AS ABOVE - OMITTED FOR BREVITY BUT INCLUDED IN FILE] */
+        :root { --bg: #050505; --card: #0f0f0f; --text: #ffffff; --accent: #ff0000; --border: #222; --active: #00ff41; --nav-bg: #1a1a1a; --fade-color: rgba(0,0,0,1); --fade-mid: rgba(0,0,0,0.8); }
+        [data-theme="light"] { --bg: #ffffff; --card: #f8f9fa; --text: #111111; --accent: #d70000; --border: #dddddd; --active: #008f25; --nav-bg: #eeeeee; --fade-color: rgba(255,255,255,1); --fade-mid: rgba(255,255,255,0.7); }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden; transition: background 0.5s ease; }
+        
+        /* Sidebar styles same as index... */
+        #menuToggle { display: block; position: fixed; top: 30px; left: 30px; z-index: 10010; user-select: none; }
+        #menuToggle span { display: block; width: 26px; height: 3px; margin-bottom: 6px; background: var(--accent); transition: 0.4s; position: relative; z-index: 10011; }
+        #menuToggle input { display: block; width: 40px; height: 32px; position: absolute; top: -7px; left: -5px; cursor: pointer; opacity: 0; z-index: 10012; }
+        #menuToggle input:checked ~ span:nth-last-child(3) { transform: rotate(45deg) translate(5px, 6px); }
+        #menuToggle input:checked ~ span:nth-last-child(2) { opacity: 0; }
+        #menuToggle input:checked ~ span:nth-last-child(1) { transform: rotate(-45deg) translate(5px, -7px); }
+        #menu { position: fixed; width: 320px; height: 100vh; margin: 0; padding: 80px 15px; top: 0; left: 0; background: var(--card); border-right: 6px solid var(--accent); transform: translateX(-100%); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); z-index: 10000; list-style: none; box-sizing: border-box; }
+        #menuToggle input:checked ~ ul { transform: translateX(0); }
+        .nav-list { list-style: none; padding: 0; margin-top: 20px; }
+        .sharp-nav { display: block; background: var(--nav-bg); color: var(--text); text-decoration: none; font-weight: 900; text-transform: uppercase; font-style: italic; padding: 16px 25px; margin-bottom: 8px; clip-path: polygon(0% 0%, 100% 0%, 88% 100%, 0% 100%); transition: 0.2s; }
+        .sharp-nav:hover { background: var(--accent); color: #fff; transform: translateX(8px); }
+
+        /* Hero and Content styles same as index... */
+        .hero-container { position: relative; width: 100%; height: clamp(350px, 60vh, 600px); background: var(--bg); overflow: hidden; }
+        .hero-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .hero-container::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to right, var(--fade-color) 0%, var(--fade-mid) 25%, transparent 100%), linear-gradient(to bottom, transparent 80%, var(--fade-color) 100%); z-index: 2; transition: background 0.5s ease; }
+        .official-logo { position: absolute; bottom: 10%; left: 5%; width: clamp(240px, 40vw, 500px); z-index: 10; filter: drop-shadow(5px 5px 15px rgba(0,0,0,0.8)); }
+        .main-container { max-width: 1000px; margin: -60px auto 0; padding: 0 20px; position: relative; z-index: 100; padding-bottom: 100px; }
+        .content-card { background: var(--card); border-left: 8px solid var(--accent); padding: clamp(20px, 5vw, 50px); box-shadow: 0 15px 35px rgba(0,0,0,0.2); margin-bottom: 30px; }
+        .table-wrap { width: 100%; overflow-x: auto; margin-top: 25px; }
+        table { border-collapse: collapse; width: 100%; min-width: 500px; }
+        th { text-align: left; color: var(--accent); border-bottom: 3px solid var(--accent); padding: 15px 10px; font-size: 12px; text-transform: uppercase; font-weight: 900; }
+        td { padding: 18px 10px; border-bottom: 1px solid var(--border); font-size: 15px; font-weight: 600; }
+
+        /* --- DEBUG SECTION --- */
+        .debug-container { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 15px; margin-bottom: 60px; }
+        .debug-btn { display: inline-block; background: transparent; color: var(--text); border: 2px solid var(--accent); padding: 10px 25px; text-decoration: none; font-weight: 900; font-style: italic; text-transform: uppercase; clip-path: polygon(8% 0, 100% 0, 92% 100%, 0% 100%); transition: 0.3s; font-size: 12px; cursor: pointer; }
+        .debug-btn:hover { background: var(--accent); color: #fff; }
+        .btn-exit { border-color: var(--border); opacity: 0.6; }
+        #link-about { color: var(--accent); font-weight: 900; text-decoration: none; font-size: 13px; text-transform: uppercase; border-bottom: 2px solid var(--accent); }
+
+        /* --- RESPONSIVITY --- */
+        @media (max-width: 768px) {
+            table { min-width: 100%; }
+            .content-card { padding: 30px 20px; }
+            .official-logo { width: 70%; left: 15%; }
+            .debug-btn, #link-about { width: 100%; box-sizing: border-box; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <nav id="menuToggle">
+        <input type="checkbox" id="navCheck" />
+        <span></span><span></span><span></span>
+        <ul id="menu">
+            <div class="nav-list">
+                <li><a href="index.html" class="sharp-nav">NORMAL SITE</a></li>
+                <li><a href="index_debug.html" class="sharp-nav">DEBUG INDEX</a></li>
+            </div>
+        </ul>
+    </nav>
+
+    <div class="hero-container">
+        <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3203370/library_hero.jpg" class="hero-img">
+        <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3203370/logo.png" class="official-logo">
+    </div>
+
+    <div class="main-container">
+        <div class="content-card">
+            <h2 style="font-size: 24px; font-weight: 900; font-style: italic;">DEBUG SYSTEM VIEW</h2>
+            <div class="table-wrap">
+                <table>
+                    <tr><th>COMPONENT</th><th>MINIMUM</th><th>RECOMMENDED</th></tr>
+                    <tr><td>OS</td><td>Windows 10+</td><td>Windows 11</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="debug-container">
+            <a href="about.html" id="link-about">PROJECT DOCUMENTATION</a>
+            <a href="debug_hub.html" class="debug-btn">RESPONSIVITY DEBUGGER</a>
+            <a href="index.html" class="debug-btn btn-exit">EXIT TO NORMAL SITE</a>
+        </div>
+    </div>
+</body>
+</html>

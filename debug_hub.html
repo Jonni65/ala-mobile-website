@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALA SYSTEM CONTROL // DEBUG_EXTENDED</title>
+    <style>
+        :root {
+            --bg: #050505; --card: #0f0f0f; --text: #00ff41; /* Classic Matrix/Terminal Green */
+            --accent: #ff0000; --border: #222; --dim: #004411;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: var(--bg); color: var(--text);
+            margin: 0; padding: 15px; font-size: 13px;
+            text-transform: uppercase;
+        }
+
+        .header {
+            border: 1px solid var(--text); padding: 10px; margin-bottom: 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(0, 255, 65, 0.05);
+        }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 15px; }
+
+        .card {
+            background: var(--card); border: 1px solid var(--border);
+            padding: 15px; position: relative; overflow: hidden;
+        }
+
+        .card-title { color: var(--accent); font-weight: bold; margin-bottom: 12px; border-bottom: 1px solid var(--border); display: block; }
+
+        /* --- 1. VIEWPORT ENGINE --- */
+        .metrics-row { display: flex; justify-content: space-between; margin-bottom: 8px; }
+        .bar-outer { width: 100%; height: 4px; background: #111; margin-top: 4px; }
+        .bar-inner { height: 100%; background: var(--text); transition: 0.3s; }
+
+        /* --- 2. CSS VARIABLE TUNER --- */
+        .tuner { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        input[type="range"] { flex-grow: 1; accent-color: var(--accent); }
+
+        /* --- 3. LIVE CONSOLE LOGS --- */
+        #log-window {
+            height: 120px; background: #000; border: 1px solid var(--dim);
+            padding: 8px; overflow-y: auto; font-size: 11px; color: #888;
+        }
+        .log-entry { margin-bottom: 4px; border-left: 2px solid var(--dim); padding-left: 5px; }
+        .log-warn { color: var(--accent); }
+
+        /* --- 4. HARDWARE EMULATION --- */
+        .emu-btn {
+            background: none; border: 1px solid var(--text); color: var(--text);
+            padding: 5px 10px; cursor: pointer; margin: 2px; font-size: 10px;
+        }
+        .emu-btn:hover { background: var(--text); color: #000; }
+
+        /* --- 5. STRESS TESTS --- */
+        .stress-btn {
+            width: 100%; padding: 10px; background: var(--accent);
+            color: #fff; border: none; font-weight: bold; cursor: pointer; margin-top: 10px;
+        }
+
+        /* --- NAVIGATION --- */
+        .nav-footer { margin-top: 25px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .nav-btn {
+            text-align: center; padding: 15px; text-decoration: none; border: 1px solid var(--text);
+            color: var(--text); font-weight: bold;
+        }
+        .nav-btn.danger { border-color: var(--accent); color: var(--accent); }
+        .nav-btn:hover { background: var(--text); color: #000; }
+
+        /* Breakpoint Visualizer */
+        #bp-visual { color: #fff; background: var(--dim); padding: 2px 5px; }
+
+        @media (max-width: 480px) { .grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <span>[ STATUS: DEPLOYED ]</span>
+        <span id="clock">00:00:00</span>
+        <span>AUTH: DEV_USER</span>
+    </div>
+
+    <div class="grid">
+        
+        <div class="card">
+            <span class="card-title">Viewport Engine</span>
+            <div class="metrics-row"><span>Width</span><span id="v-w">---</span></div>
+            <div class="bar-outer"><div id="v-w-bar" class="bar-inner"></div></div>
+            <div class="metrics-row" style="margin-top:10px;"><span>Height</span><span id="v-h">---</span></div>
+            <div class="bar-outer"><div id="v-h-bar" class="bar-inner"></div></div>
+            <div class="metrics-row" style="margin-top:10px;"><span>Active BP</span><span id="bp-visual">DETECTING</span></div>
+        </div>
+
+        <div class="card">
+            <span class="card-title">Live CSS Tuner</span>
+            <div class="tuner">
+                <span>Accent</span>
+                <input type="color" id="color-picker" value="#ff0000" oninput="tuneColor(this.value)">
+            </div>
+            <div class="tuner">
+                <span>Opacity</span>
+                <input type="range" min="0" max="100" value="100" oninput="tuneOpacity(this.value)">
+            </div>
+            <p style="font-size: 10px;">Changes apply to this session only.</p>
+        </div>
+
+        <div class="card">
+            <span class="card-title">Environment Simulation</span>
+            <button class="emu-btn" onclick="log('Simulating 3G Network...')">Simulate 3G</button>
+            <button class="emu-btn" onclick="log('SSD Temperature: 98C', true)">SSD Critical Heat</button>
+            <button class="emu-btn" onclick="log('Memory Usage: 94%')">RAM Stress</button>
+            <button class="emu-btn" onclick="localStorage.clear(); log('Storage Wiped.')">Wipe LocalCache</button>
+        </div>
+
+        <div class="card">
+            <span class="card-title">System Logs</span>
+            <div id="log-window"></div>
+            <button class="stress-btn" onclick="stressTest()">Run DOM Stress Test</button>
+        </div>
+
+    </div>
+
+    <div class="nav-footer">
+        <a href="index_debug.html" class="nav-btn">Return to Dev Index</a>
+        <a href="index.html" class="nav-btn danger">Emergency Exit (Prod)</a>
+    </div>
+
+    <script>
+        // 1. Live Clock
+        function updateClock() {
+            document.getElementById('clock').innerText = new Date().toLocaleTimeString();
+        }
+        setInterval(updateClock, 1000);
+
+        // 2. Viewport Logic
+        function updateViewport() {
+            const w = window.innerWidth;
+            const h = window.innerHeight;
+            document.getElementById('v-w').innerText = w + "PX";
+            document.getElementById('v-h').innerText = h + "PX";
+            
+            document.getElementById('v-w-bar').style.width = (w / 1920 * 100) + "%";
+            document.getElementById('v-h-bar').style.width = (h / 1080 * 100) + "%";
+
+            let bp = "DESKTOP";
+            if(w <= 768) bp = "TABLET";
+            if(w <= 480) bp = "MOBILE (S24U)";
+            document.getElementById('bp-visual').innerText = bp;
+        }
+        window.onresize = updateViewport;
+
+        // 3. Tuners
+        function tuneColor(val) {
+            document.documentElement.style.setProperty('--accent', val);
+            log("Updated --accent to " + val);
+        }
+        function tuneOpacity(val) {
+            document.body.style.opacity = val / 100;
+        }
+
+        // 4. Logging Engine
+        function log(msg, warn = false) {
+            const win = document.getElementById('log-window');
+            const entry = document.createElement('div');
+            entry.className = 'log-entry' + (warn ? ' log-warn' : '');
+            entry.innerText = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            win.prepend(entry);
+        }
+
+        // 5. Stress Test (Floods the log)
+        function stressTest() {
+            log("Starting DOM stress test...");
+            let i = 0;
+            const interval = setInterval(() => {
+                log("Processing request chunk #" + i);
+                i++;
+                if(i > 10) {
+                    clearInterval(interval);
+                    log("Stress test stable. Hardware verified.", false);
+                }
+            }, 100);
+        }
+
+        window.onload = () => {
+            updateViewport();
+            updateClock();
+            log("Debug Hub v4.0 Initialized.");
+            log("Connection: School Firewall detected (Bypassed).");
+        };
+    </script>
+
+</body>
+</html>
