@@ -8,17 +8,17 @@
             --bg: #050505; --card: #0f0f0f; --text: #ffffff;
             --accent: #ff0000; --border: #222; --nav-bg: #1a1a1a;
             --confirm: #00ff41; --subtext: #888; 
-            --hero-op: 1; 
+            --hero-op: 0.8; 
         }
         [data-theme="light"] {
             --bg: #ffffff; --card: #f4f4f4; --text: #111111;
             --accent: #d70000; --border: #cccccc; --nav-bg: #eeeeee;
             --confirm: #008f25; --subtext: #555; 
-            --hero-op: 0.8; 
+            --hero-op: 0.6; 
         }
 
-        body, .content-card, #menu, .sharp-nav, .lang-option, .back-btn {
-            transition: background 0.4s ease, color 0.4s ease, border 0.4s ease;
+        body, .content-card, #menu, .sharp-nav, .lang-option, .back-btn, .track-map-card img, .hero-banner, .sharp-title {
+            transition: background 0.4s ease, color 0.4s ease, border 0.4s ease, filter 0.4s ease, text-shadow 0.4s ease, opacity 0.4s ease;
         }
 
         body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden; }
@@ -49,8 +49,9 @@
 
         .selector-label { font-size: 10px; font-weight: 900; letter-spacing: 1.5px; color: var(--accent); text-transform: uppercase; text-align: center; display: block; }
         .lang-trigger { text-align: center; cursor: pointer; font-size: 28px; color: var(--accent); margin-bottom: 5px; transition: 0.3s; }
-        #lang-list { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; border-bottom: 1px solid var(--border); }
-        #lang-list.active { max-height: 350px; margin-bottom: 15px; }
+        #lang-list { max-height: 0; overflow: hidden; opacity: 0; transform: translateY(-15px); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); border-bottom: 1px solid var(--border); }
+        #lang-list.active { max-height: 500px; opacity: 1; transform: translateY(0); margin-bottom: 15px; }
+        
         .lang-option { display: flex; align-items: center; padding: 10px 15px; font-size: 13px; font-weight: bold; cursor: pointer; margin: 4px 0; background: var(--nav-bg); clip-path: polygon(4% 0, 100% 0, 96% 100%, 0% 100%); transition: 0.2s; }
         .lang-option img { width: 20px; margin-right: 12px; }
         .lang-option:hover { background: var(--accent); color: #fff; transform: translateX(5px); }
@@ -61,43 +62,73 @@
         .sharp-nav:hover { background: var(--accent); color: #fff; transform: translateX(8px); }
         .theme-btn-text { display: block; padding: 10px 0; text-decoration: none; color: var(--accent); font-weight: 900; font-size: 14px; text-transform: uppercase; border: none; background: none; cursor: pointer; transition: 0.3s; text-align: left; }
 
-        /* --- HERO: ULTRA STRETCHED SIDEWAYS --- */
+        /* --- HERO: ULTRA STRETCHED & FADED --- */
         .hero-banner { 
-            position: relative; width: 100vw; height: 320px; 
-            background: #000; border-bottom: 4px solid var(--accent); overflow: hidden; 
+            position: relative; width: 100%; height: 320px; 
+            background: var(--bg); /* Adapts automatically */
+            border-bottom: 4px solid var(--accent); overflow: hidden; 
         }
-        .hero-banner::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0.85) 20%, transparent 85%);
-            z-index: 2;
-        }
+
         .hero-img { 
-            display: block; width: 100vw; height: 100%; 
+            display: block; width: 80%; height: 100%; 
             object-fit: cover; 
-            transform: scaleX(3.5); /* MASSIVE HORIZONTAL STRETCH */
+            transform: scaleX(3.5); /* MASSIVE HORIZONTAL STRETCH PRESERVED */
             transform-origin: center;
             position: absolute; right: 0; top: 0;
             opacity: var(--hero-op); z-index: 1; 
-            mask-image: linear-gradient(to right, transparent 0%, black 100%);
-            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 100%);
+            /* Fades smoothly into the adaptive background */
+            mask-image: linear-gradient(to right, transparent 0%, black 60%);
+            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 60%);
         }
 
-        .track-title-wrap { position: absolute; bottom: 35px; left: 40px; z-index: 10; }
-        .sharp-title { font-size: 56px; font-weight: 900; text-transform: uppercase; letter-spacing: -2px; margin: 0; font-style: italic; color: #ffffff !important; text-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+        .track-title-wrap { position: absolute; bottom: 35px; left: 40px; z-index: 10; max-width: 60%; }
+        
+        .sharp-title { 
+            font-size: 56px; font-weight: 900; text-transform: uppercase; letter-spacing: -2px; margin: 0; 
+            font-style: italic; color: var(--text) !important; /* Adapts automatically */
+            text-shadow: 0 4px 15px rgba(0,0,0,0.2); 
+        }
+
         .loc-tag { color: var(--accent); font-weight: 900; letter-spacing: 5px; font-size: 11px; display: block; margin-bottom: 5px; }
 
         .back-btn { position: absolute; top: 30px; right: 40px; z-index: 100; background: var(--nav-bg); color: var(--text); padding: 10px 25px; text-decoration: none; font-weight: 900; font-style: italic; font-size: 11px; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%); border: 1px solid var(--border); }
+        .back-btn:hover { background: var(--accent); color: #fff; }
 
         /* --- LAYOUT --- */
         .container { width: 100%; margin: 0; display: grid; grid-template-columns: 480px 1fr; }
         .content-card { background: var(--card); border-right: 1px solid var(--border); padding: 60px 50px; min-height: calc(100vh - 320px); }
         .track-map-card { background: var(--bg); display: flex; align-items: center; justify-content: center; padding: 50px; }
-        .track-map-card img { width: 95%; max-width: 800px; filter: none; }
+        
+        /* Removed the inversion filter completely */
+        .track-map-card img { width: 95%; max-width: 800px; }
 
         .spec-table { width: 100%; border-collapse: collapse; margin-top: 40px; }
         .spec-table td { padding: 18px 0; border-bottom: 1px solid var(--border); }
         .spec-label { font-weight: 900; color: var(--subtext); font-size: 11px; letter-spacing: 2px; }
         .spec-value { text-align: right; font-weight: 900; color: var(--accent); font-family: 'Consolas', monospace; font-size: 19px; }
+
+        /* --- MOBILE RESPONSIVENESS --- */
+        @media (max-width: 768px) {
+            .container { grid-template-columns: 1fr; }
+            .hero-banner { height: 240px; }
+            
+            .hero-img { 
+                width: 100%; 
+                mask-image: linear-gradient(to right, transparent 0%, black 80%); 
+                -webkit-mask-image: linear-gradient(to right, transparent 0%, black 80%); 
+            }
+            
+            .track-title-wrap { left: 20px; bottom: 20px; max-width: 90%; }
+            .sharp-title { font-size: 32px; }
+            .back-btn { top: 20px; right: 20px; padding: 8px 15px; font-size: 10px; }
+            
+            #menuToggle { top: 20px; left: 20px; }
+            #menu { width: 100%; max-width: 320px; }
+            
+            .content-card { padding: 30px 20px; min-height: auto; border-right: none; border-bottom: 1px solid var(--border); }
+            .track-map-card { padding: 30px 20px; }
+            .spec-table { margin-top: 25px; }
+        }
     </style>
 </head>
 <body>
@@ -165,9 +196,11 @@
     function changeLang(lang, el) {
         document.querySelectorAll('.lang-option').forEach(opt => opt.classList.remove('selected'));
         if(el) el.classList.add('selected');
+        
         localStorage.setItem('prefLang', lang);
         applyLanguage();
-        setTimeout(() => { if(el) el.classList.remove('selected'); }, 1500); 
+        
+        setTimeout(() => { if(el) el.classList.remove('selected'); }, 2000); 
     }
 
     function applyLanguage() {
