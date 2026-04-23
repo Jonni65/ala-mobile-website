@@ -7,17 +7,18 @@
         :root {
             --bg: #050505; --card: #0f0f0f; --text: #ffffff;
             --accent: #ff0000; --border: #222; --nav-bg: #1a1a1a;
-            --confirm: #00ff41; --subtext: #888; --hero-op: 0.35;
+            --confirm: #00ff41; --subtext: #888; 
+            --hero-op: 0.8; 
         }
         [data-theme="light"] {
             --bg: #ffffff; --card: #f4f4f4; --text: #111111;
             --accent: #d70000; --border: #cccccc; --nav-bg: #eeeeee;
-            --confirm: #008f25; --subtext: #555; --hero-op: 0.18;
-            --light-flag-op: 0.75;
+            --confirm: #008f25; --subtext: #555; 
+            --hero-op: 0.6; 
         }
 
-        body, .content-card, #menu, .sharp-nav, .lang-option, .back-btn {
-            transition: background 0.4s ease, color 0.4s ease, border 0.4s ease;
+        body, .content-card, #menu, .sharp-nav, .lang-option, .back-btn, .hero-banner, .sharp-title {
+            transition: background 0.4s ease, color 0.4s ease, border 0.4s ease, opacity 0.4s ease;
         }
 
         body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden; }
@@ -38,45 +39,45 @@
         }
         #menuToggle input:checked ~ ul { transform: translateX(0); }
 
-        /* --- POP-OUT LANG --- */
+        /* --- LANG SELECTOR --- */
         .selector-label { font-size: 10px; font-weight: 900; letter-spacing: 1.5px; color: var(--accent); text-transform: uppercase; text-align: center; display: block; }
-        .lang-trigger { text-align: center; cursor: pointer; font-size: 28px; color: var(--accent); margin-bottom: 5px; transition: 0.3s; }
+        
+        /* Updated Arrow Character for compatibility */
+        .lang-trigger { text-align: center; cursor: pointer; font-size: 20px; color: var(--accent); margin-bottom: 5px; padding: 5px; }
+        
         #lang-list { max-height: 0; overflow: hidden; opacity: 0; transform: translateY(-15px); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); border-bottom: 1px solid var(--border); }
         #lang-list.active { max-height: 500px; opacity: 1; transform: translateY(0); margin-bottom: 15px; }
-        .lang-option { display: flex; align-items: center; padding: 12px 15px; font-size: 13px; font-weight: bold; cursor: pointer; clip-path: polygon(4% 0, 100% 0, 96% 100%, 0% 100%); margin: 4px 0; background: var(--nav-bg); color: var(--text); }
+        
+        .lang-option { display: flex; align-items: center; padding: 12px 15px; font-size: 13px; font-weight: bold; cursor: pointer; clip-path: polygon(4% 0, 100% 0, 96% 100%, 0% 100%); margin: 4px 0; background: var(--nav-bg); color: var(--text); transition: 0.2s; }
         .lang-option img { width: 20px; margin-right: 12px; }
         .lang-option:hover { background: var(--accent); color: #fff; transform: translateX(5px); }
         .lang-option.selected { background: var(--confirm) !important; color: white !important; }
 
-        /* --- NAV LIST --- */
+        /* --- NAVIGATION --- */
         .nav-list { list-style: none; padding: 0; margin-top: 20px; }
-        .sharp-nav {
-            display: block; background: var(--nav-bg); color: var(--text); text-decoration: none;
-            font-weight: 900; text-transform: uppercase; font-style: italic;
-            padding: 16px 25px; margin-bottom: 8px;
-            clip-path: polygon(0% 0%, 100% 0%, 88% 100%, 0% 100%);
-            border-left: 4px solid transparent; transition: 0.2s;
-        }
-        .sharp-nav:hover { background: var(--accent); color: #fff; border-left: 4px solid var(--text); transform: translateX(8px); }
+        .sharp-nav { display: block; background: var(--nav-bg); color: var(--text); text-decoration: none; font-weight: 900; text-transform: uppercase; font-style: italic; padding: 16px 25px; margin-bottom: 8px; clip-path: polygon(0% 0%, 100% 0%, 88% 100%, 0% 100%); border-left: 4px solid transparent; transition: 0.2s; }
+        .sharp-nav:hover { background: var(--accent); color: #fff; transform: translateX(8px); }
 
         .back-btn { position: absolute; top: 30px; right: 40px; z-index: 100; background: var(--nav-bg); color: var(--text); padding: 10px 25px; text-decoration: none; font-weight: 900; font-style: italic; font-size: 11px; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%); border: 1px solid var(--border); }
         .back-btn:hover { background: var(--accent); color: #fff; }
 
-        /* --- HERO & FLAG --- */
-        .hero-banner { position: relative; width: 100%; height: 320px; background: #000; border-bottom: 4px solid var(--accent); overflow: hidden; }
-        .hero-img { 
-            width: 70%; height: 100%; object-fit: cover; 
-            position: absolute; right: 0; 
-            opacity: var(--hero-op);
-            mask-image: linear-gradient(to right, transparent 0%, black 70%);
-            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 70%);
-            filter: saturate(0.6);
+        /* --- HERO: ADAPTIVE FADE --- */
+        .hero-banner { 
+            position: relative; width: 100%; height: 320px; 
+            background: var(--bg); 
+            border-bottom: 4px solid var(--accent); overflow: hidden; 
         }
-        [data-theme="light"] .hero-img { opacity: var(--light-flag-op); }
+
+        .hero-img { 
+            display: block; width: 80%; height: 100%; object-fit: cover; 
+            position: absolute; right: 0; top: 0;
+            opacity: var(--hero-op); z-index: 1; 
+            mask-image: linear-gradient(to right, transparent 0%, black 60%);
+            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 60%);
+        }
 
         .track-title-wrap { position: absolute; bottom: 30px; left: 40px; z-index: 10; max-width: 50%; }
-        .sharp-title { font-size: 48px; font-weight: 900; text-transform: uppercase; letter-spacing: -1.5px; margin: 0; font-style: italic; color: #fff; }
-        [data-theme="light"] .sharp-title { color: #111; }
+        .sharp-title { font-size: 48px; font-weight: 900; text-transform: uppercase; letter-spacing: -1.5px; margin: 0; font-style: italic; color: var(--text) !important; text-shadow: 0 4px 15px rgba(0,0,0,0.2); }
         .loc-tag { color: var(--accent); font-weight: 900; letter-spacing: 5px; font-size: 10px; display: block; margin-bottom: 5px; font-family: monospace; }
 
         /* --- LAYOUT --- */
@@ -84,11 +85,8 @@
         .content-card { 
             background: var(--card); border-right: 1px solid var(--border); 
             padding: 60px 50px; min-height: calc(100vh - 320px); 
-            box-shadow: 15px 0 40px rgba(0,0,0,0.15); 
-            background: linear-gradient(to right, var(--card) 85%, transparent 100%);
         }
         .track-map-card { background: var(--bg); display: flex; align-items: center; justify-content: center; padding: 50px; }
-        /* NO INVERSION - Keeping official F1 colors */
         .track-map-card img { width: 90%; max-width: 850px; opacity: 1; filter: none; }
 
         .spec-table { width: 100%; border-collapse: collapse; margin-top: 40px; }
@@ -96,55 +94,19 @@
         .spec-label { font-weight: 900; color: var(--subtext); font-size: 11px; letter-spacing: 2px; }
         .spec-value { text-align: right; font-weight: 900; color: var(--accent); font-family: 'Consolas', monospace; font-size: 18px; }
 
-        /* --- MOBILE RESPONSIVENESS --- */
+        /* --- MOBILE --- */
         @media (max-width: 768px) {
-            .container { 
-                grid-template-columns: 1fr; /* Stack the layout */
-            }
-            
-            .hero-banner { 
-                height: 240px; 
-            }
-
-            .track-title-wrap { 
-                left: 20px; 
-                bottom: 20px; 
-                max-width: 80%; 
-            }
-            
-            .sharp-title { 
-                font-size: 32px; 
-            }
-
-            .back-btn { 
-                top: 20px; 
-                right: 20px; 
-                padding: 8px 15px; 
-                font-size: 10px; 
-            }
-
+            .container { grid-template-columns: 1fr; }
+            .hero-banner { height: 240px; }
+            .track-title-wrap { left: 20px; bottom: 20px; max-width: 90%; }
+            .sharp-title { font-size: 32px; }
+            .back-btn { top: 20px; right: 20px; padding: 8px 15px; font-size: 10px; }
             #menuToggle { top: 20px; left: 20px; }
             #menu { width: 100%; max-width: 320px; }
-
-            .content-card { 
-                padding: 30px 20px; 
-                min-height: auto; 
-                border-right: none;
-                border-bottom: 1px solid var(--border);
-                background: var(--card); /* Flatten gradient on mobile */
-            }
-
-            .track-map-card { 
-                padding: 30px 20px; 
-            }
-
-            .spec-table { 
-                margin-top: 25px; 
-            }
-            
-            .hero-img {
-                width: 100%; /* Give flag more presence on small screens */
-            }
+            .content-card { padding: 30px 20px; min-height: auto; border-right: none; border-bottom: 1px solid var(--border); }
+            .track-map-card { padding: 30px 20px; }
+            .spec-table { margin-top: 25px; }
+            .hero-img { width: 100%; mask-image: linear-gradient(to right, transparent 0%, black 80%); -webkit-mask-image: linear-gradient(to right, transparent 0%, black 80%); }
         }
     </style>
 </head>
@@ -155,7 +117,7 @@
         <span></span><span></span><span></span>
         <ul id="menu">
             <span class="selector-label">Language</span>
-            <div class="lang-trigger" id="arrow" onclick="toggleLang()">⏷</div>
+            <div class="lang-trigger" onclick="document.getElementById('lang-list').classList.toggle('active')">▼</div>
             <div id="lang-list">
                 <div class="lang-option" onclick="changeLang('en', this)"><img src="https://flagcdn.com/w40/gb.png"> ENGLISH</div>
                 <div class="lang-option" onclick="changeLang('fi', this)"><img src="https://flagcdn.com/w40/fi.png"> SUOMI</div>
@@ -209,17 +171,12 @@
         es: { "txt-track-name": "GP DE AUSTRALIA", "txt-loc": "MELBOURNE // AUSTRALIA", "txt-overview": "RESUMEN TÉCNICO", "txt-desc": "Un fluido circuito de parque. Albert Park combina secciones de alta velocidad con fuertes frenadas alrededor de un lago.", "lbl-length": "LONGITUD", "lbl-turns": "CURVAS", "lbl-type": "TIPO DE PISTA", "val-type": "CIRCUITO DE PARQUE", "lbl-diff": "DIFICULTAD", "val-diff": "MEDIA", "btn-back": "← LISTA PISTAS", "link-home": "PANTALLA INICIAL", "link-tracks": "LISTA DE PISTAS", "link-custom": "PERSONALIZACIÓN", "txt-mode": "CAMBIAR TEMA" }
     };
 
-    function toggleLang() { 
-        document.getElementById('lang-list').classList.toggle('active');
-        document.getElementById('arrow').classList.toggle('open');
-    }
-
     function changeLang(lang, el) {
         document.querySelectorAll('.lang-option').forEach(opt => opt.classList.remove('selected'));
-        el.classList.add('selected');
+        if(el) el.classList.add('selected');
         localStorage.setItem('prefLang', lang);
         applyLanguage();
-        setTimeout(() => { el.classList.remove('selected'); }, 2500); 
+        setTimeout(() => { if(el) el.classList.remove('selected'); }, 2000); 
     }
 
     function applyLanguage() {
