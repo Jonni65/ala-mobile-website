@@ -91,6 +91,30 @@
         .legal-sub { font-weight: 900; font-size: 12px; color: var(--accent); text-transform: uppercase; display: block; margin: 25px 0 5px; letter-spacing: 1px; }
         .ai-tag { display: inline-block; border: 1px solid var(--border); padding: 8px 18px; font-size: 10px; font-weight: 900; color: var(--subtext); text-transform: uppercase; letter-spacing: 2px; margin-top: 20px; background: var(--nav-bg); }
         .footer-credit { text-align: center; margin-top: 60px; border-top: 1px solid var(--border); padding-top: 30px; font-size: 12px; opacity: 0.5; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+
+        /* --- MOBILE RESPONSIVENESS --- */
+        @media (max-width: 768px) {
+            .page-header { height: 200px; }
+            .header-title-wrap { left: 20px; bottom: 20px; right: 20px; }
+            .page-title { font-size: 28px; letter-spacing: -1px; }
+            
+            .back-btn { 
+                top: 20px; 
+                right: 20px; 
+                padding: 8px 15px; 
+                font-size: 10px;
+            }
+
+            #menuToggle { top: 20px; left: 20px; }
+            #menu { width: 100%; max-width: 320px; }
+
+            .main-container { margin: 20px auto; padding: 0 15px; padding-bottom: 60px; }
+            
+            .drawer-trigger { padding: 20px; }
+            .drawer-trigger h2 { font-size: 16px; }
+            .drawer-content { padding: 0 20px; }
+            .drawer.open .drawer-content { padding-bottom: 20px; }
+        }
     </style>
 </head>
 <body>
@@ -183,10 +207,43 @@
             "txt-project-body": "Aloitin tämän projektin alun perin kouluprojektina IT-opintojeni tutustumisjaksolla. Nähtyäni kuinka hyvä lopputuloksesta tuli, päätin julkaista sen toivoen, että Vince ehkä joskus ottaisi sivuston käyttöön.",
             "txt-ai-credit": "KEHITETTY 2 PÄIVÄSSÄ GOOGLE GEMINI AI:N AVULLA",
             "txt-legal-title": "OIKEUDELLISET TIEDOT", 
-            "lbl-tm": "TAVARAMERKKI-ILMOITUS JA NOUDATTAMINEN", "txt-tm-body": "Ala Mobile ja kaikki siihen liittyvät varat, logot ja pelikuvat ovat CVi Gamesin ja Vincenzo Cosentinon yksinomaista omaisuutta. Tämä sivusto on itsenäinen faniprojekti teknistä esittelyä varten.",
+            "lbl-tm": "TAVARAMERKKI-ILMOITUS JA NOUDATTAMINEN", "txt-tm-body": "Ala Mobile ja kaikki siihen liittyvät varat, logot ja pelikuvat ovat CVi Gamesin ja Vincenzo Cosentinon yksinomaista omaisuutta. Tämä sivusto on itsenäinen faniprojekti teknistä esittelyä varten. Se ei ole virallisesti sidoksissa CVi Gamesiin.",
             "lbl-ip": "TEKIJÄNOIKEUDET JA KARTOGRAFIA", "txt-ip-body": "F1-ratakartat ja tekniset asettelut ovat FOM:n ja vastaavien arkkitehtien omaisuutta. Näitä varoja käytetään 'Fair Use' -periaatteen mukaisesti Jonni Heiskasen opintoihin liittyvässä portfoliossa.",
             "lbl-noncom": "EI-KAUPALLINEN TARKOITUS JA VASTUU", "txt-noncom-body": "Sivusto ei tuota tuloja mainoksilla tai datalla. Se ei sisällä suojattuja pelitiedostoja tai tekijänoikeudella suojattuja ohjelmistoja. Projekti on tekninen käyttöliittymäesittely Jonni Heiskasen opetuksellista arviointia varten.",
             "txt-footer": "© 2026 JONNI HEISKANEN | CVI GAMES FANIPROJEKTI | KAIKKI OIKEUDET PIDÄTETÄÄN", "txt-mode": "VAIHDA TEEMA"
+        },
+        sv: {
+            "link-home": "HEMSKÄRM", "link-tracks": "BANLISTA", "link-custom": "ANPASSNING", "btn-back": "← HEMSKÄRM",
+            "txt-about-header": "PROJEKTDOKUMENTATION", "txt-project-title": "PROJEKTETS HISTORIA",
+            "txt-project-body": "Ursprungligen startade jag det här projektet som ett skolarbete under min introduktionsperiod till IT-studier på min skola. Men efter att ha sett hur bra resultatet blev, beslutade jag mig för att publicera det i hopp om att Vince en dag ska anta webbplatsen.",
+            "txt-ai-credit": "BYGGD PÅ 2 DAGAR MED GOOGLE GEMINI AI",
+            "txt-legal-title": "JURIDIK & TILLSKRIVNING",
+            "lbl-tm": "VARUMÄRKESMEDDELANDE & EFTERLEVNAD", "txt-tm-body": "Ala Mobile och alla tillhörande visuella tillgångar, logotyper och spelbilder är exklusiv immateriell egendom tillhörande CVi Games och Vincenzo Cosentino. Denna digitala plattform är ett oberoende, icke-kommersiellt fanprojekt skapat för teknisk demonstration. Det är inte officiellt anslutet till CVi Games.",
+            "lbl-ip": "IMMATERIELLA RÄTTIGHETER & KARTOGRAFI", "txt-ip-body": "Alla Formel 1-bankartor och tekniska banlayouter som används som referens tillhör FOM och deras respektive arkitekter. Dessa tillgångar används under 'Fair Use' för pedagogiska referensändamål i en students IT-portfolio.",
+            "lbl-noncom": "ICKE-KOMMERSIELL AVSIKT & ANSVAR", "txt-noncom-body": "Denna plattform är strikt ideell och genererar inga intäkter. Den är inte värd för proprietära filer eller upphovsrättsskyddad programvara. Projektet fungerar uteslutande som en teknisk UI/UX-demonstration för pedagogisk utvärdering av Jonni Heiskanen.",
+            "txt-footer": "© 2026 JONNI HEISKANEN | CVI GAMES FANPROJEKT | ALLA RÄTTIGHETER FÖRBEHÅLLNA", "txt-mode": "BYT TEMA"
+        },
+        it: {
+            "link-home": "SCHERMATA INIZIALE", "link-tracks": "LISTA CIRCUITI", "link-custom": "PERSONALIZZAZIONE", "btn-back": "← SCHERMATA INIZIALE",
+            "txt-about-header": "DOCUMENTAZIONE DEL PROGETTO", "txt-project-title": "STORIA DEL PROGETTO",
+            "txt-project-body": "Inizialmente, ho iniziato questo progetto come compito scolastico durante il mio periodo di orientamento agli studi informatici nella mia scuola. Tuttavia, dopo aver visto l'ottimo risultato ottenuto, ho deciso di pubblicarlo nella speranza che un giorno Vince adotti il sito.",
+            "txt-ai-credit": "COSTRUITO IN 2 GIORNI CON GOOGLE GEMINI AI",
+            "txt-legal-title": "NOTE LEGALI E ATTRIBUZIONI",
+            "lbl-tm": "AVVISO SUI MARCHI E CONFORMITÀ", "txt-tm-body": "Ala Mobile e tutte le risorse visive, i loghi e le immagini di gioco associati sono proprietà intellettuale esclusiva di CVi Games e Vincenzo Cosentino. Questa piattaforma digitale è un progetto fan indipendente e non commerciale creato per dimostrazione tecnica. Non è ufficialmente affiliato a CVi Games.",
+            "lbl-ip": "PROPRIETÀ INTELLETTUALE E CARTOGRAFIA", "txt-ip-body": "Tutte le mappe dei circuiti di Formula 1 e i layout tecnici utilizzati come riferimento sono di proprietà della FOM e dei rispettivi architetti. Queste risorse sono utilizzate in base al 'Fair Use' per scopi di riferimento educativo all'interno di un portfolio informatico studentesco.",
+            "lbl-noncom": "INTENTO NON COMMERCIALE E RESPONSABILITÀ", "txt-noncom-body": "Questa piattaforma è rigorosamente senza scopo di lucro e non genera entrate. Non ospita file proprietari o software protetto da copyright. Il progetto funge esclusivamente da dimostrazione tecnica UI/UX per la valutazione educativa di Jonni Heiskanen.",
+            "txt-footer": "© 2026 JONNI HEISKANEN | PROGETTO FAN CVI GAMES | TUTTI I DIRITTI RISERVATI", "txt-mode": "CAMBIA TEMA"
+        },
+        es: {
+            "link-home": "PANTALLA INICIAL", "link-tracks": "LISTA DE PISTAS", "link-custom": "PERSONALIZACIÓN", "btn-back": "← PANTALLA INICIAL",
+            "txt-about-header": "DOCUMENTACIÓN DEL PROYECTO", "txt-project-title": "HISTORIA DEL PROYECTO",
+            "txt-project-body": "Inicialmente, comencé este proyecto como un trabajo escolar durante mi período de orientación en estudios de TI en mi escuela. Sin embargo, al ver lo bien que resultó, decidí publicarlo con la esperanza de que algún día Vince adopte el sitio.",
+            "txt-ai-credit": "CONSTRUIDO EN 2 DÍAS CON GOOGLE GEMINI AI",
+            "txt-legal-title": "AVISO LEGAL Y ATRIBUCIÓN",
+            "lbl-tm": "AVISO DE MARCA REGISTRADA Y CUMPLIMIENTO", "txt-tm-body": "Ala Mobile y todos los activos visuales, logotipos e imágenes de juego asociados son propiedad intelectual exclusiva de CVi Games y Vincenzo Cosentino. Esta plataforma digital es un proyecto de fans independiente y no comercial creado para demostración técnica. No está afiliado oficialmente a CVi Games.",
+            "lbl-ip": "PROPIEDAD INTELECTUAL Y CARTOGRAFIA", "txt-ip-body": "Todos los mapas de circuitos de Fórmula 1 y diseños técnicos utilizados como referencia son propiedad de la FOM y de sus respectivos arquitectos. Estos activos se utilizan bajo 'Uso Justo' con fines de referencia educativa dentro de un portafolio de TI estudiantil.",
+            "lbl-noncom": "INTENCIÓN NO COMERCIAL Y RESPONSABILIDAD", "txt-noncom-body": "Esta plataforma es estrictamente sin fines de lucro y no genera ingresos. No aloja archivos propietarios ni software con derechos de autor. El proyecto sirve exclusivamente como una demostración técnica de UI/UX para la evaluación educativa de Jonni Heiskanen.",
+            "txt-footer": "© 2026 JONNI HEISKANEN | PROYECTO DE FANS DE CVI GAMES | TODOS LOS DERECHOS RESERVADOS", "txt-mode": "CAMBIAR TEMA"
         }
     };
 
