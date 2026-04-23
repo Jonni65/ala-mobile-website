@@ -49,12 +49,14 @@
         }
 
         .selector-label { font-size: 10px; font-weight: 900; letter-spacing: 1.5px; color: var(--accent); text-transform: uppercase; text-align: center; display: block; }
-        .lang-trigger { text-align: center; cursor: pointer; font-size: 28px; color: var(--accent); margin-bottom: 5px; transition: 0.3s; }
-        #lang-list { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; border-bottom: 1px solid var(--border); }
+        .lang-trigger { text-align: center; cursor: pointer; font-size: 20px; color: var(--accent); margin-bottom: 5px; padding: 5px; }
+        
+        #lang-list { max-height: 0; overflow: hidden; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); border-bottom: 1px solid var(--border); }
         #lang-list.active { max-height: 350px; margin-bottom: 15px; }
+        
         .lang-option { display: flex; align-items: center; padding: 10px 15px; font-size: 13px; font-weight: bold; cursor: pointer; margin: 4px 0; background: var(--nav-bg); clip-path: polygon(4% 0, 100% 0, 96% 100%, 0% 100%); transition: 0.2s; }
         .lang-option img { width: 20px; margin-right: 12px; }
-        .lang-option:hover { background: var(--accent); color: #fff; }
+        .lang-option:hover { background: var(--accent); color: #fff; transform: translateX(5px); }
         .lang-option.selected { background: var(--confirm) !important; color: white !important; }
 
         .nav-list { list-style: none; padding: 0; margin-top: 20px; }
@@ -85,33 +87,12 @@
         .track-name { font-weight: 900; font-size: 18px; text-transform: uppercase; font-style: italic; color: var(--text); }
         .track-meta { font-size: 10px; color: #888; margin-top: 5px; font-family: monospace; letter-spacing: 1px; text-transform: uppercase; }
 
-        /* --- MOBILE RESPONSIVENESS --- */
         @media (max-width: 768px) {
-            .container { 
-                padding: 0 20px; 
-                margin-top: 80px; 
-            }
-            
-            h1 { 
-                font-size: 32px; 
-                margin-bottom: 30px; 
-                border-left-width: 6px; 
-            }
-            
-            .track-grid { 
-                grid-template-columns: 1fr; 
-                gap: 15px; 
-            }
-            
-            #menu { 
-                width: 100%; 
-                max-width: 320px; 
-            }
-
-            #menuToggle {
-                top: 20px;
-                left: 20px;
-            }
+            .container { padding: 0 20px; margin-top: 80px; }
+            h1 { font-size: 32px; margin-bottom: 30px; border-left-width: 6px; }
+            .track-grid { grid-template-columns: 1fr; gap: 15px; }
+            #menu { width: 100%; max-width: 320px; }
+            #menuToggle { top: 20px; left: 20px; }
         }
     </style>
 </head>
@@ -120,10 +101,10 @@
     <nav id="menuToggle">
         <input type="checkbox" id="navCheck" />
         <span></span><span></span><span></span>
-        <div id="content-overlay"></div>
+        <div id="content-overlay" onclick="document.getElementById('navCheck').checked = false"></div>
         <ul id="menu">
             <span class="selector-label">Language</span>
-            <div class="lang-trigger" onclick="document.getElementById('lang-list').classList.toggle('active')">⏷</div>
+            <div class="lang-trigger" onclick="document.getElementById('lang-list').classList.toggle('active')">▼</div>
             <div id="lang-list">
                 <div class="lang-option" onclick="changeLang('en', this)"><img src="https://flagcdn.com/w40/gb.png"> ENGLISH</div>
                 <div class="lang-option" onclick="changeLang('fi', this)"><img src="https://flagcdn.com/w40/fi.png"> SUOMI</div>
@@ -198,7 +179,7 @@
         if(el) el.classList.add('selected');
         localStorage.setItem('prefLang', lang);
         applyLanguage();
-        setTimeout(() => { if(el) el.classList.remove('selected'); }, 1500); 
+        setTimeout(() => { if(el) el.classList.remove('selected'); }, 2000); 
     }
 
     function applyLanguage() {
