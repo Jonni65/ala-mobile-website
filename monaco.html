@@ -8,19 +8,17 @@
             --bg: #050505; --card: #0f0f0f; --text: #ffffff;
             --accent: #ff0000; --border: #222; --nav-bg: #1a1a1a;
             --confirm: #00ff41; --subtext: #888; 
-            --hero-op: 0.8; /* Flag is now actually visible */
-            --banner-bg: #0a0a0a;
+            --hero-op: 0.8; 
         }
         [data-theme="light"] {
             --bg: #ffffff; --card: #f4f4f4; --text: #111111;
             --accent: #d70000; --border: #cccccc; --nav-bg: #eeeeee;
             --confirm: #008f25; --subtext: #555; 
-            --hero-op: 0.6; /* High visibility even in Light Mode */
-            --banner-bg: #f0f0f0;
+            --hero-op: 0.6; 
         }
 
-        body, .content-card, #menu, .sharp-nav, .lang-option, .back-btn {
-            transition: background 0.4s ease, color 0.4s ease, border 0.4s ease;
+        body, .content-card, #menu, .sharp-nav, .lang-option, .back-btn, .hero-banner, .sharp-title {
+            transition: background 0.4s ease, color 0.4s ease, border 0.4s ease, opacity 0.4s ease;
         }
 
         body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden; }
@@ -41,47 +39,75 @@
         }
         #menuToggle input:checked ~ ul { transform: translateX(0); }
 
-        /* --- HERO: HIGH VISIBILITY FIX --- */
+        /* --- LANG SELECTOR --- */
+        .selector-label { font-size: 10px; font-weight: 900; letter-spacing: 1.5px; color: var(--accent); text-transform: uppercase; text-align: center; display: block; }
+        .lang-trigger { text-align: center; cursor: pointer; font-size: 20px; color: var(--accent); margin-bottom: 5px; padding: 5px; }
+        
+        #lang-list { max-height: 0; overflow: hidden; opacity: 0; transform: translateY(-15px); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); border-bottom: 1px solid var(--border); }
+        #lang-list.active { max-height: 500px; opacity: 1; transform: translateY(0); margin-bottom: 15px; }
+        
+        .lang-option { display: flex; align-items: center; padding: 12px 15px; font-size: 13px; font-weight: bold; cursor: pointer; clip-path: polygon(4% 0, 100% 0, 96% 100%, 0% 100%); margin: 4px 0; background: var(--nav-bg); color: var(--text); transition: 0.2s; }
+        .lang-option img { width: 20px; margin-right: 12px; }
+        .lang-option:hover { background: var(--accent); color: #fff; transform: translateX(5px); }
+        .lang-option.selected { background: var(--confirm) !important; color: white !important; }
+
+        /* --- NAV BUTTONS --- */
+        .nav-list { list-style: none; padding: 0; margin-top: 20px; }
+        .sharp-nav { display: block; background: var(--nav-bg); color: var(--text); text-decoration: none; font-weight: 900; text-transform: uppercase; font-style: italic; padding: 16px 25px; margin-bottom: 8px; clip-path: polygon(0% 0%, 100% 0%, 88% 100%, 0% 100%); border-left: 4px solid transparent; transition: 0.2s; }
+        .sharp-nav:hover { background: var(--accent); color: #fff; transform: translateX(8px); }
+
+        /* Clean Switch Theme (No Blade) */
+        .theme-btn-text { display: block; padding: 10px 0; text-decoration: none; color: var(--accent); font-weight: 900; font-size: 14px; text-transform: uppercase; border: none; background: none; cursor: pointer; transition: 0.3s; text-align: left; width: 100%; }
+        .theme-btn-text:hover { opacity: 0.7; }
+
+        .back-btn { position: absolute; top: 30px; right: 40px; z-index: 100; background: var(--nav-bg); color: var(--text); padding: 10px 25px; text-decoration: none; font-weight: 900; font-style: italic; font-size: 11px; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%); border: 1px solid var(--border); }
+        .back-btn:hover { background: var(--accent); color: #fff; }
+
+        /* --- HERO: ADAPTIVE FADE --- */
         .hero-banner { 
             position: relative; width: 100%; height: 320px; 
-            background: var(--banner-bg); 
+            background: var(--bg); 
             border-bottom: 4px solid var(--accent); overflow: hidden; 
         }
 
-        /* The Technical Anchor: Permanent dark gradient for text legibility */
-        .hero-banner::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0.7) 30%, transparent 80%);
-            z-index: 2;
-        }
-
         .hero-img { 
-            width: 90%; height: 100%; object-fit: cover; position: absolute; right: 0; 
-            opacity: var(--hero-op); 
-            filter: saturate(1.1); /* Boosted color */
-            z-index: 1;
+            display: block; width: 80%; height: 100%; object-fit: cover; 
+            position: absolute; right: 0; top: 0;
+            opacity: var(--hero-op); z-index: 1; 
+            mask-image: linear-gradient(to right, transparent 0%, black 60%);
+            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 60%);
+            filter: saturate(1.1);
         }
 
-        .track-title-wrap { position: absolute; bottom: 35px; left: 40px; z-index: 10; }
-        .sharp-title { 
-            font-size: 56px; font-weight: 900; text-transform: uppercase; letter-spacing: -2px; 
-            margin: 0; font-style: italic; color: #ffffff !important; 
-            text-shadow: 0 4px 20px rgba(0,0,0,0.5);
-        }
-        .loc-tag { color: var(--accent); font-weight: 900; letter-spacing: 5px; font-size: 11px; display: block; margin-bottom: 5px; }
-
-        .back-btn { position: absolute; top: 30px; right: 40px; z-index: 100; background: var(--nav-bg); color: var(--text); padding: 10px 25px; text-decoration: none; font-weight: 900; font-style: italic; font-size: 11px; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%); border: 1px solid var(--border); }
+        .track-title-wrap { position: absolute; bottom: 30px; left: 40px; z-index: 10; max-width: 50%; }
+        .sharp-title { font-size: 56px; font-weight: 900; text-transform: uppercase; letter-spacing: -2px; margin: 0; font-style: italic; color: var(--text) !important; text-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .loc-tag { color: var(--accent); font-weight: 900; letter-spacing: 5px; font-size: 10px; display: block; margin-bottom: 5px; font-family: monospace; }
 
         /* --- LAYOUT --- */
-        .container { width: 100%; margin: 0; display: grid; grid-template-columns: 480px 1fr; }
-        .content-card { background: var(--card); border-right: 1px solid var(--border); padding: 60px 50px; min-height: calc(100vh - 320px); }
+        .container { width: 100%; margin: 0; padding: 0; display: grid; grid-template-columns: 480px 1fr; gap: 0; }
+        .content-card { 
+            background: var(--card); border-right: 1px solid var(--border); 
+            padding: 60px 50px; min-height: calc(100vh - 320px); 
+        }
         .track-map-card { background: var(--bg); display: flex; align-items: center; justify-content: center; padding: 50px; }
-        .track-map-card img { width: 95%; max-width: 850px; }
+        .track-map-card img { width: 90%; max-width: 850px; opacity: 1; filter: none; }
 
         .spec-table { width: 100%; border-collapse: collapse; margin-top: 40px; }
-        .spec-table td { padding: 18px 0; border-bottom: 1px solid var(--border); }
+        .spec-table td { padding: 16px 0; border-bottom: 1px solid var(--border); }
         .spec-label { font-weight: 900; color: var(--subtext); font-size: 11px; letter-spacing: 2px; }
-        .spec-value { text-align: right; font-weight: 900; color: var(--accent); font-family: 'Consolas', monospace; font-size: 19px; }
+        .spec-value { text-align: right; font-weight: 900; color: var(--accent); font-family: 'Consolas', monospace; font-size: 18px; }
+
+        @media (max-width: 768px) {
+            .container { grid-template-columns: 1fr; }
+            .hero-banner { height: 240px; }
+            .hero-img { width: 100%; mask-image: linear-gradient(to right, transparent 0%, black 80%); -webkit-mask-image: linear-gradient(to right, transparent 0%, black 80%); }
+            .track-title-wrap { left: 20px; bottom: 20px; max-width: 90%; }
+            .sharp-title { font-size: 32px; }
+            #menuToggle { top: 20px; left: 20px; }
+            #menu { width: 100%; max-width: 320px; }
+            .content-card { padding: 30px 20px; min-height: auto; border-right: none; border-bottom: 1px solid var(--border); }
+            .track-map-card { padding: 30px 20px; }
+        }
     </style>
 </head>
 <body>
@@ -91,17 +117,20 @@
         <span></span><span></span><span></span>
         <ul id="menu">
             <span class="selector-label">Language</span>
-            <div class="lang-trigger" onclick="document.getElementById('lang-list').classList.toggle('active')">⏷</div>
+            <div class="lang-trigger" onclick="document.getElementById('lang-list').classList.toggle('active')">▼</div>
             <div id="lang-list">
                 <div class="lang-option" onclick="changeLang('en', this)"><img src="https://flagcdn.com/w40/gb.png"> ENGLISH</div>
                 <div class="lang-option" onclick="changeLang('fi', this)"><img src="https://flagcdn.com/w40/fi.png"> SUOMI</div>
+                <div class="lang-option" onclick="changeLang('sv', this)"><img src="https://flagcdn.com/w40/se.png"> SVENSKA</div>
                 <div class="lang-option" onclick="changeLang('it', this)"><img src="https://flagcdn.com/w40/it.png"> ITALIANO</div>
+                <div class="lang-option" onclick="changeLang('es', this)"><img src="https://flagcdn.com/w40/es.png"> ESPAÑOL</div>
             </div>
             <div class="nav-list">
                 <li><a href="index.html" class="sharp-nav" id="link-home">HOME SCREEN</a></li>
                 <li><a href="tracks.html" class="sharp-nav" id="link-tracks">TRACK LIST</a></li>
+                <li><a href="custom.html" class="sharp-nav" id="link-custom">CUSTOMIZATION</a></li>
                 <hr style="border: none; border-top: 1px solid var(--border); margin: 30px 0;">
-                <li><a href="javascript:void(0)" onclick="toggleTheme()" class="sharp-nav" id="txt-mode" style="color:var(--accent)">SWITCH THEME</a></li>
+                <li><button onclick="toggleTheme()" class="theme-btn-text" id="txt-mode">SWITCH THEME</button></li>
             </div>
         </ul>
     </nav>
@@ -135,14 +164,19 @@
 
     <script>
     const translations = {
-        en: { "txt-track-name": "MONACO GP", "txt-loc": "MONTE CARLO // MONACO", "txt-overview": "TECHNICAL OVERVIEW", "txt-desc": "The ultimate test of precision. Monaco is a legendary street circuit where the walls are closer than anywhere else.", "lbl-length": "LENGTH", "lbl-turns": "TURNS", "lbl-laps": "RACE LAPS", "lbl-diff": "DIFFICULTY", "val-diff": "EXTREME", "btn-back": "← TRACK LIST", "link-home": "HOME SCREEN", "link-tracks": "TRACK LIST", "txt-mode": "SWITCH THEME" },
-        fi: { "txt-track-name": "MONACON GP", "txt-loc": "MONTE CARLO // MONACO", "txt-overview": "TEKNINEN YLEISKATSAUS", "txt-desc": "Tarkkuuden perimmäinen testi. Monaco on legendaarinen katurata, jossa seinät ovat lähempänä kuin missään muualla.", "lbl-length": "PITUUS", "lbl-turns": "MUTKAT", "lbl-laps": "KIERROKSET", "lbl-diff": "VAIKEUSASTE", "val-diff": "ÄÄRIMMÄINEN", "btn-back": "← RATALISTA", "link-home": "ALOITUSRUUTU", "link-tracks": "RATALISTA", "txt-mode": "VAIHDA TEEMA" },
-        it: { "txt-track-name": "GP MONACO", "txt-loc": "MONTE CARLO // MONACO", "txt-overview": "PANORAMICA TECNICA", "txt-desc": "La prova definitiva di precisione. Monaco è un leggendario circuito cittadino dove i muretti sono più vicini che altrove.", "lbl-length": "LUNGHEZZA", "lbl-turns": "CURVE", "lbl-laps": "GIRI", "lbl-diff": "DIFFICOLTÀ", "val-diff": "ESTREMA", "btn-back": "← LISTA CIRCUITI", "link-home": "SCHERMATA INIZIALE", "link-tracks": "LISTA CIRCUITI", "txt-mode": "CAMBIA TEMA" }
+        en: { "txt-track-name": "MONACO GP", "txt-loc": "MONTE CARLO // MONACO", "txt-overview": "TECHNICAL OVERVIEW", "txt-desc": "The ultimate test of precision. Monaco is a legendary street circuit where the walls are closer than anywhere else.", "lbl-length": "LENGTH", "lbl-turns": "TURNS", "lbl-laps": "RACE LAPS", "lbl-diff": "DIFFICULTY", "val-diff": "EXTREME", "btn-back": "← TRACK LIST", "link-home": "HOME SCREEN", "link-tracks": "TRACK LIST", "link-custom": "CUSTOMIZATION", "txt-mode": "SWITCH THEME" },
+        fi: { "txt-track-name": "MONACON GP", "txt-loc": "MONTE CARLO // MONACO", "txt-overview": "TEKNINEN YLEISKATSAUS", "txt-desc": "Tarkkuuden perimmäinen testi. Monaco on legendaarinen katurata, jossa seinät ovat lähempänä kuin missään muualla.", "lbl-length": "PITUUS", "lbl-turns": "MUTKAT", "lbl-laps": "KIERROKSET", "lbl-diff": "VAIKEUSASTE", "val-diff": "ÄÄRIMMÄINEN", "btn-back": "← RATALISTA", "link-home": "ALOITUSRUUTU", "link-tracks": "RATALISTA", "link-custom": "MUOKKAUS", "txt-mode": "VAIHDA TEEMA" },
+        sv: { "txt-track-name": "MONACOS GP", "txt-loc": "MONTE CARLO // MONACO", "txt-overview": "TEKNISK ÖVERSIKT", "txt-desc": "Det ultimata testet av precision. Monaco är en legendarisk stadsbana där väggarna är närmare än någon annanstans.", "lbl-length": "LÄNGD", "lbl-turns": "SVÄNGAR", "lbl-laps": "VARV", "lbl-diff": "SVÅRIGHETSGRAD", "val-diff": "EXTREM", "btn-back": "← BANLISTA", "link-home": "HEMSKÄRM", "link-tracks": "BANLISTA", "link-custom": "ANPASSNING", "txt-mode": "BYT TEMA" },
+        it: { "txt-track-name": "GP MONACO", "txt-loc": "MONTE CARLO // MONACO", "txt-overview": "PANORAMICA TECNICA", "txt-desc": "La prova definitiva di precisione. Monaco è un leggendario circuito cittadino dove i muretti sono più vicini che altrove.", "lbl-length": "LUNGHEZZA", "lbl-turns": "CURVE", "lbl-laps": "GIRI", "lbl-diff": "DIFFICOLTÀ", "val-diff": "ESTREMA", "btn-back": "← LISTA CIRCUITI", "link-home": "SCHERMATA INIZIALE", "link-tracks": "LISTA CIRCUITI", "link-custom": "PERSONALIZZAZIONE", "txt-mode": "CAMBIA TEMA" },
+        es: { "txt-track-name": "GP DE MÓNACO", "txt-loc": "MONTE CARLO // MÓNACO", "txt-overview": "RESUMEN TÉCNICO", "txt-desc": "La prueba definitiva de precisión. Mónaco es un legendario circuito callejero donde los muros están más cerca que en cualquier otro lugar.", "lbl-length": "LONGITUD", "lbl-turns": "CURVAS", "lbl-laps": "VUELTAS", "lbl-diff": "DIFICULTAD", "val-diff": "EXTREMA", "btn-back": "← LISTA PISTAS", "link-home": "PANTALLA INICIAL", "link-tracks": "LISTA DE PISTAS", "link-custom": "PERSONALIZACIÓN", "txt-mode": "CAMBIAR TEMA" }
     };
 
-    function changeLang(lang) {
+    function changeLang(lang, el) {
+        document.querySelectorAll('.lang-option').forEach(opt => opt.classList.remove('selected'));
+        if(el) el.classList.add('selected');
         localStorage.setItem('prefLang', lang);
         applyLanguage();
+        setTimeout(() => { if(el) el.classList.remove('selected'); }, 2000); 
     }
 
     function applyLanguage() {
