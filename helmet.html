@@ -50,7 +50,10 @@
 
         /* --- LANG SELECTOR --- */
         .selector-label { font-size: 10px; font-weight: 900; letter-spacing: 1.5px; color: var(--accent); text-transform: uppercase; text-align: center; display: block; }
-        .lang-trigger { text-align: center; cursor: pointer; font-size: 28px; color: var(--accent); margin-bottom: 5px; transition: 0.3s; }
+        
+        /* Updated Arrow Character for S24 Ultra */
+        .lang-trigger { text-align: center; cursor: pointer; font-size: 20px; color: var(--accent); margin-bottom: 5px; padding: 5px; }
+        
         #lang-list { max-height: 0; overflow: hidden; opacity: 0; transform: translateY(-15px); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); border-bottom: 1px solid var(--border); }
         #lang-list.active { max-height: 500px; opacity: 1; transform: translateY(0); margin-bottom: 15px; }
         
@@ -66,17 +69,16 @@
         .theme-btn-text { display: block; padding: 10px 0; text-decoration: none; color: var(--accent); font-weight: 900; font-size: 14px; text-transform: uppercase; border: none; background: none; cursor: pointer; transition: 0.3s; text-align: left; }
         .theme-btn-text:hover { opacity: 0.7; }
 
-        /* --- HERO --- */
+        /* --- HERO: ADAPTIVE FADE --- */
         .hero-banner { 
             position: relative; width: 100%; height: 320px; 
-            background: var(--bg); /* Adapts automatically */
+            background: var(--bg); 
             border-bottom: 4px solid var(--accent); overflow: hidden; 
         }
 
         .hero-img { 
             width: 80%; height: 100%; object-fit: cover; position: absolute; right: 0; top: 0; 
             opacity: var(--hero-op); z-index: 1; 
-            /* Fades smoothly into the adaptive background */
             mask-image: linear-gradient(to right, transparent 0%, black 60%);
             -webkit-mask-image: linear-gradient(to right, transparent 0%, black 60%);
         }
@@ -85,7 +87,7 @@
         
         .sharp-title { 
             font-size: 56px; font-weight: 900; text-transform: uppercase; letter-spacing: -2px; margin: 0; 
-            font-style: italic; color: var(--text) !important; /* Adapts automatically */
+            font-style: italic; color: var(--text) !important; 
             text-shadow: 0 4px 15px rgba(0,0,0,0.2); 
         }
 
@@ -102,11 +104,10 @@
         .info-card h2 { margin: 0 0 15px 0; font-size: 24px; color: var(--text); font-weight: 900; }
         .info-card p { margin: 0; line-height: 1.6; color: var(--subtext); font-size: 14px; }
 
-        /* --- MOBILE RESPONSIVENESS --- */
+        /* --- MOBILE --- */
         @media (max-width: 768px) {
             .container { padding: 40px 20px; }
             .grid { grid-template-columns: 1fr; gap: 20px; }
-            
             .hero-banner { height: 240px; }
             .hero-img { 
                 width: 100%; 
@@ -115,7 +116,6 @@
             }
             .track-title-wrap { left: 20px; bottom: 20px; max-width: 90%; }
             .sharp-title { font-size: 32px; }
-            
             .back-btn { top: 20px; right: 20px; padding: 8px 15px; font-size: 10px; }
             #menuToggle { top: 20px; left: 20px; }
             #menu { width: 100%; max-width: 320px; }
@@ -130,7 +130,7 @@
         <div id="content-overlay"></div>
         <ul id="menu">
             <span class="selector-label">Language</span>
-            <div class="lang-trigger" onclick="document.getElementById('lang-list').classList.toggle('active')">⏷</div>
+            <div class="lang-trigger" onclick="document.getElementById('lang-list').classList.toggle('active')">▼</div>
             <div id="lang-list">
                 <div class="lang-option" onclick="changeLang('en', this)"><img src="https://flagcdn.com/w40/gb.png"> ENGLISH</div>
                 <div class="lang-option" onclick="changeLang('fi', this)"><img src="https://flagcdn.com/w40/fi.png"> SUOMI</div>
@@ -236,10 +236,8 @@
     function changeLang(lang, el) {
         document.querySelectorAll('.lang-option').forEach(opt => opt.classList.remove('selected'));
         if(el) el.classList.add('selected');
-        
         localStorage.setItem('prefLang', lang);
         applyLanguage();
-        
         setTimeout(() => { if(el) el.classList.remove('selected'); }, 2000); 
     }
 
