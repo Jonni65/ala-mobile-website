@@ -8,19 +8,18 @@
             --bg: #050505; --card: #0f0f0f; --text: #ffffff;
             --accent: #ff0000; 
             --border: #222; --nav-bg: #1a1a1a;
-            --subtext: #888; --hero-op: 1;
-            --banner-bg: #000000;
+            --confirm: #00ff41; --subtext: #888; 
+            --hero-op: 0.8;
         }
         [data-theme="light"] {
             --bg: #ffffff; --card: #f4f4f4; --text: #111111;
             --accent: #d70000; --border: #cccccc; --nav-bg: #eeeeee;
-            --subtext: #555; 
-            --hero-op: 0.8; 
-            --banner-bg: #f5f5f5;
+            --confirm: #008f25; --subtext: #555; 
+            --hero-op: 0.6; 
         }
 
-        body, .content-card, #menu, .sharp-nav, .lang-option, .back-btn {
-            transition: background 0.4s ease, color 0.4s ease, border 0.4s ease;
+        body, .content-card, #menu, .sharp-nav, .lang-option, .back-btn, .info-card, .hero-banner, .sharp-title {
+            transition: background 0.4s ease, color 0.4s ease, border 0.4s ease, text-shadow 0.4s ease, opacity 0.4s ease;
         }
 
         body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden; }
@@ -41,14 +40,24 @@
         }
         #menuToggle input:checked ~ ul { transform: translateX(0); }
 
+        /* --- INTERACTION LOCK --- */
+        #content-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.2); z-index: 8500;
+            display: none; pointer-events: none;
+        }
+        #menuToggle input:checked ~ #content-overlay { display: block; pointer-events: all; }
+
+        /* --- LANG SELECTOR --- */
         .selector-label { font-size: 10px; font-weight: 900; letter-spacing: 1.5px; color: var(--accent); text-transform: uppercase; text-align: center; display: block; }
         .lang-trigger { text-align: center; cursor: pointer; font-size: 28px; color: var(--accent); margin-bottom: 5px; transition: 0.3s; }
         #lang-list { max-height: 0; overflow: hidden; opacity: 0; transform: translateY(-15px); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); border-bottom: 1px solid var(--border); }
         #lang-list.active { max-height: 500px; opacity: 1; transform: translateY(0); margin-bottom: 15px; }
         
-        .lang-option { display: flex; align-items: center; padding: 12px 15px; font-size: 13px; font-weight: bold; cursor: pointer; margin: 4px 0; background: var(--nav-bg); color: var(--text); clip-path: polygon(4% 0, 100% 0, 96% 100%, 0% 100%); }
+        .lang-option { display: flex; align-items: center; padding: 12px 15px; font-size: 13px; font-weight: bold; cursor: pointer; margin: 4px 0; background: var(--nav-bg); color: var(--text); clip-path: polygon(4% 0, 100% 0, 96% 100%, 0% 100%); transition: 0.2s; }
         .lang-option img { width: 20px; margin-right: 12px; }
         .lang-option:hover { background: var(--accent); color: #fff; transform: translateX(5px); }
+        .lang-option.selected { background: var(--confirm) !important; color: white !important; }
 
         .nav-list { list-style: none; padding: 0; margin-top: 20px; }
         .sharp-nav { display: block; background: var(--nav-bg); color: var(--text); text-decoration: none; font-weight: 900; text-transform: uppercase; font-style: italic; padding: 16px 25px; margin-bottom: 8px; clip-path: polygon(0% 0%, 100% 0%, 88% 100%, 0% 100%); border-left: 4px solid transparent; transition: 0.2s; }
@@ -60,36 +69,57 @@
         /* --- HERO --- */
         .hero-banner { 
             position: relative; width: 100%; height: 320px; 
-            background: #000; 
+            background: var(--bg); /* Adapts automatically */
             border-bottom: 4px solid var(--accent); overflow: hidden; 
         }
 
-        .hero-banner::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 25%, transparent 75%);
-            z-index: 2;
-        }
-
         .hero-img { 
-            width: 95%; height: 100%; object-fit: cover; position: absolute; right: 0; 
+            width: 80%; height: 100%; object-fit: cover; position: absolute; right: 0; top: 0; 
             opacity: var(--hero-op); z-index: 1; 
-            mask-image: linear-gradient(to right, transparent 0%, black 100%);
-            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 100%);
+            /* Fades smoothly into the adaptive background */
+            mask-image: linear-gradient(to right, transparent 0%, black 60%);
+            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 60%);
         }
 
-        .track-title-wrap { position: absolute; bottom: 35px; left: 40px; z-index: 10; }
-        .sharp-title { font-size: 56px; font-weight: 900; text-transform: uppercase; letter-spacing: -2px; margin: 0; font-style: italic; color: #ffffff !important; text-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+        .track-title-wrap { position: absolute; bottom: 35px; left: 40px; z-index: 10; max-width: 60%; }
+        
+        .sharp-title { 
+            font-size: 56px; font-weight: 900; text-transform: uppercase; letter-spacing: -2px; margin: 0; 
+            font-style: italic; color: var(--text) !important; /* Adapts automatically */
+            text-shadow: 0 4px 15px rgba(0,0,0,0.2); 
+        }
+
         .loc-tag { color: var(--accent); font-weight: 900; letter-spacing: 5px; font-size: 11px; display: block; margin-bottom: 5px; }
 
         .back-btn { position: absolute; top: 30px; right: 40px; z-index: 100; background: var(--nav-bg); color: var(--text); padding: 10px 25px; text-decoration: none; font-weight: 900; font-style: italic; font-size: 11px; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%); border: 1px solid var(--border); }
+        .back-btn:hover { background: var(--accent); color: #fff; }
 
         /* --- LAYOUT --- */
-        .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 60px 40px; }
+        .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 60px 40px; box-sizing: border-box; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 40px; }
-        .info-card { background: var(--card); border: 1px solid var(--border); padding: 30px; border-radius: 15px; border-top: 4px solid var(--accent); }
+        .info-card { background: var(--card); border: 1px solid var(--border); padding: 30px; border-radius: 15px; border-top: 4px solid var(--accent); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
         .info-card h4 { margin: 0 0 10px 0; font-size: 11px; color: var(--subtext); letter-spacing: 2px; text-transform: uppercase; }
         .info-card h2 { margin: 0 0 15px 0; font-size: 24px; color: var(--text); font-weight: 900; }
         .info-card p { margin: 0; line-height: 1.6; color: var(--subtext); font-size: 14px; }
+
+        /* --- MOBILE RESPONSIVENESS --- */
+        @media (max-width: 768px) {
+            .container { padding: 40px 20px; }
+            .grid { grid-template-columns: 1fr; gap: 20px; }
+            
+            .hero-banner { height: 240px; }
+            .hero-img { 
+                width: 100%; 
+                mask-image: linear-gradient(to right, transparent 0%, black 80%); 
+                -webkit-mask-image: linear-gradient(to right, transparent 0%, black 80%); 
+            }
+            .track-title-wrap { left: 20px; bottom: 20px; max-width: 90%; }
+            .sharp-title { font-size: 32px; }
+            
+            .back-btn { top: 20px; right: 20px; padding: 8px 15px; font-size: 10px; }
+            #menuToggle { top: 20px; left: 20px; }
+            #menu { width: 100%; max-width: 320px; }
+        }
     </style>
 </head>
 <body>
@@ -97,15 +127,16 @@
     <nav id="menuToggle">
         <input type="checkbox" id="navCheck" />
         <span></span><span></span><span></span>
+        <div id="content-overlay"></div>
         <ul id="menu">
             <span class="selector-label">Language</span>
             <div class="lang-trigger" onclick="document.getElementById('lang-list').classList.toggle('active')">⏷</div>
             <div id="lang-list">
-                <div class="lang-option" onclick="changeLang('en')"><img src="https://flagcdn.com/w40/gb.png"> ENGLISH</div>
-                <div class="lang-option" onclick="changeLang('fi')"><img src="https://flagcdn.com/w40/fi.png"> SUOMI</div>
-                <div class="lang-option" onclick="changeLang('sv')"><img src="https://flagcdn.com/w40/se.png"> SVENSKA</div>
-                <div class="lang-option" onclick="changeLang('it')"><img src="https://flagcdn.com/w40/it.png"> ITALIANO</div>
-                <div class="lang-option" onclick="changeLang('es')"><img src="https://flagcdn.com/w40/es.png"> ESPAÑOL</div>
+                <div class="lang-option" onclick="changeLang('en', this)"><img src="https://flagcdn.com/w40/gb.png"> ENGLISH</div>
+                <div class="lang-option" onclick="changeLang('fi', this)"><img src="https://flagcdn.com/w40/fi.png"> SUOMI</div>
+                <div class="lang-option" onclick="changeLang('sv', this)"><img src="https://flagcdn.com/w40/se.png"> SVENSKA</div>
+                <div class="lang-option" onclick="changeLang('it', this)"><img src="https://flagcdn.com/w40/it.png"> ITALIANO</div>
+                <div class="lang-option" onclick="changeLang('es', this)"><img src="https://flagcdn.com/w40/es.png"> ESPAÑOL</div>
             </div>
             <div class="nav-list">
                 <li><a href="index.html" class="sharp-nav" id="link-home">HOME SCREEN</a></li>
@@ -202,9 +233,14 @@
         }
     };
 
-    function changeLang(lang) {
+    function changeLang(lang, el) {
+        document.querySelectorAll('.lang-option').forEach(opt => opt.classList.remove('selected'));
+        if(el) el.classList.add('selected');
+        
         localStorage.setItem('prefLang', lang);
         applyLanguage();
+        
+        setTimeout(() => { if(el) el.classList.remove('selected'); }, 2000); 
     }
 
     function applyLanguage() {
