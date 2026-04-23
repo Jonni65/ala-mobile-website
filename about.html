@@ -40,9 +40,13 @@
 
         /* --- NAV & LANG --- */
         .selector-label { font-size: 10px; font-weight: 900; letter-spacing: 1.5px; color: var(--accent); text-transform: uppercase; text-align: center; display: block; margin-top: 10px; }
-        .lang-trigger { text-align: center; cursor: pointer; font-size: 28px; color: var(--accent); margin-bottom: 5px; }
-        #lang-list { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; border-bottom: 1px solid var(--border); }
-        #lang-list.active { max-height: 350px; margin-bottom: 15px; }
+        
+        /* Updated Arrow Character for S24 Ultra compatibility */
+        .lang-trigger { text-align: center; cursor: pointer; font-size: 20px; color: var(--accent); margin-bottom: 5px; padding: 5px; }
+        
+        #lang-list { max-height: 0; overflow: hidden; opacity: 0; transform: translateY(-15px); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); border-bottom: 1px solid var(--border); }
+        #lang-list.active { max-height: 500px; opacity: 1; transform: translateY(0); margin-bottom: 15px; }
+        
         .lang-option { display: flex; align-items: center; padding: 10px 15px; font-size: 13px; font-weight: bold; cursor: pointer; margin: 4px 0; background: var(--nav-bg); clip-path: polygon(4% 0, 100% 0, 96% 100%, 0% 100%); transition: 0.2s; }
         .lang-option img { width: 20px; margin-right: 12px; }
         .lang-option:hover { background: var(--accent); color: #fff; transform: translateX(5px); }
@@ -84,7 +88,8 @@
         .drawer-trigger .icon { font-size: 24px; transition: 0.4s; color: var(--accent); font-weight: bold; }
         
         .drawer-content { max-height: 0; padding: 0 40px; opacity: 0; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
-        .drawer.open .drawer-content { max-height: 1500px; padding-bottom: 40px; opacity: 1; }
+        .drawer.open { border-left-width: 12px; }
+        .drawer.open .drawer-content { max-height: 2000px; padding-bottom: 40px; opacity: 1; }
         .drawer.open .icon { transform: rotate(45deg); }
 
         p { line-height: 1.8; opacity: 0.85; font-size: 15px; text-align: justify; }
@@ -124,7 +129,7 @@
         <span></span><span></span><span></span>
         <ul id="menu">
             <span class="selector-label">Language</span>
-            <div class="lang-trigger" onclick="document.getElementById('lang-list').classList.toggle('active')">⏷</div>
+            <div class="lang-trigger" onclick="document.getElementById('lang-list').classList.toggle('active')">▼</div>
             <div id="lang-list">
                 <div class="lang-option" onclick="changeLang('en', this)"><img src="https://flagcdn.com/w40/gb.png"> ENGLISH</div>
                 <div class="lang-option" onclick="changeLang('fi', this)"><img src="https://flagcdn.com/w40/fi.png"> SUOMI</div>
@@ -214,11 +219,11 @@
         },
         sv: {
             "link-home": "HEMSKÄRM", "link-tracks": "BANLISTA", "link-custom": "ANPASSNING", "btn-back": "← HEMSKÄRM",
-            "txt-about-header": "PROJEKTDOKUMENTATION", "txt-project-title": "PROJEKTETS HISTORIA",
+            "txt-about-header": "PROJEKTDOKUMENTATION", "txt-project-title": "PROJECT STORY",
             "txt-project-body": "Ursprungligen startade jag det här projektet som ett skolarbete under min introduktionsperiod till IT-studier på min skola. Men efter att ha sett hur bra resultatet blev, beslutade jag mig för att publicera det i hopp om att Vince en dag ska anta webbplatsen.",
             "txt-ai-credit": "BYGGD PÅ 2 DAGAR MED GOOGLE GEMINI AI",
             "txt-legal-title": "JURIDIK & TILLSKRIVNING",
-            "lbl-tm": "VARUMÄRKESMEDDELANDE & EFTERLEVNAD", "txt-tm-body": "Ala Mobile och alla tillhörande visuella tillgångar, logotyper och spelbilder är exklusiv immateriell egendom tillhörande CVi Games och Vincenzo Cosentino. Denna digitala plattform är ett oberoende, icke-kommersiellt fanprojekt skapat för teknisk demonstration. Det är inte officiellt anslutet till CVi Games.",
+            "lbl-tm": "VARUMÄRKESMEDDELANDE & EFTERLEVNAD", "txt-tm-body": "Ala Mobile och alla tillhörande visuella tillgångar, logotyper och spelbilder är exklusiv immateriell egendom tillhörande CVi Games och Vincenzo Cosentino. Denna digitala plattform är ett oberoende, icke-kommersiellt fanprojekt skapat för teknisk demonstration. Det ist inte officiellt anslutet till CVi Games.",
             "lbl-ip": "IMMATERIELLA RÄTTIGHETER & KARTOGRAFI", "txt-ip-body": "Alla Formel 1-bankartor och tekniska banlayouter som används som referens tillhör FOM och deras respektive arkitekter. Dessa tillgångar används under 'Fair Use' för pedagogiska referensändamål i en students IT-portfolio.",
             "lbl-noncom": "ICKE-KOMMERSIELL AVSIKT & ANSVAR", "txt-noncom-body": "Denna plattform är strikt ideell och genererar inga intäkter. Den är inte värd för proprietära filer eller upphovsrättsskyddad programvara. Projektet fungerar uteslutande som en teknisk UI/UX-demonstration för pedagogisk utvärdering av Jonni Heiskanen.",
             "txt-footer": "© 2026 JONNI HEISKANEN | CVI GAMES FANPROJEKT | ALLA RÄTTIGHETER FÖRBEHÅLLNA", "txt-mode": "BYT TEMA"
@@ -252,7 +257,7 @@
         if(el) el.classList.add('selected');
         localStorage.setItem('prefLang', lang);
         applyLanguage();
-        setTimeout(() => { if(el) el.classList.remove('selected'); }, 1500); 
+        setTimeout(() => { if(el) el.classList.remove('selected'); }, 2000); 
     }
 
     function applyLanguage() {
