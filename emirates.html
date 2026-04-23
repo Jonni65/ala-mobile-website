@@ -51,7 +51,9 @@
         .lang-option { display: flex; align-items: center; padding: 10px 15px; font-size: 13px; font-weight: bold; cursor: pointer; margin: 4px 0; background: var(--nav-bg); clip-path: polygon(4% 0, 100% 0, 96% 100%, 0% 100%); transition: 0.2s; }
         .lang-option img { width: 20px; margin-right: 12px; }
         .lang-option:hover { background: var(--accent); color: #fff; transform: translateX(5px); }
-        .lang-option.selected { background: var(--confirm) !important; color: white !important; }
+        
+        /* Language Confirmation Style */
+        .lang-option.selected { background: var(--confirm) !important; color: #fff !important; }
 
         .nav-list { list-style: none; padding: 0; margin-top: 20px; }
         .sharp-nav { display: block; background: var(--nav-bg); color: var(--text); text-decoration: none; font-weight: 900; text-transform: uppercase; font-style: italic; padding: 16px 25px; margin-bottom: 8px; clip-path: polygon(0% 0%, 100% 0%, 88% 100%, 0% 100%); border-left: 4px solid transparent; transition: 0.2s; }
@@ -87,6 +89,56 @@
         .spec-table td { padding: 18px 0; border-bottom: 1px solid var(--border); }
         .spec-label { font-weight: 900; color: var(--subtext); font-size: 11px; letter-spacing: 2px; }
         .spec-value { text-align: right; font-weight: 900; color: var(--accent); font-family: 'Consolas', monospace; font-size: 19px; }
+
+        /* --- MOBILE RESPONSIVENESS --- */
+        @media (max-width: 768px) {
+            .container { 
+                grid-template-columns: 1fr; 
+            }
+            
+            .hero-banner { 
+                height: 240px; 
+                background-position: center center;
+                background-image: 
+                    linear-gradient(to right, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.6) 50%, transparent 100%),
+                    url('https://flagcdn.com/w1280/ae.png');
+            }
+
+            .track-title-wrap { 
+                left: 20px; 
+                bottom: 20px; 
+                max-width: 90%; 
+            }
+            
+            .sharp-title { 
+                font-size: 32px; 
+            }
+
+            .back-btn { 
+                top: 20px; 
+                right: 20px; 
+                padding: 8px 15px; 
+                font-size: 10px; 
+            }
+
+            #menuToggle { top: 20px; left: 20px; }
+            #menu { width: 100%; max-width: 320px; }
+
+            .content-card { 
+                padding: 30px 20px; 
+                min-height: auto; 
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .track-map-card { 
+                padding: 30px 20px; 
+            }
+
+            .spec-table { 
+                margin-top: 25px; 
+            }
+        }
     </style>
 </head>
 <body>
@@ -150,13 +202,13 @@
             "link-home": "HOME SCREEN", "link-tracks": "TRACK LIST", "link-custom": "CUSTOMIZATION", "txt-mode": "SWITCH THEME", "btn-back": "← TRACK LIST"
         },
         fi: { 
-            "txt-track-name": "UAE GP", "txt-loc": "DUBAI // YHDISTYNEET ARABIEMIRAATIT", "txt-overview": "TEKNINEN YLEISKATSAUS", 
+            "txt-track-name": "ARABIEMIRAATTIEN GP", "txt-loc": "DUBAI // YHDISTYNEET ARABIEMIRAATIT", "txt-overview": "TEKNINEN YLEISKATSAUS", 
             "txt-desc": "Dubain Autodrome on moderni mestariteos aavikon sydämessä.", 
             "lbl-length": "PITUUS", "lbl-turns": "MUTKAT", "lbl-laps": "KIERROKSET", "lbl-diff": "VAIKEUSASTE", "val-diff": "KESKITASO",
             "link-home": "ALOITUSRUUTU", "link-tracks": "RATALISTA", "link-custom": "MUOKKAUS", "txt-mode": "VAIHDA TEEMA", "btn-back": "← RATALISTA"
         },
         sv: { 
-            "txt-track-name": "UAE GP", "txt-loc": "DUBAI // FÖRENADE ARABEMIRATEN", "txt-overview": "TEKNISK ÖVERSIKT", 
+            "txt-track-name": "FÖRENADE ARABEMIRATENS GP", "txt-loc": "DUBAI // FÖRENADE ARABEMIRATEN", "txt-overview": "TEKNISK ÖVERSIKT", 
             "txt-desc": "Dubai Autodrome är ett modernt mästerverk i hjärtat av öknen.", 
             "lbl-length": "LÄNGD", "lbl-turns": "SVÄNGAR", "lbl-laps": "VARV", "lbl-diff": "SVÅRIGHETSGRAD", "val-diff": "MEDIUM",
             "link-home": "HEMSKÄRM", "link-tracks": "BANLISTA", "link-custom": "ANPASSNING", "txt-mode": "BYT TEMA", "btn-back": "← BANLISTA"
@@ -178,9 +230,12 @@
     function changeLang(lang, el) {
         document.querySelectorAll('.lang-option').forEach(opt => opt.classList.remove('selected'));
         if(el) el.classList.add('selected');
+        
         localStorage.setItem('prefLang', lang);
         applyLanguage();
-        setTimeout(() => { if(el) el.classList.remove('selected'); }, 1500); 
+        
+        // Remove confirmation highlight after 2 seconds
+        setTimeout(() => { if(el) el.classList.remove('selected'); }, 2000); 
     }
 
     function applyLanguage() {
