@@ -85,6 +85,57 @@
         .spec-table td { padding: 16px 0; border-bottom: 1px solid var(--border); }
         .spec-label { font-weight: 900; color: var(--subtext); font-size: 11px; letter-spacing: 2px; }
         .spec-value { text-align: right; font-weight: 900; color: var(--accent); font-family: 'Consolas', monospace; font-size: 18px; }
+
+        /* --- MOBILE RESPONSIVENESS --- */
+        @media (max-width: 768px) {
+            .container { 
+                grid-template-columns: 1fr; 
+            }
+            
+            .hero-banner { 
+                height: 240px; 
+            }
+
+            .track-title-wrap { 
+                left: 20px; 
+                bottom: 20px; 
+                max-width: 80%; 
+            }
+            
+            .sharp-title { 
+                font-size: 32px; 
+            }
+
+            .back-btn { 
+                top: 20px; 
+                right: 20px; 
+                padding: 8px 15px; 
+                font-size: 10px; 
+            }
+
+            #menuToggle { top: 20px; left: 20px; }
+            #menu { width: 100%; max-width: 320px; }
+
+            .content-card { 
+                padding: 30px 20px; 
+                min-height: auto; 
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                background: var(--card); 
+            }
+
+            .track-map-card { 
+                padding: 30px 20px; 
+            }
+
+            .spec-table { 
+                margin-top: 25px; 
+            }
+            
+            .hero-img {
+                width: 100%; 
+            }
+        }
     </style>
 </head>
 <body>
