@@ -84,6 +84,35 @@
         .track-info { padding: 20px; border-top: 3px solid var(--accent); }
         .track-name { font-weight: 900; font-size: 18px; text-transform: uppercase; font-style: italic; color: var(--text); }
         .track-meta { font-size: 10px; color: #888; margin-top: 5px; font-family: monospace; letter-spacing: 1px; text-transform: uppercase; }
+
+        /* --- MOBILE RESPONSIVENESS --- */
+        @media (max-width: 768px) {
+            .container { 
+                padding: 0 20px; 
+                margin-top: 80px; 
+            }
+            
+            h1 { 
+                font-size: 32px; 
+                margin-bottom: 30px; 
+                border-left-width: 6px; 
+            }
+            
+            .track-grid { 
+                grid-template-columns: 1fr; 
+                gap: 15px; 
+            }
+            
+            #menu { 
+                width: 100%; 
+                max-width: 320px; 
+            }
+
+            #menuToggle {
+                top: 20px;
+                left: 20px;
+            }
+        }
     </style>
 </head>
 <body>
