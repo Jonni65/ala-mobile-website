@@ -88,6 +88,56 @@
         .spec-table td { padding: 18px 0; border-bottom: 1px solid var(--border); }
         .spec-label { font-weight: 900; color: var(--subtext); font-size: 11px; letter-spacing: 2px; }
         .spec-value { text-align: right; font-weight: 900; color: var(--accent); font-family: 'Consolas', monospace; font-size: 19px; }
+
+        /* --- MOBILE RESPONSIVENESS --- */
+        @media (max-width: 768px) {
+            .container { 
+                grid-template-columns: 1fr; /* Stack the layout */
+            }
+            
+            .hero-banner { 
+                height: 240px; 
+                background-position: center center;
+                background-image: 
+                    linear-gradient(to right, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.6) 50%, transparent 100%),
+                    url('https://flagcdn.com/w1280/at.png');
+            }
+
+            .track-title-wrap { 
+                left: 20px; 
+                bottom: 20px; 
+                max-width: 90%; 
+            }
+            
+            .sharp-title { 
+                font-size: 32px; 
+            }
+
+            .back-btn { 
+                top: 20px; 
+                right: 20px; 
+                padding: 8px 15px; 
+                font-size: 10px; 
+            }
+
+            #menuToggle { top: 20px; left: 20px; }
+            #menu { width: 100%; max-width: 320px; }
+
+            .content-card { 
+                padding: 30px 20px; 
+                min-height: auto; 
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .track-map-card { 
+                padding: 30px 20px; 
+            }
+
+            .spec-table { 
+                margin-top: 25px; 
+            }
+        }
     </style>
 </head>
 <body>
