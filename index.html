@@ -146,8 +146,7 @@
                 <div class="lang-option" onclick="changeLang('es', this)"><img src="https://flagcdn.com/w40/es.png"> ESPAÑOL</div>
             </div>
             <div class="nav-list">
-                <li><a href="index.html" class="sharp-nav" id="link-home">HOME SCREEN</a></li>
-                <li><a href="updates.html" class="sharp-nav" id="link-updates">GAME UPDATES</a></li>
+                <li><a href="index.html" class="sharp-nav" id="link-home" style="background: var(--accent); color: white;">HOME SCREEN</a></li>
                 <li><a href="tracks.html" class="sharp-nav" id="link-tracks">TRACK LIST</a></li>
                 <li><a href="custom.html" class="sharp-nav" id="link-custom">CUSTOMIZATION</a></li>
                 <hr style="border: none; border-top: 1px solid var(--border); margin: 30px 0;">
@@ -166,7 +165,7 @@
             <a href="https://store.steampowered.com/app/3203370/" target="_blank" rel="noopener noreferrer" class="steam-btn" id="btn-steam">GET IT ON STEAM</a>
         </div>
 
-        <!-- BALANCED UPDATE HIGHLIGHT CARD -->
+        <!-- TEASER CARD POINTING TO UPDATES HUB (updates.html) -->
         <div class="content-card">
             <div class="update-header">
                 <h2 class="update-title" id="txt-update-title">MAJOR OVERHAUL: V8.0 UPDATE IS LIVE</h2>
@@ -190,7 +189,7 @@
             </div>
 
             <div class="update-footer">
-                <a href="updates.html" class="update-link-btn" id="btn-read-patchnotes">READ FULL CHANGELOG →</a>
+                <a href="updates.html" class="update-link-btn" id="btn-read-patchnotes">EXPLORE ALL UPDATES →</a>
             </div>
         </div>
         
@@ -216,7 +215,7 @@
     <script>
     const translations = {
         en: { 
-            "link-home": "HOME SCREEN", "link-updates": "GAME UPDATES", "link-tracks": "TRACK LIST", "link-custom": "CUSTOMIZATION", "txt-sys-req": "SYSTEM REQUIREMENTS", 
+            "link-home": "HOME SCREEN", "link-tracks": "TRACK LIST", "link-custom": "CUSTOMIZATION", "txt-sys-req": "SYSTEM REQUIREMENTS", 
             "th-osa": "COMPONENT", "th-min": "MINIMUM", "th-rec": "RECOMMENDED", "td-proc": "PROCESSOR", "td-mem": "MEMORY", "td-gfx": "GRAPHICS", 
             "td-store": "STORAGE", "td-store-min": "3 GB SPACE", "td-store-rec": "5 GB (SSD)", "btn-steam": "GET IT ON STEAM", "txt-mode": "SWITCH THEME",
             "link-about-project": "PROJECT DOCUMENTATION & LEGAL INFO", "steam-lang": "english",
@@ -225,10 +224,10 @@
             "txt-h1-title": "2026 DLC & CARS", "txt-h1-desc": "11 new formula chassis models with active aero wing modes and 22-car grids.",
             "txt-h2-title": "REBUILT AI PHYSICS", "txt-h2-desc": "Non-scripted dynamic racing lines, improved wet weather AI, and hybrid energy deployment.",
             "txt-h3-title": "GRAN FESTIVAL & RULES", "txt-h3-desc": "Multi-class event racing alongside automated steward track limit penalty systems.",
-            "btn-read-patchnotes": "READ FULL CHANGELOG →"
+            "btn-read-patchnotes": "EXPLORE ALL UPDATES →"
         },
         fi: { 
-            "link-home": "ALOITUSRUUTU", "link-updates": "PÄIVITYKSET", "link-tracks": "RATALISTA", "link-custom": "MUOKKAUS", "txt-sys-req": "JÄRJESTELMÄVAATIMUKSET", 
+            "link-home": "ALOITUSRUUTU", "link-tracks": "RATALISTA", "link-custom": "MUOKKAUS", "txt-sys-req": "JÄRJESTELMÄVAATIMUKSET", 
             "th-osa": "OSA", "th-min": "MINIMI", "th-rec": "SUOSITUS", "td-proc": "PROSESSORI", "td-mem": "MUISTI", "td-gfx": "NÄYTÖNOHJAIN", 
             "td-store": "TALLENNUSTILA", "td-store-min": "3 GT TILAA", "td-store-rec": "5 GT (SSD)", "btn-steam": "LATAA STEAMISTA", "txt-mode": "VAIHDA TEEMA",
             "link-about-project": "PROJEKTIN DOKUMENTAATIO JA LAKITIEDOT", "steam-lang": "finnish",
@@ -237,10 +236,10 @@
             "txt-h1-title": "2026 DLC JA AUTOT", "txt-h1-desc": "11 uutta formulamallia aktiiviaerolla ja 22 auton lähtöruudulla.",
             "txt-h2-title": "UUDISTETTU TEKOÄLY", "txt-h2-desc": "Dynaamiset ajolinjat, parempi sateella ajaminen ja hybridijärjestelmä.",
             "txt-h3-title": "GRAN FESTIVAL JA SÄÄNNÖT", "txt-h3-desc": "Moniluokkaiset kilpailut sekä tiukka ratarajavalvonta rangaistuksineen.",
-            "btn-read-patchnotes": "LUE KOKO MUUTOSLOKI →"
+            "btn-read-patchnotes": "TUTUSTU PÄIVITYKSIIN →"
         },
         sv: { 
-            "link-home": "HEMSKÄRM", "link-updates": "UPPDATERINGAR", "link-tracks": "BANLISTA", "link-custom": "ANPASSNING", "txt-sys-req": "SYSTEMKRAV", 
+            "link-home": "HEMSKÄRM", "link-tracks": "BANLISTA", "link-custom": "ANPASSNING", "txt-sys-req": "SYSTEMKRAV", 
             "th-osa": "KOMPONENT", "th-min": "MINIMUM", "th-rec": "REKOMMENDERAT", "td-proc": "PROCESSOR", "td-mem": "MINNE", "td-gfx": "GRAFIK", 
             "td-store": "LAGRING", "td-store-min": "3 GB UTRYMME", "td-store-rec": "5 GB (SSD)", "btn-steam": "HÄMTA PÅ STEAM", "txt-mode": "BYT TEMA",
             "link-about-project": "PROJEKTDOKUMENTATION & JURIDISK INFO", "steam-lang": "swedish",
@@ -249,10 +248,10 @@
             "txt-h1-title": "2026 DLC & BILAR", "txt-h1-desc": "11 nya formelchassis med aktiv aero och 22 bilar på startgriden.",
             "txt-h2-title": "OMBYGGD AI-FYSİK", "txt-h2-desc": "Dynamiska idealspår, förbättrad AI i regn och hybrid-energisystem.",
             "txt-h3-title": "GRAN FESTIVAL & REGLER", "txt-h3-desc": "Flerklassracing och automatisk bestraffning av banbegränsningar.",
-            "btn-read-patchnotes": "LÄS HELA ÄNDRINGSLOGGEN →"
+            "btn-read-patchnotes": "UTFORSKA UPPDATERINGAR →"
         },
         it: { 
-            "link-home": "SCHERMATA INIZIALE", "link-updates": "AGGIORNAMENTI", "link-tracks": "LISTA CIRCUITI", "link-custom": "PERSONALIZZAZIONE", "txt-sys-req": "REQUISITI DI SISTEMA", 
+            "link-home": "SCHERMATA INIZIALE", "link-tracks": "LISTA CIRCUITI", "link-custom": "PERSONALIZZAZIONE", "txt-sys-req": "REQUISITI DI SISTEMA", 
             "th-osa": "COMPONENTE", "th-min": "MINIMO", "th-rec": "CONSIGLIATO", "td-proc": "PROCESSORE", "td-mem": "MEMORIA", "td-gfx": "GRAFICA", 
             "td-store": "ARCHIVIAZIONE", "td-store-min": "3 GB DI SPAZIO", "td-store-rec": "5 GB (SSD)", "btn-steam": "SCARICA SU STEAM", "txt-mode": "CAMBIA TEMA",
             "link-about-project": "DOCUMENTAZIONE E NOTE LEGALI", "steam-lang": "italian",
@@ -261,10 +260,10 @@
             "txt-h1-title": "DLC 2026 E AUTO", "txt-h1-desc": "11 nuovi telai con aerodinamica attiva e griglie da 22 vetture.",
             "txt-h2-title": "IA E FISICA RICOSTRUITE", "txt-h2-desc": "Traiettorie dinamiche, IA migliorata su bagnato e gestione energia ibrida.",
             "txt-h3-title": "GRAN FESTIVAL E REGOLE", "txt-h3-desc": "Gare multicategoria e sistema automatico di penalità per i limiti di pista.",
-            "btn-read-patchnotes": "LEGGI IL CHANGELOG COMPLETO →"
+            "btn-read-patchnotes": "ESPLORA TUTTI GLI AGGIORNAMENTI →"
         },
         es: { 
-            "link-home": "PANTALLA INICIAL", "link-updates": "ACTUALIZACIONES", "link-tracks": "LISTA DE PISTAS", "link-custom": "PERSONALIZACIÓN", "txt-sys-req": "REQUISITOS DEL SISTEMA", 
+            "link-home": "PANTALLA INICIAL", "link-tracks": "LISTA DE PISTAS", "link-custom": "PERSONALIZACIÓN", "txt-sys-req": "REQUISITOS DEL SISTEMA", 
             "th-osa": "COMPONENTE", "th-min": "MÍNIMO", "th-rec": "RECOMENDADO", "td-proc": "PROCESADOR", "td-mem": "MEMORIA", "td-gfx": "GRÁFICOS", 
             "td-store": "ALMACENAMIENTO", "td-store-min": "3 GB DE ESPACIO", "td-store-rec": "5 GB (SSD)", "btn-steam": "CONSEGUIR EN STEAM", "txt-mode": "CAMBIAR TEMA",
             "link-about-project": "DOCUMENTACIÓN E INFO LEGAL", "steam-lang": "spanish",
@@ -273,7 +272,7 @@
             "txt-h1-title": "DLC 2026 Y COCHES", "txt-h1-desc": "11 nuevos chasis con aerodinámica activa y parrillas de 22 coches.",
             "txt-h2-title": "IA Y FÍSICAS RECONSTRUIDAS", "txt-h2-desc": "Líneas trazadas dinámicas, mejor conducta en lluvia y gestión de energía híbrida.",
             "txt-h3-title": "GRAN FESTIVAL Y REGLAS", "txt-h3-desc": "Carreras multicategoría y sanciones automáticas por límites de pista.",
-            "btn-read-patchnotes": "LEER EL REGISTRO DE CAMBIOS →"
+            "btn-read-patchnotes": "EXPLORAR ACTUALIZACIONES →"
         }
     };
 
@@ -294,13 +293,11 @@
         const lang = localStorage.getItem('prefLang') || 'en';
         const data = translations[lang] || translations['en'];
         
-        // Update texts
         for (let id in data) {
             const el = document.getElementById(id);
             if (el && id !== "steam-lang") el.innerText = data[id];
         }
 
-        // Update Steam Link with corresponding language parameter
         const steamBtn = document.getElementById('btn-steam');
         if (steamBtn) {
             steamBtn.href = `https://store.steampowered.com/app/3203370/?l=${data['steam-lang']}`;
