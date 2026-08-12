@@ -65,13 +65,11 @@
         .container { max-width: 1000px; margin: 100px auto; padding: 0 40px; }
         h1 { font-size: 50px; font-style: italic; font-weight: 900; letter-spacing: -2px; border-left: 10px solid var(--accent); padding-left: 20px; margin-bottom: 40px; text-transform: uppercase; }
 
-        /* LATEST UPDATE HERO CARD */
+        /* STATIC HERO BANNER */
         .workshop-hero { 
             background: var(--card); border: 1px solid var(--border); border-left: 8px solid var(--accent);
-            display: flex; align-items: center; padding: 40px; margin-bottom: 30px; 
-            text-decoration: none; color: inherit; transition: 0.3s;
+            display: flex; align-items: center; padding: 40px; margin-bottom: 30px; color: inherit;
         }
-        .workshop-hero:hover { transform: scale(1.01); border-color: var(--accent); box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
         .hero-text { flex: 1; }
         .hero-text h2 { color: var(--accent); font-size: 32px; font-style: italic; font-weight: 900; margin: 0; }
         .hero-text p { font-size: 18px; font-weight: 700; margin: 10px 0; opacity: 0.8; }
@@ -85,7 +83,7 @@
             display: flex; flex-direction: column; overflow: hidden; position: relative;
         }
         .image-wrap { width: 100%; height: 200px; overflow: hidden; background: #000; position: relative; }
-        .image-wrap img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; filter: grayscale(0.8); transition: 0.5s; }
+        .image-wrap img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; filter: grayscale(0.5); transition: 0.5s; }
         .patch-card:not(.disabled):hover img { opacity: 1; filter: grayscale(0); transform: scale(1.05); }
         .patch-card:not(.disabled):hover { border-color: var(--accent); box-shadow: 0 10px 25px rgba(255,0,0,0.15); }
 
@@ -95,13 +93,52 @@
         .card-hint { margin-top: 15px; font-size: 11px; font-weight: 900; color: var(--accent); text-transform: uppercase; font-style: italic; display: block; }
 
         /* DISABLED / COMING SOON CARD STYLING */
-        .patch-card.disabled { cursor: not-allowed; opacity: 0.65; border-color: var(--border); }
+        .patch-card.disabled { cursor: pointer; opacity: 0.75; border-color: var(--border); }
+        .patch-card.disabled .image-wrap img { filter: brightness(0.5) contrast(1.2); opacity: 0.5; }
         .patch-card.disabled .card-content { border-top-color: var(--subtext); }
         .patch-card.disabled h3 { color: var(--subtext); }
         .coming-soon-badge { 
-            position: absolute; top: 15px; right: 15px; background: var(--nav-bg); color: var(--text); 
+            position: absolute; top: 15px; right: 15px; background: var(--accent); color: #fff; 
             border: 1px solid var(--border); font-size: 10px; font-weight: 900; font-style: italic; 
             padding: 4px 10px; text-transform: uppercase; letter-spacing: 1px; z-index: 10;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+
+        /* --- FIXED SHARP RACING TOAST CONTAINER --- */
+        #toast-wrapper {
+            position: fixed;
+            bottom: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20000;
+            transition: bottom 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #toast-wrapper.show {
+            bottom: 40px;
+            opacity: 1;
+        }
+
+        .toast-outer {
+            background: var(--accent);
+            padding: 2px;
+            clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.35);
+        }
+
+        .toast-inner {
+            background: var(--card);
+            color: var(--text);
+            padding: 14px 36px;
+            font-weight: 900;
+            font-style: italic;
+            text-transform: uppercase;
+            font-size: 14px;
+            letter-spacing: 1.5px;
+            clip-path: polygon(5px 0, 100% 0, calc(100% - 5px) 100%, 0 100%);
+            white-space: nowrap;
         }
 
         @media (max-width: 768px) {
@@ -114,6 +151,7 @@
             .image-wrap { height: 180px; }
             #menuToggle { top: 20px; left: 20px; }
             #menu { width: 100%; max-width: 320px; }
+            .toast-inner { padding: 12px 24px; font-size: 12px; }
         }
     </style>
 </head>
@@ -135,7 +173,6 @@
             </div>
             <div class="nav-list">
                 <li><a href="index.html" class="sharp-nav" id="link-home">HOME SCREEN</a></li>
-                <li><a href="updates.html" class="sharp-nav" id="link-updates" style="background: var(--accent); color: white;">GAME UPDATES</a></li>
                 <li><a href="tracks.html" class="sharp-nav" id="link-tracks">TRACK LIST</a></li>
                 <li><a href="custom.html" class="sharp-nav" id="link-custom">CUSTOMIZATION</a></li>
                 <hr style="border: none; border-top: 1px solid var(--border); margin: 30px 0;">
@@ -147,19 +184,19 @@
     <div class="container">
         <h1 id="txt-updates-title">Game Updates</h1>
 
-        <!-- LATEST FEATURED UPDATE: VERSION 8.0 -->
-        <a href="update-v8.html" class="workshop-hero">
+        <!-- STATIC FEATURED HEADER -->
+        <div class="workshop-hero">
             <div class="hero-text">
-                <h2 id="txt-v8-title">VERSION 8.0 OVERHAUL</h2>
-                <p id="txt-v8-desc">2026 DLC • ACTIVE AERO • REBUILT AI</p>
-                <span class="hero-hint" id="txt-v8-hint">CLICK TO VIEW UPDATE BREAKDOWN</span>
+                <h2 id="txt-v8-title">GAME UPDATES ARCHIVE</h2>
+                <p id="txt-v8-desc">SELECT A MAJOR RELEASE BELOW TO READ DETAILED PATCH NOTES</p>
+                <span class="hero-hint" id="txt-v8-hint">ALA MOBILE ROADMAP</span>
             </div>
             <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3203370/logo.png" width="220" style="filter: drop-shadow(0 0 10px rgba(255,0,0,0.2));">
-        </a>
+        </div>
 
-        <!-- ALL UPDATES GRID (V8 ACTIVE, V9-V11 COMING SOON) -->
+        <!-- ALL UPDATES GRID -->
         <div class="editor-grid">
-            <!-- V8.0 CARD (ACTIVE) -->
+            <!-- V8.0 CARD (ACTIVE BUTTON) -->
             <a href="update-v8.html" class="patch-card">
                 <div class="image-wrap">
                     <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3203370/header.jpg">
@@ -173,11 +210,11 @@
                 </div>
             </a>
 
-            <!-- V9.0 CARD (COMING SOON) -->
-            <div class="patch-card disabled">
+            <!-- V9.0 CARD (TRIGGERS TOAST) -->
+            <div class="patch-card disabled" onclick="showToast()">
                 <span class="coming-soon-badge" id="txt-cs-1">COMING SOON</span>
                 <div class="image-wrap">
-                    <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3203370/ss_9d6ed5b449ef07ff8ccaa900ef42dc38ba98a12e.600x338.jpg">
+                    <img src="https://dummyimage.com/600x338/111111/ff0000.jpg&text=VERSION+9.0+COMING+SOON">
                 </div>
                 <div class="card-content">
                     <div>
@@ -188,11 +225,11 @@
                 </div>
             </div>
 
-            <!-- V10.0 CARD (COMING SOON) -->
-            <div class="patch-card disabled">
+            <!-- V10.0 CARD (TRIGGERS TOAST) -->
+            <div class="patch-card disabled" onclick="showToast()">
                 <span class="coming-soon-badge" id="txt-cs-2">COMING SOON</span>
                 <div class="image-wrap">
-                    <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3203370/ss_8e3c666579cfeb7b68edbbceb3be0c8bb2b826ef.600x338.jpg">
+                    <img src="https://dummyimage.com/600x338/111111/ff0000.jpg&text=VERSION+10.0+COMING+SOON">
                 </div>
                 <div class="card-content">
                     <div>
@@ -203,11 +240,11 @@
                 </div>
             </div>
 
-            <!-- V11.0 CARD (COMING SOON) -->
-            <div class="patch-card disabled">
+            <!-- V11.0 CARD (TRIGGERS TOAST) -->
+            <div class="patch-card disabled" onclick="showToast()">
                 <span class="coming-soon-badge" id="txt-cs-3">COMING SOON</span>
                 <div class="image-wrap">
-                    <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3203370/ss_50b18fbf792b005feae7161b47b4cf2f01f010ea.600x338.jpg">
+                    <img src="https://dummyimage.com/600x338/111111/ff0000.jpg&text=VERSION+11.0+COMING+SOON">
                 </div>
                 <div class="card-content">
                     <div>
@@ -220,59 +257,83 @@
         </div>
     </div>
 
+    <!-- CLEAN TOAST NOTIFICATION -->
+    <div id="toast-wrapper">
+        <div class="toast-outer">
+            <div class="toast-inner" id="txt-toast">UPDATE IS COMING SOON</div>
+        </div>
+    </div>
+
     <script>
     const translations = {
         en: { 
             "txt-updates-title": "Game Updates", 
-            "txt-v8-title": "VERSION 8.0 OVERHAUL", "txt-v8-desc": "2026 DLC • ACTIVE AERO • REBUILT AI", "txt-v8-hint": "CLICK TO VIEW UPDATE BREAKDOWN",
+            "txt-v8-title": "GAME UPDATES ARCHIVE", "txt-v8-desc": "SELECT A MAJOR RELEASE BELOW TO READ DETAILED PATCH NOTES", "txt-v8-hint": "ALA MOBILE ROADMAP",
             "txt-c1-title": "VERSION 8.0", "txt-c1-desc": "2026 DLC • ACTIVE AERO • AI OVERHAUL • STEWARDS", "txt-hint-1": "READ FULL PATCH NOTES →",
             "txt-c2-title": "VERSION 9.0", "txt-c2-desc": "FUTURE CONTENT RELEASE", "txt-hint-2": "DETAILS COMING SOON",
             "txt-c3-title": "VERSION 10.0", "txt-c3-desc": "FUTURE CONTENT RELEASE", "txt-hint-3": "DETAILS COMING SOON",
             "txt-c4-title": "VERSION 11.0", "txt-c4-desc": "FUTURE CONTENT RELEASE", "txt-hint-4": "DETAILS COMING SOON",
             "txt-cs-1": "COMING SOON", "txt-cs-2": "COMING SOON", "txt-cs-3": "COMING SOON",
-            "link-home": "HOME SCREEN", "link-updates": "GAME UPDATES", "link-tracks": "TRACK LIST", "link-custom": "CUSTOMIZATION", "txt-mode": "SWITCH THEME"
+            "txt-toast": "UPDATE IS COMING SOON",
+            "link-home": "HOME SCREEN", "link-tracks": "TRACK LIST", "link-custom": "CUSTOMIZATION", "txt-mode": "SWITCH THEME"
         },
         fi: { 
             "txt-updates-title": "Päivitykset", 
-            "txt-v8-title": "VERSIO 8.0 UUDISTUS", "txt-v8-desc": "2026 DLC • AKTIIVIAERO • UUSITTU TEKOÄLY", "txt-v8-hint": "KLIKKAA KATSOAKSESI PÄIVITYKSEN TIEDOT",
+            "txt-v8-title": "PÄIVITYSARKISTO", "txt-v8-desc": "VALITSE JULKAISU ALTA LUAKSESI TARKEMMAT MUUTOSLOKIT", "txt-v8-hint": "ALA MOBILE ROADMAP",
             "txt-c1-title": "VERSIO 8.0", "txt-c1-desc": "2026 DLC • AKTIIVIAERO • UUSITTU TEKOÄLY • SÄÄNNÖT", "txt-hint-1": "LUE KOKO MUUTOSLOKI →",
             "txt-c2-title": "VERSIO 9.0", "txt-c2-desc": "TULEVA SISÄLTÖJULKAISU", "txt-hint-2": "TIEDOT TULOSSA PIAN",
             "txt-c3-title": "VERSIO 10.0", "txt-c3-desc": "TULEVA SISÄLTÖJULKAISU", "txt-hint-3": "TIEDOT TULOSSA PIAN",
             "txt-c4-title": "VERSIO 11.0", "txt-c4-desc": "TULEVA SISÄLTÖJULKAISU", "txt-hint-4": "TIEDOT TULOSSA PIAN",
             "txt-cs-1": "TULOSSA PIAN", "txt-cs-2": "TULOSSA PIAN", "txt-cs-3": "TULOSSA PIAN",
-            "link-home": "ALOITUSRUUTU", "link-updates": "PÄIVITYKSET", "link-tracks": "RATALISTA", "link-custom": "MUOKKAUS", "txt-mode": "VAIHDA TEEMA"
+            "txt-toast": "PÄIVITYS ON TULOSSA PIAN",
+            "link-home": "ALOITUSRUUTU", "link-tracks": "RATALISTA", "link-custom": "MUOKKAUS", "txt-mode": "VAIHDA TEEMA"
         },
         sv: {
             "txt-updates-title": "Uppdateringar", 
-            "txt-v8-title": "VERSION 8.0 OMSTÄLLNING", "txt-v8-desc": "2026 DLC • AKTIV AERO • OMBYGGD AI", "txt-v8-hint": "KLICKA FÖR ATT VISA UPPDATERINGSINFO",
+            "txt-v8-title": "UPPDATERINGSARKIV", "txt-v8-desc": "VÄLJ EN VERSION NEDAN FÖR DETALJERADE ÄNDRINGSLOGGAR", "txt-v8-hint": "ALA MOBILE ROADMAP",
             "txt-c1-title": "VERSION 8.0", "txt-c1-desc": "2026 DLC • AKTIV AERO • OMBYGGD AI • REGLER", "txt-hint-1": "LÄS HELA ÄNDRINGSLOGGEN →",
             "txt-c2-title": "VERSION 9.0", "txt-c2-desc": "KOMMANDE INNEHÅLL", "txt-hint-2": "DETALJER KOMMER SNART",
             "txt-c3-title": "VERSION 10.0", "txt-c3-desc": "KOMMANDE INNEHÅLL", "txt-hint-3": "DETALJER KOMMER SNART",
             "txt-c4-title": "VERSION 11.0", "txt-c4-desc": "KOMMANDE INNEHÅLL", "txt-hint-4": "DETALJER KOMMER SNART",
             "txt-cs-1": "KOMMER SNART", "txt-cs-2": "KOMMER SNART", "txt-cs-3": "KOMMER SNART",
-            "link-home": "HEMSKÄRM", "link-updates": "UPPDATERINGAR", "link-tracks": "BANLISTA", "link-custom": "ANPASSNING", "txt-mode": "BYT TEMA"
+            "txt-toast": "UPPDATERINGEN KOMMER SNART",
+            "link-home": "HEMSKÄRM", "link-tracks": "BANLISTA", "link-custom": "ANPASSNING", "txt-mode": "BYT TEMA"
         },
         it: {
             "txt-updates-title": "Aggiornamenti", 
-            "txt-v8-title": "VERSIONE 8.0 REVISIONATA", "txt-v8-desc": "DLC 2026 • AERO ATTIVA • IA RICOSTRUITA", "txt-v8-hint": "CLICCA PER VEDERE DETTAGLI AGGIORNAMENTO",
+            "txt-v8-title": "ARCHIVIO AGGIORNAMENTI", "txt-v8-desc": "SELEZIONA UN RILASCIO SOTTO PER IL CHANGELOG COMPLETO", "txt-v8-hint": "ALA MOBILE ROADMAP",
             "txt-c1-title": "VERSIONE 8.0", "txt-c1-desc": "DLC 2026 • AERO ATTIVA • IA RICOSTRUITA • REGOLE", "txt-hint-1": "LEGGI CHANGELOG COMPLETO →",
             "txt-c2-title": "VERSIONE 9.0", "txt-c2-desc": "CONTENUTO FUTURO", "txt-hint-2": "DETTAGLI IN ARRIVO",
             "txt-c3-title": "VERSIONE 10.0", "txt-c3-desc": "CONTENUTO FUTURO", "txt-hint-3": "DETTAGLI IN ARRIVO",
             "txt-c4-title": "VERSIONE 11.0", "txt-c4-desc": "CONTENUTO FUTURO", "txt-hint-4": "DETTAGLI IN ARRIVO",
             "txt-cs-1": "IN ARRIVO", "txt-cs-2": "IN ARRIVO", "txt-cs-3": "IN ARRIVO",
-            "link-home": "SCHERMATA INIZIALE", "link-updates": "AGGIORNAMENTI", "link-tracks": "LISTA CIRCUITI", "link-custom": "PERSONALIZZAZIONE", "txt-mode": "CAMBIA TEMA"
+            "txt-toast": "L'AGGIORNAMENTO ARRIVERÀ PRESTO",
+            "link-home": "SCHERMATA INIZIALE", "link-tracks": "LISTA CIRCUITI", "link-custom": "PERSONALIZZAZIONE", "txt-mode": "CAMBIA TEMA"
         },
         es: {
             "txt-updates-title": "Actualizaciones", 
-            "txt-v8-title": "VERSIÓN 8.0 RESTRUCTURADA", "txt-v8-desc": "DLC 2026 • AERO ACTIVA • IA RENOVADA", "txt-v8-hint": "HAZ CLIC PARA VER DESGLOSE",
+            "txt-v8-title": "ARCHIVO DE ACTUALIZACIONES", "txt-v8-desc": "SELECCIONA UNA VERSIÓN ABAJO PARA VER LOS DETALLES", "txt-v8-hint": "ALA MOBILE ROADMAP",
             "txt-c1-title": "VERSIÓN 8.0", "txt-c1-desc": "DLC 2026 • AERO ACTIVA • IA RENOVADA • REGLAS", "txt-hint-1": "LEER CAMBIOS COMPLETOS →",
             "txt-c2-title": "VERSIÓN 9.0", "txt-c2-desc": "CONTENIDO FUTURO", "txt-hint-2": "DETALLES PRÓXIMAMENTE",
             "txt-c3-title": "VERSIÓN 10.0", "txt-c3-desc": "CONTENIDO FUTURO", "txt-hint-3": "DETALLES PRÓXIMAMENTE",
             "txt-c4-title": "VERSIÓN 11.0", "txt-c4-desc": "CONTENIDO FUTURO", "txt-hint-4": "DETALLES PRÓXIMAMENTE",
             "txt-cs-1": "PRÓXIMAMENTE", "txt-cs-2": "PRÓXIMAMENTE", "txt-cs-3": "PRÓXIMAMENTE",
-            "link-home": "PANTALLA DE INICIO", "link-updates": "ACTUALIZACIONES", "link-tracks": "LISTA DE PISTAS", "link-custom": "PERSONALIZACIÓN", "txt-mode": "CAMBIAR TEMA"
+            "txt-toast": "LA ACTUALIZACIÓN LLEGARÁ PRONTO",
+            "link-home": "PANTALLA INICIAL", "link-tracks": "LISTA DE PISTAS", "link-custom": "PERSONALIZACIÓN", "txt-mode": "CAMBIAR TEMA"
         }
     };
+
+    let toastTimer = null;
+    function showToast() {
+        const toast = document.getElementById('toast-wrapper');
+        toast.classList.add('show');
+        
+        if (toastTimer) clearTimeout(toastTimer);
+        
+        toastTimer = setTimeout(() => {
+            toast.classList.remove('show');
+        }, 2200);
+    }
 
     function changeLang(lang, el) {
         document.querySelectorAll('.lang-option').forEach(opt => opt.classList.remove('selected'));
