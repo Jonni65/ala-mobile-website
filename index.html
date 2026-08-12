@@ -80,6 +80,36 @@
 
         .content-card { background: var(--card); border-left: 8px solid var(--accent); padding: clamp(20px, 5vw, 50px); box-shadow: 0 15px 35px rgba(0,0,0,0.2); margin-bottom: 30px; transition: background 0.5s ease; }
 
+        /* --- ENHANCED UPDATE HIGHLIGHTS CARD --- */
+        .update-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; }
+        .update-tag { background: var(--accent); color: #fff; font-size: 11px; font-weight: 900; padding: 4px 10px; text-transform: uppercase; font-style: italic; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%); }
+        .update-title { font-size: 22px; font-weight: 900; font-style: italic; letter-spacing: -0.5px; margin: 0; }
+        
+        .update-highlights-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin: 20px 0; }
+        .highlight-box { background: var(--nav-bg); padding: 15px; border-top: 2px solid var(--accent); }
+        .highlight-box h4 { margin: 0 0 6px 0; color: var(--accent); font-size: 13px; font-weight: 900; text-transform: uppercase; font-style: italic; }
+        .highlight-box p { margin: 0; font-size: 13px; opacity: 0.85; line-height: 1.4; }
+
+        .update-footer { text-align: right; margin-top: 15px; }
+        .update-link-btn { 
+            display: inline-block; 
+            background: var(--nav-bg); 
+            color: var(--text); 
+            padding: 12px 28px; 
+            text-decoration: none; 
+            font-weight: 900; 
+            font-style: italic; 
+            text-transform: uppercase; 
+            clip-path: polygon(8% 0, 100% 0, 92% 100%, 0% 100%); 
+            transition: 0.2s; 
+            font-size: 13px; 
+        }
+        .update-link-btn:hover { 
+            background: var(--accent); 
+            color: #fff; 
+            transform: translateX(4px); 
+        }
+
         .table-wrap { width: 100%; overflow-x: auto; overflow-y: hidden; margin-top: 25px; }
         table { border-collapse: collapse; width: 100%; min-width: 500px; }
         th { text-align: left; color: var(--accent); border-bottom: 3px solid var(--accent); padding: 15px 10px; font-size: 12px; text-transform: uppercase; font-weight: 900; }
@@ -94,6 +124,8 @@
             .content-card { padding: 30px 20px; }
             .official-logo { width: 70%; left: 15%; }
             .steam-btn { width: 100%; box-sizing: border-box; }
+            .update-footer { text-align: stretch; }
+            .update-link-btn { width: 100%; text-align: center; box-sizing: border-box; }
             #link-about-project { display: inline-block; width: 100%; box-sizing: border-box; text-align: center; }
         }
     </style>
@@ -115,6 +147,7 @@
             </div>
             <div class="nav-list">
                 <li><a href="index.html" class="sharp-nav" id="link-home">HOME SCREEN</a></li>
+                <li><a href="updates.html" class="sharp-nav" id="link-updates">GAME UPDATES</a></li>
                 <li><a href="tracks.html" class="sharp-nav" id="link-tracks">TRACK LIST</a></li>
                 <li><a href="custom.html" class="sharp-nav" id="link-custom">CUSTOMIZATION</a></li>
                 <hr style="border: none; border-top: 1px solid var(--border); margin: 30px 0;">
@@ -131,6 +164,34 @@
     <div class="main-container">
         <div class="steam-container">
             <a href="https://store.steampowered.com/app/3203370/" target="_blank" rel="noopener noreferrer" class="steam-btn" id="btn-steam">GET IT ON STEAM</a>
+        </div>
+
+        <!-- BALANCED UPDATE HIGHLIGHT CARD -->
+        <div class="content-card">
+            <div class="update-header">
+                <h2 class="update-title" id="txt-update-title">MAJOR OVERHAUL: V8.0 UPDATE IS LIVE</h2>
+                <span class="update-tag">2026 RELEASE</span>
+            </div>
+            <p id="txt-update-intro" style="font-size: 14px; opacity: 0.9; margin: 0 0 15px 0;">Ala Mobile has been updated with new 2026 regulations, rebuilt AI mechanics, and active aerodynamics.</p>
+            
+            <div class="update-highlights-grid">
+                <div class="highlight-box">
+                    <h4 id="txt-h1-title">2026 DLC & CARS</h4>
+                    <p id="txt-h1-desc">11 new formula chassis models with active aero wing modes and 22-car grids.</p>
+                </div>
+                <div class="highlight-box">
+                    <h4 id="txt-h2-title">REBUILT AI PHYSICS</h4>
+                    <p id="txt-h2-desc">Non-scripted dynamic racing lines, improved wet weather AI, and hybrid energy deployment.</p>
+                </div>
+                <div class="highlight-box">
+                    <h4 id="txt-h3-title">GRAN FESTIVAL & RULES</h4>
+                    <p id="txt-h3-desc">Multi-class event racing alongside automated steward track limit penalty systems.</p>
+                </div>
+            </div>
+
+            <div class="update-footer">
+                <a href="updates.html" class="update-link-btn" id="btn-read-patchnotes">READ FULL CHANGELOG →</a>
+            </div>
         </div>
         
         <div class="content-card">
@@ -155,34 +216,64 @@
     <script>
     const translations = {
         en: { 
-            "link-home": "HOME SCREEN", "link-tracks": "TRACK LIST", "link-custom": "CUSTOMIZATION", "txt-sys-req": "SYSTEM REQUIREMENTS", 
+            "link-home": "HOME SCREEN", "link-updates": "GAME UPDATES", "link-tracks": "TRACK LIST", "link-custom": "CUSTOMIZATION", "txt-sys-req": "SYSTEM REQUIREMENTS", 
             "th-osa": "COMPONENT", "th-min": "MINIMUM", "th-rec": "RECOMMENDED", "td-proc": "PROCESSOR", "td-mem": "MEMORY", "td-gfx": "GRAPHICS", 
             "td-store": "STORAGE", "td-store-min": "3 GB SPACE", "td-store-rec": "5 GB (SSD)", "btn-steam": "GET IT ON STEAM", "txt-mode": "SWITCH THEME",
-            "link-about-project": "PROJECT DOCUMENTATION & LEGAL INFO", "steam-lang": "english"
+            "link-about-project": "PROJECT DOCUMENTATION & LEGAL INFO", "steam-lang": "english",
+            "txt-update-title": "MAJOR OVERHAUL: V8.0 UPDATE IS LIVE",
+            "txt-update-intro": "Ala Mobile has been updated with new 2026 regulations, rebuilt AI mechanics, and active aerodynamics.",
+            "txt-h1-title": "2026 DLC & CARS", "txt-h1-desc": "11 new formula chassis models with active aero wing modes and 22-car grids.",
+            "txt-h2-title": "REBUILT AI PHYSICS", "txt-h2-desc": "Non-scripted dynamic racing lines, improved wet weather AI, and hybrid energy deployment.",
+            "txt-h3-title": "GRAN FESTIVAL & RULES", "txt-h3-desc": "Multi-class event racing alongside automated steward track limit penalty systems.",
+            "btn-read-patchnotes": "READ FULL CHANGELOG →"
         },
         fi: { 
-            "link-home": "ALOITUSRUUTU", "link-tracks": "RATALISTA", "link-custom": "MUOKKAUS", "txt-sys-req": "JÄRJESTELMÄVAATIMUKSET", 
+            "link-home": "ALOITUSRUUTU", "link-updates": "PÄIVITYKSET", "link-tracks": "RATALISTA", "link-custom": "MUOKKAUS", "txt-sys-req": "JÄRJESTELMÄVAATIMUKSET", 
             "th-osa": "OSA", "th-min": "MINIMI", "th-rec": "SUOSITUS", "td-proc": "PROSESSORI", "td-mem": "MUISTI", "td-gfx": "NÄYTÖNOHJAIN", 
             "td-store": "TALLENNUSTILA", "td-store-min": "3 GT TILAA", "td-store-rec": "5 GT (SSD)", "btn-steam": "LATAA STEAMISTA", "txt-mode": "VAIHDA TEEMA",
-            "link-about-project": "PROJEKTIN DOKUMENTAATIO JA LAKITIEDOT", "steam-lang": "finnish"
+            "link-about-project": "PROJEKTIN DOKUMENTAATIO JA LAKITIEDOT", "steam-lang": "finnish",
+            "txt-update-title": "SUURPÄIVITYS: V8.0 ON ULKONA",
+            "txt-update-intro": "Ala Mobile on päivitetty vuoden 2026 säännöillä, uudistetulla tekoälyllä ja aktiivisella aerodynamiikalla.",
+            "txt-h1-title": "2026 DLC JA AUTOT", "txt-h1-desc": "11 uutta formulamallia aktiiviaerolla ja 22 auton lähtöruudulla.",
+            "txt-h2-title": "UUDISTETTU TEKOÄLY", "txt-h2-desc": "Dynaamiset ajolinjat, parempi sateella ajaminen ja hybridijärjestelmä.",
+            "txt-h3-title": "GRAN FESTIVAL JA SÄÄNNÖT", "txt-h3-desc": "Moniluokkaiset kilpailut sekä tiukka ratarajavalvonta rangaistuksineen.",
+            "btn-read-patchnotes": "LUE KOKO MUUTOSLOKI →"
         },
         sv: { 
-            "link-home": "HEMSKÄRM", "link-tracks": "BANLISTA", "link-custom": "ANPASSNING", "txt-sys-req": "SYSTEMKRAV", 
+            "link-home": "HEMSKÄRM", "link-updates": "UPPDATERINGAR", "link-tracks": "BANLISTA", "link-custom": "ANPASSNING", "txt-sys-req": "SYSTEMKRAV", 
             "th-osa": "KOMPONENT", "th-min": "MINIMUM", "th-rec": "REKOMMENDERAT", "td-proc": "PROCESSOR", "td-mem": "MINNE", "td-gfx": "GRAFIK", 
             "td-store": "LAGRING", "td-store-min": "3 GB UTRYMME", "td-store-rec": "5 GB (SSD)", "btn-steam": "HÄMTA PÅ STEAM", "txt-mode": "BYT TEMA",
-            "link-about-project": "PROJEKTDOKUMENTATION & JURIDISK INFO", "steam-lang": "swedish"
+            "link-about-project": "PROJEKTDOKUMENTATION & JURIDISK INFO", "steam-lang": "swedish",
+            "txt-update-title": "STOR UPPDATERING: V8.0 ÄR HÄR",
+            "txt-update-intro": "Ala Mobile har uppdaterats med 2026 års regler, ombyggd AI och aktiv aerodynamik.",
+            "txt-h1-title": "2026 DLC & BILAR", "txt-h1-desc": "11 nya formelchassis med aktiv aero och 22 bilar på startgriden.",
+            "txt-h2-title": "OMBYGGD AI-FYSİK", "txt-h2-desc": "Dynamiska idealspår, förbättrad AI i regn och hybrid-energisystem.",
+            "txt-h3-title": "GRAN FESTIVAL & REGLER", "txt-h3-desc": "Flerklassracing och automatisk bestraffning av banbegränsningar.",
+            "btn-read-patchnotes": "LÄS HELA ÄNDRINGSLOGGEN →"
         },
         it: { 
-            "link-home": "SCHERMATA INIZIALE", "link-tracks": "LISTA CIRCUITI", "link-custom": "PERSONALIZZAZIONE", "txt-sys-req": "REQUISITI DI SISTEMA", 
+            "link-home": "SCHERMATA INIZIALE", "link-updates": "AGGIORNAMENTI", "link-tracks": "LISTA CIRCUITI", "link-custom": "PERSONALIZZAZIONE", "txt-sys-req": "REQUISITI DI SISTEMA", 
             "th-osa": "COMPONENTE", "th-min": "MINIMO", "th-rec": "CONSIGLIATO", "td-proc": "PROCESSORE", "td-mem": "MEMORIA", "td-gfx": "GRAFICA", 
             "td-store": "ARCHIVIAZIONE", "td-store-min": "3 GB DI SPAZIO", "td-store-rec": "5 GB (SSD)", "btn-steam": "SCARICA SU STEAM", "txt-mode": "CAMBIA TEMA",
-            "link-about-project": "DOCUMENTAZIONE E NOTE LEGALI", "steam-lang": "italian"
+            "link-about-project": "DOCUMENTAZIONE E NOTE LEGALI", "steam-lang": "italian",
+            "txt-update-title": "GRANDE AGGIORNAMENTO: V8.0 DISPONIBILE",
+            "txt-update-intro": "Ala Mobile si aggiorna con i regolamenti 2026, IA completamente ricostruita e aerodinamica attiva.",
+            "txt-h1-title": "DLC 2026 E AUTO", "txt-h1-desc": "11 nuovi telai con aerodinamica attiva e griglie da 22 vetture.",
+            "txt-h2-title": "IA E FISICA RICOSTRUITE", "txt-h2-desc": "Traiettorie dinamiche, IA migliorata su bagnato e gestione energia ibrida.",
+            "txt-h3-title": "GRAN FESTIVAL E REGOLE", "txt-h3-desc": "Gare multicategoria e sistema automatico di penalità per i limiti di pista.",
+            "btn-read-patchnotes": "LEGGI IL CHANGELOG COMPLETO →"
         },
         es: { 
-            "link-home": "PANTALLA INICIAL", "link-tracks": "LISTA DE PISTAS", "link-custom": "PERSONALIZACIÓN", "txt-sys-req": "REQUISITOS DEL SISTEMA", 
+            "link-home": "PANTALLA INICIAL", "link-updates": "ACTUALIZACIONES", "link-tracks": "LISTA DE PISTAS", "link-custom": "PERSONALIZACIÓN", "txt-sys-req": "REQUISITOS DEL SISTEMA", 
             "th-osa": "COMPONENTE", "th-min": "MÍNIMO", "th-rec": "RECOMENDADO", "td-proc": "PROCESADOR", "td-mem": "MEMORIA", "td-gfx": "GRÁFICOS", 
             "td-store": "ALMACENAMIENTO", "td-store-min": "3 GB DE ESPACIO", "td-store-rec": "5 GB (SSD)", "btn-steam": "CONSEGUIR EN STEAM", "txt-mode": "CAMBIAR TEMA",
-            "link-about-project": "DOCUMENTACIÓN E INFO LEGAL", "steam-lang": "spanish"
+            "link-about-project": "DOCUMENTACIÓN E INFO LEGAL", "steam-lang": "spanish",
+            "txt-update-title": "GRAN ACTUALIZACIÓN: V8.0 DISPONIBLE",
+            "txt-update-intro": "Ala Mobile se actualiza con regulaciones 2026, IA rediseñada y aerodinámica activa.",
+            "txt-h1-title": "DLC 2026 Y COCHES", "txt-h1-desc": "11 nuevos chasis con aerodinámica activa y parrillas de 22 coches.",
+            "txt-h2-title": "IA Y FÍSICAS RECONSTRUIDAS", "txt-h2-desc": "Líneas trazadas dinámicas, mejor conducta en lluvia y gestión de energía híbrida.",
+            "txt-h3-title": "GRAN FESTIVAL Y REGLAS", "txt-h3-desc": "Carreras multicategoría y sanciones automáticas por límites de pista.",
+            "btn-read-patchnotes": "LEER EL REGISTRO DE CAMBIOS →"
         }
     };
 
