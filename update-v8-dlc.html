@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DLC Packs - Ala Mobile</title>
+    <style>
+        :root {
+            --bg: #050505; --card: #0f0f0f; --text: #ffffff;
+            --accent: #ff0000; --border: #222; --nav-bg: #1a1a1a;
+            --confirm: #00ff41; --subtext: #888;
+        }
+        [data-theme="light"] {
+            --bg: #ffffff; --card: #f8f9fa; --text: #111111;
+            --accent: #d70000; --border: #dddddd; --nav-bg: #eeeeee;
+            --confirm: #008f25; --subtext: #666;
+        }
+
+        body, #menu, .sharp-nav, .lang-option, .dlc-card, .spec-card {
+            transition: background 0.5s ease, color 0.5s ease, border 0.5s ease;
+        }
+
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden; }
+
+        /* --- SIDEBAR --- */
+        #menuToggle { display: block; position: fixed; top: 30px; left: 30px; z-index: 9999; user-select: none; }
+        #menuToggle input { display: block; width: 40px; height: 32px; position: absolute; top: -7px; left: -5px; cursor: pointer; opacity: 0; z-index: 10001; }
+        #menuToggle span { display: block; width: 26px; height: 3px; margin-bottom: 5px; position: relative; background: var(--accent); z-index: 10000; transition: 0.4s; }
+        #menuToggle input:checked ~ span:nth-last-child(3) { transform: rotate(45deg) translate(5px, 6px); }
+        #menuToggle input:checked ~ span:nth-last-child(2) { opacity: 0; }
+        #menuToggle input:checked ~ span:nth-last-child(1) { transform: rotate(-45deg) translate(5px, -7px); }
+
+        #menu { 
+            position: fixed; width: 340px; height: 100vh; margin: 0; padding: 100px 15px; top: 0; left: 0; 
+            background: var(--card); border-right: 6px solid var(--accent); transform: translateX(-100%); 
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 8px 0 20px rgba(0,0,0,0.3); list-style: none;
+            box-sizing: border-box; z-index: 9000; overflow-y: auto;
+        }
+        #menuToggle input:checked ~ ul { transform: translateX(0); }
+
+        #content-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.1); z-index: 8500; display: none; pointer-events: none;
+        }
+        #menuToggle input:checked ~ #content-overlay { display: block; pointer-events: all; }
+
+        /* --- LANG SELECTOR --- */
+        .selector-label { font-size: 10px; font-weight: 900; letter-spacing: 1.5px; color: var(--accent); text-transform: uppercase; text-align: center; display: block; }
+        .lang-trigger { text-align: center; cursor: pointer; font-size: 20px; color: var(--accent); margin-bottom: 5px; padding: 5px; }
+        
+        #lang-list { max-height: 0; overflow: hidden; opacity: 0; transform: translateY(-15px); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); border-bottom: 1px solid var(--border); }
+        #lang-list.active { max-height: 500px; opacity: 1; transform: translateY(0); margin-bottom: 15px; }
+        
+        .lang-option { display: flex; align-items: center; padding: 10px 15px; font-size: 13px; font-weight: bold; cursor: pointer; margin: 4px 0; background: var(--nav-bg); clip-path: polygon(4% 0, 100% 0, 96% 100%, 0% 100%); transition: 0.2s; }
+        .lang-option img { width: 20px; margin-right: 12px; }
+        .lang-option:hover { background: var(--accent); color: #fff; transform: translateX(5px); }
+        .lang-option.selected { background: var(--confirm) !important; color: #fff !important; }
+
+        .nav-list { list-style: none; padding: 0; margin-top: 20px; }
+        .sharp-nav { display: block; background: var(--nav-bg); color: var(--text); text-decoration: none; font-weight: 900; text-transform: uppercase; font-style: italic; padding: 16px 25px; margin-bottom: 8px; clip-path: polygon(0% 0%, 100% 0%, 88% 100%, 0% 100%); transition: 0.2s; }
+        .sharp-nav:hover { background: var(--accent); color: #fff; transform: translateX(8px); }
+        .theme-btn-text { display: block; padding: 10px 0; text-decoration: none; color: var(--accent); font-weight: 900; font-size: 14px; text-transform: uppercase; border: none; background: none; cursor: pointer; transition: 0.3s; text-align: left; }
+
+        /* --- PAGE LAYOUT --- */
+        .container { max-width: 1000px; margin: 100px auto 60px; padding: 0 40px; }
+        
+        .back-btn { 
+            display: inline-block; color: var(--accent); font-weight: 900; text-transform: uppercase; 
+            font-style: italic; text-decoration: none; margin-bottom: 20px; font-size: 13px; transition: 0.2s; 
+        }
+        .back-btn:hover { transform: translateX(-5px); }
+
+        .patch-header { border-left: 10px solid var(--accent); padding-left: 20px; margin-bottom: 30px; }
+        .patch-tag { background: var(--accent); color: #fff; font-size: 11px; font-weight: 900; padding: 4px 10px; text-transform: uppercase; font-style: italic; display: inline-block; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%); margin-bottom: 10px; }
+        h1 { font-size: 44px; font-style: italic; font-weight: 900; letter-spacing: -2px; margin: 0; text-transform: uppercase; }
+        .patch-sub { font-size: 16px; font-weight: 700; opacity: 0.7; margin-top: 10px; }
+
+        /* --- ALA MOBILE STYLED HEADER BANNER --- */
+        .ala-header-banner {
+            width: 100%;
+            height: 220px;
+            margin-bottom: 40px;
+            background: linear-gradient(135deg, #050505 0%, #1a0202 50%, #080808 100%);
+            border: 1px solid var(--border);
+            border-left: 8px solid var(--accent);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-sizing: border-box;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .ala-header-banner::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: 
+                radial-gradient(black 15%, transparent 16%) 0 0,
+                radial-gradient(black 15%, transparent 16%) 8px 8px;
+            background-size: 16px 16px;
+            opacity: 0.25;
+            pointer-events: none;
+        }
+
+        .speed-lines {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                -45deg,
+                transparent,
+                transparent 15px,
+                rgba(255, 0, 0, 0.05) 15px,
+                rgba(255, 0, 0, 0.05) 30px
+            );
+            pointer-events: none;
+        }
+
+        .ala-title {
+            font-family: 'Arial Black', 'Impact', sans-serif;
+            font-size: 68px;
+            font-weight: 900;
+            font-style: italic;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            color: #ffffff;
+            transform: skewX(-12deg);
+            text-shadow: 
+                3px 3px 0px var(--accent),
+                6px 6px 0px #000000,
+                0px 0px 25px rgba(255, 0, 0, 0.6);
+            position: relative;
+            z-index: 2;
+            margin: 0;
+            user-select: none;
+        }
+
+        .ala-title span {
+            color: var(--accent);
+            text-shadow: 
+                3px 3px 0px #ffffff,
+                6px 6px 0px #000000,
+                0px 0px 25px rgba(255, 0, 0, 0.8);
+        }
+
+        .ala-badge {
+            position: absolute;
+            bottom: 20px;
+            background: var(--accent);
+            color: #ffffff;
+            font-weight: 900;
+            font-style: italic;
+            font-size: 10px;
+            letter-spacing: 3px;
+            padding: 4px 16px;
+            text-transform: uppercase;
+            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
+            z-index: 2;
+        }
+
+        .section-title { font-size: 24px; font-weight: 900; font-style: italic; text-transform: uppercase; border-bottom: 3px solid var(--accent); padding-bottom: 8px; margin-bottom: 25px; }
+
+        /* --- DLC CARDS GRID --- */
+        .dlc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 40px; }
+        .dlc-card {
+            background: var(--card); border: 1px solid var(--border); border-top: 4px solid var(--accent);
+            padding: 25px; display: flex; flex-direction: column; justify-content: space-between;
+            position: relative; overflow: hidden; transition: 0.3s;
+        }
+        .dlc-card.interactive { cursor: pointer; }
+        .dlc-card.interactive:hover { border-color: var(--accent); transform: translateY(-4px); box-shadow: 0 8px 20px rgba(255,0,0,0.15); }
+        .dlc-card h3 { margin: 0 0 8px 0; color: var(--accent); font-size: 20px; font-weight: 900; font-style: italic; text-transform: uppercase; }
+        .dlc-card .status-tag { font-size: 10px; font-weight: 900; letter-spacing: 1px; color: var(--confirm); text-transform: uppercase; margin-bottom: 12px; display: block; }
+        .dlc-card.coming-soon .status-tag { color: var(--subtext); }
+        .dlc-card p { margin: 0 0 15px 0; font-size: 13.5px; opacity: 0.85; line-height: 1.5; font-weight: 600; }
+        .card-action { font-size: 11px; font-weight: 900; color: var(--accent); text-transform: uppercase; font-style: italic; margin-top: auto; }
+
+        /* --- MODAL POPUPS FOR SPECIFICATIONS --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(5px);
+            z-index: 25000; display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none; transition: 0.3s ease; padding: 20px; box-sizing: border-box;
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
+        .modal-container {
+            background: var(--card); border: 2px solid var(--accent); border-top: 8px solid var(--accent);
+            max-width: 750px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 30px; position: relative;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+        }
+        .close-modal-btn {
+            position: absolute; top: 20px; right: 20px; background: var(--accent); color: #fff;
+            border: none; font-weight: 900; font-size: 16px; width: 32px; height: 32px; cursor: pointer;
+            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
+        }
+        .tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .spec-card { background: var(--nav-bg); padding: 18px; border-top: 2px solid var(--accent); }
+        .spec-card h4 { margin: 0 0 8px 0; color: var(--accent); font-size: 14px; font-weight: 900; font-style: italic; text-transform: uppercase; }
+        .spec-card p { margin: 0; font-size: 12.5px; opacity: 0.85; line-height: 1.4; font-weight: 600; }
+
+        /* --- SHARP RACING TOAST STYLING --- */
+        #toast-wrapper {
+            position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
+            z-index: 20000; transition: bottom 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+            opacity: 0; pointer-events: none;
+        }
+        #toast-wrapper.show { bottom: 40px; opacity: 1; }
+        .toast-outer { background: var(--accent); padding: 2px; clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%); box-shadow: 0 10px 30px rgba(255, 0, 0, 0.35); }
+        .toast-inner { background: var(--card); color: var(--text); padding: 14px 36px; font-weight: 900; font-style: italic; text-transform: uppercase; font-size: 14px; letter-spacing: 1.5px; clip-path: polygon(5px 0, 100% 0, calc(100% - 5px) 100%, 0 100%); white-space: nowrap; }
+
+        @media (max-width: 768px) {
+            .container { margin: 80px auto 40px; padding: 0 20px; }
+            h1 { font-size: 28px; }
+            .ala-title { font-size: 42px; }
+            .ala-header-banner { height: 160px; }
+            .tech-grid { grid-template-columns: 1fr; }
+            #menuToggle { top: 20px; left: 20px; }
+            #menu { width: 100%; max-width: 320px; }
+            .toast-inner { padding: 12px 24px; font-size: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav id="menuToggle">
+        <input type="checkbox" id="navCheck" />
+        <span></span><span></span><span></span>
+        <div id="content-overlay"></div>
+        <ul id="menu">
+            <span class="selector-label">Language</span>
+            <div class="lang-trigger" onclick="document.getElementById('lang-list').classList.toggle('active')">▼</div>
+            <div id="lang-list">
+                <div class="lang-option" onclick="changeLang('en', this)"><img src="https://flagcdn.com/w40/gb.png"> ENGLISH</div>
+                <div class="lang-option" onclick="changeLang('fi', this)"><img src="https://flagcdn.com/w40/fi.png"> SUOMI</div>
+                <div class="lang-option" onclick="changeLang('sv', this)"><img src="https://flagcdn.com/w40/se.png"> SVENSKA</div>
+                <div class="lang-option" onclick="changeLang('it', this)"><img src="https://flagcdn.com/w40/it.png"> ITALIANO</div>
+                <div class="lang-option" onclick="changeLang('es', this)"><img src="https://flagcdn.com/w40/es.png"> ESPAÑOL</div>
+            </div>
+            <div class="nav-list">
+                <li><a href="index.html" class="sharp-nav" id="link-home">HOME SCREEN</a></li>
+                <li><a href="tracks.html" class="sharp-nav" id="link-tracks">TRACK LIST</a></li>
+                <li><a href="custom.html" class="sharp-nav" id="link-custom">CUSTOMIZATION</a></li>
+                <hr style="border: none; border-top: 1px solid var(--border); margin: 30px 0;">
+                <li><button onclick="toggleTheme()" class="theme-btn-text" id="txt-mode">SWITCH THEME</button></li>
+            </div>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <a href="update-v8.html" class="back-btn" id="btn-back">← BACK TO V8.0 OVERVIEW</a>
+
+        <div class="patch-header">
+            <span class="patch-tag">EXPANSION BREAKDOWN</span>
+            <h1 id="txt-dlc-title">FORMULA DLC PACKS</h1>
+            <div class="patch-sub" id="txt-dlc-sub">EXPANDED CAR ROSTERS, TECHNICAL ERA OVERHAULS & FUTURE CONTENT</div>
+        </div>
+
+        <!-- ALA MOBILE STYLED HEADER BANNER -->
+        <div class="ala-header-banner">
+            <div class="speed-lines"></div>
+            <h2 class="ala-title">DLC<span>-</span>PACKS</h2>
+            <div class="ala-badge">ALA MOBILE FORMULA V8.0</div>
+        </div>
+
+        <h2 class="section-title" id="txt-sec-packs">CONTENT PACKS OVERVIEW</h2>
+
+        <div class="dlc-grid">
+            <!-- 1. 2025 GROUND EFFECT CARS (CLICK TO OPEN 2025 MODAL) -->
+            <div class="dlc-card interactive" onclick="openModal('specModal2025')">
+                <div>
+                    <span class="status-tag" id="tag-active-2">AVAILABLE IN GAME</span>
+                    <h3 id="txt-card2-title">2025 GROUND EFFECT CARS</h3>
+                    <p id="txt-card2-desc">Full 2025 roster featuring high-downforce Venturi floor ground effect aerodynamics, stiff suspension mechanics, and 20-car grid layouts.</p>
+                </div>
+                <span class="card-action" id="act-click2025">CLICK TO VIEW TECHNICAL DETAILS →</span>
+            </div>
+
+            <!-- 2. 2026 ACTIVE AERO CARS (CLICK TO OPEN 2026 MODAL) -->
+            <div class="dlc-card interactive" onclick="openModal('specModal2026')">
+                <div>
+                    <span class="status-tag" id="tag-active-1">ACTIVE NOW</span>
+                    <h3 id="txt-card1-title">2026 ACTIVE AERO CARS</h3>
+                    <p id="txt-card1-desc">11 new 2026 regulation chassis models equipped with dual-active wings, lightweight chassis geometry, and 350kW MGU-K hybrid output.</p>
+                </div>
+                <span class="card-action" id="act-click1">CLICK TO VIEW TECHNICAL DETAILS →</span>
+            </div>
+
+            <!-- 3. UPCOMING PACKS CARD (TRIGGERS TOAST) -->
+            <div class="dlc-card interactive coming-soon" onclick="showToast()">
+                <div>
+                    <span class="status-tag" id="tag-future">COMING SOON</span>
+                    <h3 id="txt-card4-title">UPCOMING DLC PACKS</h3>
+                    <p id="txt-card4-desc">Future expansion packs are currently in development.</p>
+                </div>
+                <span class="card-action" id="act-click2">CLICK TO VIEW STATUS →</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2025 TECHNICAL SPECIFICATIONS POP-UP MODAL -->
+    <div class="modal-overlay" id="specModal2025">
+        <div class="modal-container">
+            <button class="close-modal-btn" onclick="closeModal('specModal2025')">✕</button>
+            <h2 id="txt-m2025-title" style="color: var(--accent); font-style: italic; font-weight: 900; margin: 0 0 10px 0; text-transform: uppercase;">2022–2025 GROUND EFFECT ERA DETAILS</h2>
+            <p id="txt-m2025-desc" style="font-size: 13.5px; opacity: 0.85; line-height: 1.5; font-weight: 600; margin: 0 0 20px 0;">
+                The 2022–2025 technical rules introduced Venturi floor aerodynamics designed to maximize high-speed cornering grip while allowing cars to follow closely.
+            </p>
+
+            <div class="tech-grid">
+                <div class="spec-card">
+                    <h4 id="txt-s2025-1-title">VENTURI UNDERFLOOR TUNNELS</h4>
+                    <p id="txt-s2025-1-desc">Generates massive low-pressure downforce under the chassis floor, relying on ground effect to maintain cornering grip at high speeds.</p>
+                </div>
+
+                <div class="spec-card">
+                    <h4 id="txt-s2025-2-title">DRS (DRAG REDUCTION SYSTEM)</h4>
+                    <p id="txt-s2025-2-desc">Single rear-wing flap opening within designated DRS zones when tracking within 1 second of a rival car at the detection point.</p>
+                </div>
+
+                <div class="spec-card">
+                    <h4 id="txt-s2025-3-title">STIFF SUSPENSION & PORPOISING</h4>
+                    <p id="txt-s2025-3-desc">Requires stiff suspension setups to manage ride-height consistency, demanding precise kerb riding and smooth steering inputs.</p>
+                </div>
+
+                <div class="spec-card">
+                    <h4 id="txt-s2025-4-title">18-INCH WHEELS & 20-CAR GRIDS</h4>
+                    <p id="txt-s2025-4-desc">Low-profile tires mounted on 18-inch wheels with 20-car starting grids across all championship and quick-race modes.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2026 TECHNICAL SPECIFICATIONS POP-UP MODAL -->
+    <div class="modal-overlay" id="specModal2026">
+        <div class="modal-container">
+            <button class="close-modal-btn" onclick="closeModal('specModal2026')">✕</button>
+            <h2 id="txt-modal-title" style="color: var(--accent); font-style: italic; font-weight: 900; margin: 0 0 10px 0; text-transform: uppercase;">2026 CHASSIS TECHNICAL DETAILS</h2>
+            <p id="txt-modal-desc" style="font-size: 13.5px; opacity: 0.85; line-height: 1.5; font-weight: 600; margin: 0 0 20px 0;">
+                The 2026 regulation overhaul fundamentally alters how cars generate downforce and manage electrical battery power during wheel-to-wheel battles.
+            </p>
+
+            <div class="tech-grid">
+                <div class="spec-card">
+                    <h4 id="txt-spec1-title">ACTIVE AERO: Z-MODE & X-MODE</h4>
+                    <p id="txt-spec1-desc">Replace DRS with dual active wings. Shift to High-Downforce (Z-Mode) through corners, then manually switch to Low-Drag (X-Mode) on straights to dump drag and boost top speed.</p>
+                </div>
+
+                <div class="spec-card">
+                    <h4 id="txt-spec2-title">ERS SUPERCLIPPING MECHANIC</h4>
+                    <p id="txt-spec2-desc">At speeds above 290 km/h, the MGU-K electrical deployment tapers off dynamically. Drivers must store electrical charge to trigger high-power manual override bursts when chasing rival cars.</p>
+                </div>
+
+                <div class="spec-card">
+                    <h4 id="txt-spec3-title">NARROW CHASSIS & WEIGHT REDUCTION</h4>
+                    <p id="txt-spec3-desc">Chassis width is reduced by 10cm and total vehicle mass is dropped, resulting in significantly higher cornering agility, shorter braking distances, and sharper direction changes.</p>
+                </div>
+
+                <div class="spec-card">
+                    <h4 id="txt-spec4-title">22-CAR EXPANDED GRIDS</h4>
+                    <p id="txt-spec4-desc">All 2026 race modes now feature 22 active cars on track simultaneously, creating denser traffic management, tighter pit stop windows, and intense restart sequences.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SHARP RACING TOAST CONTAINER -->
+    <div id="toast-wrapper">
+        <div class="toast-outer">
+            <div class="toast-inner" id="txt-toast">UPDATE IS COMING SOON</div>
+        </div>
+    </div>
+
+    <script>
+    const translations = {
+        en: {
+            "btn-back": "← BACK TO V8.0 OVERVIEW",
+            "txt-dlc-title": "FORMULA DLC PACKS",
+            "txt-dlc-sub": "EXPANDED CAR ROSTERS, TECHNICAL ERA OVERHAULS & FUTURE CONTENT",
+            "txt-sec-packs": "CONTENT PACKS OVERVIEW",
+            "tag-active-2": "AVAILABLE IN GAME",
+            "txt-card2-title": "2025 GROUND EFFECT CARS",
+            "txt-card2-desc": "Full 2025 roster featuring high-downforce Venturi floor ground effect aerodynamics, stiff suspension mechanics, and 20-car grid layouts.",
+            "act-click2025": "CLICK TO VIEW TECHNICAL DETAILS →",
+            "tag-active-1": "ACTIVE NOW",
+            "txt-card1-title": "2026 ACTIVE AERO CARS",
+            "txt-card1-desc": "11 new 2026 regulation chassis models equipped with dual-active wings, lightweight chassis geometry, and 350kW MGU-K hybrid output.",
+            "act-click1": "CLICK TO VIEW TECHNICAL DETAILS →",
+            "tag-future": "COMING SOON",
+            "txt-card4-title": "UPCOMING DLC PACKS",
+            "txt-card4-desc": "Future expansion packs are currently in development.",
+            "act-click2": "CLICK TO VIEW STATUS →",
+            "txt-m2025-title": "2022–2025 GROUND EFFECT ERA DETAILS",
+            "txt-m2025-desc": "The 2022–2025 technical rules introduced Venturi floor aerodynamics designed to maximize high-speed cornering grip while allowing cars to follow closely.",
+            "txt-s2025-1-title": "VENTURI UNDERFLOOR TUNNELS",
+            "txt-s2025-1-desc": "Generates massive low-pressure downforce under the chassis floor, relying on ground effect to maintain cornering grip at high speeds.",
+            "txt-s2025-2-title": "DRS (DRAG REDUCTION SYSTEM)",
+            "txt-s2025-2-desc": "Single rear-wing flap opening within designated DRS zones when tracking within 1 second of a rival car at the detection point.",
+            "txt-s2025-3-title": "STIFF SUSPENSION & PORPOISING",
+            "txt-s2025-3-desc": "Requires stiff suspension setups to manage ride-height consistency, demanding precise kerb riding and smooth steering inputs.",
+            "txt-s2025-4-title": "18-INCH WHEELS & 20-CAR GRIDS",
+            "txt-s2025-4-desc": "Low-profile tires mounted on 18-inch wheels with 20-car starting grids across all championship and quick-race modes.",
+            "txt-modal-title": "2026 CHASSIS TECHNICAL DETAILS",
+            "txt-modal-desc": "The 2026 regulation overhaul fundamentally alters how cars generate downforce and manage electrical battery power during wheel-to-wheel battles.",
+            "txt-spec1-title": "ACTIVE AERO: Z-MODE & X-MODE",
+            "txt-spec1-desc": "Replace DRS with dual active wings. Shift to High-Downforce (Z-Mode) through corners, then manually switch to Low-Drag (X-Mode) on straights to dump drag and boost top speed.",
+            "txt-spec2-title": "ERS SUPERCLIPPING MECHANIC",
+            "txt-spec2-desc": "At speeds above 290 km/h, the MGU-K electrical deployment tapers off dynamically. Drivers must store electrical charge to trigger high-power manual override bursts when chasing rival cars.",
+            "txt-spec3-title": "NARROW CHASSIS & WEIGHT REDUCTION",
+            "txt-spec3-desc": "Chassis width is reduced by 10cm and total vehicle mass is dropped, resulting in significantly higher cornering agility, shorter braking distances, and sharper direction changes.",
+            "txt-spec4-title": "22-CAR EXPANDED GRIDS",
+            "txt-spec4-desc": "All 2026 race modes now feature 22 active cars on track simultaneously, creating denser traffic management, tighter pit stop windows, and intense restart sequences.",
+            "txt-toast": "UPDATE IS COMING SOON",
+            "link-home": "HOME SCREEN", "link-tracks": "TRACK LIST", "link-custom": "CUSTOMIZATION", "txt-mode": "SWITCH THEME"
+        },
+        fi: {
+            "btn-back": "← TAKAISIN V8.0 KATSAUKSEEN",
+            "txt-dlc-title": "FORMULA DLC -PAKETIT",
+            "txt-dlc-sub": "LAAJENNETUT AUTOPAKETIT, TEKNISET SÄÄNTÖUUDISTUKSET JA TULEVA SISÄLTÖ",
+            "txt-sec-packs": "SISÄLTÖPAKETIT",
+            "tag-active-2": "SAATAVILLA PELISSÄ",
+            "txt-card2-title": "2025 MAAVAIKUTUSAUTOT",
+            "txt-card2-desc": "Koko vuoden 2025 kalusto maaefektipohjalla, jäykällä jousituksella ja 20 auton lähtöruudukolla.",
+            "act-click2025": "KLIKKAA NÄHDÄKSESI TEKNISET TIEDOT →",
+            "tag-active-1": "AKTIIVINEN NYT",
+            "txt-card1-title": "2026 AKTIIVIAERO-AUTOT",
+            "txt-card1-desc": "11 uutta vuoden 2026 sääntöjen mukaista formulamallia aktiivisilla siivillä ja 350kW MGU-K hybriditeholla.",
+            "act-click1": "KLIKKAA NÄHDÄKSESI TEKNISET TIEDOT →",
+            "tag-future": "TULOSSA PIAN",
+            "txt-card4-title": "TULEVAT DLC-PAKETIT",
+            "txt-card4-desc": "Tulevat laajennukset ovat tällä hetkellä kehityksessä.",
+            "act-click2": "KLIKKAA NÄHDÄKSESI TILA →",
+            "txt-m2025-title": "2022–2025 MAAEFEKTIKAUDEN TIEDOT",
+            "txt-m2025-desc": "Vuosien 2022–2025 tekniset säännöt toivat Venturi-pohjatunnelit, jotka maksimoivat pidon nopeissa mutkissa mahdollistaen lähekkäin ajamisen.",
+            "txt-s2025-1-title": "VENTURI-POHJATUNNELIT",
+            "txt-s2025-1-desc": "Luo alhaisen paineen maaefektin auton alle, mikä takaa suuren kaarrenopeuden.",
+            "txt-s2025-2-title": "DRS (ILMANVASTUKSEN VÄHENNYS)",
+            "txt-s2025-2-desc": "Avautuva takasiipi nimetyillä DRS-alueilla, kun etäisyys edellä ajavaan on alle 1 sekunti.",
+            "txt-s2025-3-title": "JÄYKKÄ JOUSITUS",
+            "txt-s2025-3-desc": "Vaatii jäykän jousituksen maavaran ylläpitämiseksi, mikä vaatii tarkkaa ajolinjaa ja tasaista ohjausta.",
+            "txt-s2025-4-title": "18 TUUMAN VANTEET & 20 AUTOA",
+            "txt-s2025-4-desc": "Matalaprofiilirenkaat 18 tuuman vanteilla ja 20 auton lähtöruudukko kaikissa pelitiloissa.",
+            "txt-modal-title": "2026 RUNKOGEOMETRIA JA TEKNISET TIEDOT",
+            "txt-modal-desc": "Vuoden 2026 sääntöuudistus muuttaa täysin tavan, jolla autot tuottavat maaefektiä ja käyttävät akkuenergiaa.",
+            "txt-spec1-title": "AKTIIVIAERO: Z-TILA JA X-TILA",
+            "txt-spec1-desc": "Korvaa DRS-järjestelmän. Käytä suurta maaefektiä (Z-tila) mutkissa ja vaihda pienemmän ilmanvastuksen X-tilaan suorilla.",
+            "txt-spec2-title": "ERS SUPERCLIPPING -MEKANIIKKA",
+            "txt-spec2-desc": "Yli 290 km/h nopeuksissa sähkötehon syöttö vähenee dynaamisesti. Kuljettajien on säästettävä akkuenergiaa ohitustilanteisiin.",
+            "txt-spec3-title": "KAPEAMPI RUNKO JA KEVYEMPI PAINO",
+            "txt-spec3-desc": "Rungon leveyttä on pienennetty 10 cm ja kokonaispainoa pudotettu, mikä tekee autoista huomattavasti ketterämpiä mutkissa.",
+            "txt-spec4-title": "22 AUTON LÄHTÖRUUUDUKKO",
+            "txt-spec4-desc": "Kaikissa vuoden 2026 pelitiloissa on nyt 22 autoa radalla samanaikaisesti stabiilin suorituskyvyn takaamiseksi.",
+            "txt-toast": "PÄIVITYS ON TULOSSA PIAN",
+            "link-home": "ALOITUSRUUTU", "link-tracks": "RATALISTA", "link-custom": "MUOKKAUS", "txt-mode": "VAIHDA TEEMA"
+        },
+        sv: {
+            "btn-back": "← TILLBAKA TILL V8.0 ÖVERSIKT",
+            "txt-dlc-title": "FORMULA DLC-PAKET",
+            "txt-dlc-sub": "UTÖKADE BILUPPSTÄLLNINGAR, TEKNISKA EROR OCH FRAMTIDA INNEHÅLL",
+            "txt-sec-packs": "INNEHÅLLSPAKET",
+            "tag-active-2": "TILLGÄNGLIG I SPELET",
+            "txt-card2-title": "2025 MARKEFFEKT-BILAR",
+            "txt-card2-desc": "Hela 2025 års uppställning med Venturi-golv, styv fjädring och 20 bilar på startgriden.",
+            "act-click2025": "KLICKA FÖR TEKNISK INFO →",
+            "tag-active-1": "AKTIV NU",
+            "txt-card1-title": "2026 AKTIV AERO-BILAR",
+            "txt-card1-desc": "11 nya formelchassis för 2026 med aktiva vingar och 350kW MGU-K hybrideffekt.",
+            "act-click1": "KLICKA FÖR TEKNISK INFO →",
+            "tag-future": "KOMMER SNART",
+            "txt-card4-title": "KOMMANDE DLC-PAKET",
+            "txt-card4-desc": "Framtida expansioner är för närvarande under utveckling.",
+            "act-click2": "KLICKA FÖR STATUS →",
+            "txt-m2025-title": "2022–2025 MARKEFFEKT-ERAN DETALJER",
+            "txt-m2025-desc": "2022–2025 regler introducerade Venturi-tunnlar för maximalt marktryck i höga hastigheter.",
+            "txt-s2025-1-title": "VENTURI UNDERGOLVSTUNNLAR",
+            "txt-s2025-1-desc": "Skapar stort marktryck under chassit för maximalt kurvgrepp.",
+            "txt-s2025-2-title": "DRS (DRAG REDUCTION SYSTEM)",
+            "txt-s2025-2-desc": "Öppningsbar bakvinge i DRS-zoner när du är inom 1 sekund från bilen framför.",
+            "txt-s2025-3-title": "STYV FJÄDRING",
+            "txt-s2025-3-desc": "Kräver styv fjädring för att hålla markfrigången stabil under alla förhållanden.",
+            "txt-s2025-4-title": "18-TUMSHJUL & 20 BILAR",
+            "txt-s2025-4-desc": "Lågprofildäck på 18-tumshjul med 20 bilar på startgriden i alla lägen.",
+            "txt-modal-title": "2026 CHASSI TEKNISK SPECIFIKATION",
+            "txt-modal-desc": "2026 års regler ändrar i grunden hur bilarna skapar marktryck och hanterar batterikraft.",
+            "txt-spec1-title": "AKTIV AERO: Z-LÄGE & X-LÄGE",
+            "txt-spec1-desc": "Ersätter DRS. Använd High-Downforce (Z-läget) i kurvor och byt till Low-Drag (X-läget) på raksträckor.",
+            "txt-spec2-title": "ERS SUPERCLIPPING",
+            "txt-spec2-desc": "Vid hastigheter över 290 km/h minskar elmotorns effekt. Förare måste spara batteri för manuell omkörningskraft.",
+            "txt-spec3-title": "SMALARE CHASSI & LÄGRE VIKT",
+            "txt-spec3-desc": "Chassibredden minskas med 10 cm och vikten sänks, vilket ger betydligt snabbare kurvtagning.",
+            "txt-spec4-title": "22 BILAR PÅ STARTGRIDEN",
+            "txt-spec4-desc": "Alla 2026-lägen har nu 22 bilar samtidigt på banan för ännu tätare racing.",
+            "txt-toast": "UPPDATERINGEN KOMMER SNART",
+            "link-home": "HEMSKÄRM", "link-tracks": "BANLISTA", "link-custom": "ANPASSNING", "txt-mode": "BYT TEMA"
+        },
+        it: {
+            "btn-back": "← TORNA PANORAMICA V8.0",
+            "txt-dlc-title": "PACCHETTI DLC FORMULA",
+            "txt-dlc-sub": "ROSTER AUTO ESTESI, REVISIONI DI ERE TECNICHE E CONTENUTI FUTURI",
+            "txt-sec-packs": "PANORAMICA CONTENUTI",
+            "tag-active-2": "DISPONIBILE NEL GIOCO",
+            "txt-card2-title": "AUTO EFFETTO SUOLO 2025",
+            "txt-card2-desc": "Roster completo 2025 con canali Venturi, sospensioni rigide e griglie da 20 auto.",
+            "act-click2025": "CLICCA PER DETTAGLI TECNICI →",
+            "tag-active-1": "ATTIVO ORA",
+            "txt-card1-title": "AUTO AERO ATTIVA 2026",
+            "txt-card1-desc": "11 nuovi telai 2026 dotati di ali attive e potenza ibrida MGU-K da 350kW.",
+            "act-click1": "CLICCA PER DETTAGLI TECNICI →",
+            "tag-future": "IN ARRIVO",
+            "txt-card4-title": "PROSSIMI PACCHETTI DLC",
+            "txt-card4-desc": "Le prossime espansioni sono attualmente in fase di sviluppo.",
+            "act-click2": "CLICCA PER LO STATO →",
+            "txt-m2025-title": "DETTAGLI ERA EFFETTO SUOLO 2022–2025",
+            "txt-m2025-desc": "I regolamenti 2022–2025 hanno introdotto i canali Venturi per massimizzare la deportanza in curva.",
+            "txt-s2025-1-title": "CANALI VENTURI SOTTO IL TELAIO",
+            "txt-s2025-1-desc": "Generano un'elevata deportanza a bassa pressione sotto la vettura per grande aderenza.",
+            "txt-s2025-2-title": "DRS (DRAG REDUCTION SYSTEM)",
+            "txt-s2025-2-desc": "Apertura dell'ala posteriore nelle zone DRS quando ci si trova a meno di 1 secondo.",
+            "txt-s2025-3-title": "SOSPENSIONI RIGIDE",
+            "txt-s2025-3-desc": "Richiede un assetto rigido per mantenere costante l'altezza da terra in ogni curva.",
+            "txt-s2025-4-title": "RUOTE DA 18 POLLICI E 20 AUTO",
+            "txt-s2025-4-desc": "Pneumatici a profilo ribassato su cerchi da 18 pollici con griglie di partenza da 20 auto.",
+            "txt-modal-title": "DETTAGLI TECNICI TELAIO 2026",
+            "txt-modal-desc": "I regolamenti 2026 cambiano radicalmente il modo in cui le auto generano deportanza e gestiscono l'energia.",
+            "txt-spec1-title": "AERO ATTIVA: Z-MODE E X-MODE",
+            "txt-spec1-desc": "Sostituisce il DRS. Passa al Z-Mode in curva ed al X-Mode in rettilineo per azzerare la resistenza dell'aria.",
+            "txt-spec2-title": "MECCANICA ERS SUPERCLIPPING",
+            "txt-spec2-desc": "Oltre i 290 km/h la potenza elettrica si riduce. I piloti devono accumulare carica per attivare il boost manuale.",
+            "txt-spec3-title": "TELAIO PIÙ STRETTO E LEGGERO",
+            "txt-spec3-desc": "Larghezza ridotta di 10cm e peso complessivo diminuito per una maggiore reattività in curva.",
+            "txt-spec4-title": "GRIGLIE ESTESE A 22 AUTO",
+            "txt-spec4-desc": "Tutte le modalità 2026 includono ora 22 vetture in pista contemporaneamente.",
+            "txt-toast": "L'AGGIORNAMENTO ARRIVERÀ PRESTO",
+            "link-home": "SCHERMATA INIZIALE", "link-tracks": "LISTA CIRCUITI", "link-custom": "PERSONALIZZAZIONE", "txt-mode": "CAMBIA TEMA"
+        },
+        es: {
+            "btn-back": "← VOLVER A RESUMEN V8.0",
+            "txt-dlc-title": "PAQUETES DLC FÓRMULA",
+            "txt-dlc-sub": "PARRILLAS AMPLIADAS, NUEVAS ERAS TÉCNICAS Y FUTURO CONTENIDO",
+            "txt-sec-packs": "RESUMEN DE CONTENIDO",
+            "tag-active-2": "DISPONIBLE EN EL JUEGO",
+            "txt-card2-title": "COCHES EFECTO SUELO 2025",
+            "txt-card2-desc": "Parrilla completa de 2025 con túneles Venturi, suspensión rígida y carreras de 20 coches.",
+            "act-click2025": "CLIC PARA DETALLES TÉCNICOS →",
+            "tag-active-1": "ACTIVO AHORA",
+            "txt-card1-title": "COCHES AERO ACTIVA 2026",
+            "txt-card1-desc": "11 nuevos chasis de regulación 2026 equipados con alerones activos y 350kW de potencia Híbrida.",
+            "act-click1": "CLIC PARA DETALLES TÉCNICOS →",
+            "tag-future": "PRÓXIMAMENTE",
+            "txt-card4-title": "PRÓXIMOS PAQUETES DLC",
+            "txt-card4-desc": "Las futuras expansiones están actualmente en desarrollo.",
+            "act-click2": "VER ESTADO →",
+            "txt-m2025-title": "DETALLES DE LA ERA EFECTO SUELO 2022–2025",
+            "txt-m2025-desc": "Las reglas 2022–2025 introdujeron túneles Venturi para maximizar el agarre en curva a alta velocidad.",
+            "txt-s2025-1-title": "TÚNELES VENTURI EN EL SUELO",
+            "txt-s2025-1-desc": "Generan carga aerodinámica por efecto suelo debajo del chasis para mantener agarre extremo.",
+            "txt-s2025-2-title": "DRS (SISTEMA DE REDUCCIÓN DE ARRASTRE)",
+            "txt-s2025-2-desc": "Apertura del alerón trasero en zonas DRS cuando estás a menos de 1 segundo de un rival.",
+            "txt-s2025-3-title": "SUSPENSIÓN RÍGIDA",
+            "txt-s2025-3-desc": "Requiere una configuración rígida para mantener constante la altura del chasis.",
+            "txt-s2025-4-title": "LLANTAS DE 18 PULGADAS Y 20 COCHES",
+            "txt-s2025-4-desc": "Neumáticos de perfil bajo en llantas de 18 pulgadas con parrillas de 20 coches en todos los modos.",
+            "txt-modal-title": "DETALLES TÉCNICOS DEL CHASIS 2026",
+            "txt-modal-desc": "El reglamento 2026 altera cómo los coches generan carga aerodinámica y gestionan la batería en carrera.",
+            "txt-spec1-title": "AERO ACTIVA: Z-MODE Y X-MODE",
+            "txt-spec1-desc": "Sustituye al DRS. Usa Z-Mode en curvas y cambia a X-Mode en rectas para reducir la resistencia y ganar velocidad.",
+            "txt-spec2-title": "SUPERCLIPPING DEL ERS",
+            "txt-spec2-desc": "A más de 290 km/h la entrega eléctrica se reduce. Los pilotos deben guardar carga para desplegar potencia manual.",
+            "txt-spec3-title": "CHASIS MÁS ESTRECHO Y LIGERO",
+            "txt-spec3-desc": "Chasis 10cm más estrecho y menor peso total para mayor agilidad y frenadas más cortas.",
+            "txt-spec4-title": "PARRILLAS DE 22 COCHES",
+            "txt-spec4-desc": "Todos los modos de 2026 incluyen 22 coches compitiendo en pista simultáneamente.",
+            "txt-toast": "LA ACTUALIZACIÓN LLEGARÁ PRONTO",
+            "link-home": "PANTALLA INICIAL", "link-tracks": "LISTA DE PISTAS", "link-custom": "PERSONALIZACIÓN", "txt-mode": "CAMBIAR TEMA"
+        }
+    };
+
+    function openModal(id) {
+        const modal = document.getElementById(id);
+        if (modal) modal.classList.add('active');
+    }
+
+    function closeModal(id) {
+        const modal = document.getElementById(id);
+        if (modal) modal.classList.remove('active');
+    }
+
+    let toastTimer = null;
+    function showToast() {
+        const toast = document.getElementById('toast-wrapper');
+        toast.classList.add('show');
+        
+        if (toastTimer) clearTimeout(toastTimer);
+        
+        toastTimer = setTimeout(() => {
+            toast.classList.remove('show');
+        }, 2200);
+    }
+
+    function changeLang(lang, el) {
+        document.querySelectorAll('.lang-option').forEach(opt => opt.classList.remove('selected'));
+        if(el) el.classList.add('selected');
+        localStorage.setItem('prefLang', lang);
+        applyLanguage();
+        setTimeout(() => { if(el) el.classList.remove('selected'); }, 2000); 
+    }
+
+    function applyLanguage() {
+        const lang = localStorage.getItem('prefLang') || 'en';
+        const data = translations[lang] || translations['en'];
+        for (let id in data) {
+            const el = document.getElementById(id);
+            if (el) el.innerText = data[id];
+        }
+    }
+
+    function toggleTheme() {
+        const body = document.documentElement;
+        const isDark = body.getAttribute('data-theme') !== 'light';
+        body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+        localStorage.setItem('theme', isDark ? 'light' : 'dark');
+    }
+
+    window.onload = () => {
+        applyLanguage();
+        if (localStorage.getItem('theme') === 'light') document.documentElement.setAttribute('data-theme', 'light');
+    };
+    </script>
+</body>
+</html>
